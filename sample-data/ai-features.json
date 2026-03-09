@@ -1,0 +1,64 @@
+{
+  "caseSummaries": [
+    {
+      "guestId": 1,
+      "summary": "• Guest reported heater issue on Oct 12\n• Technician scheduled for Oct 13\n• Stay extended 3 days due to repair delay\n• Lease agreement provided to guest\n• Overall sentiment: Satisfied with coordinator response",
+      "version": 1
+    },
+    {
+      "guestId": 1,
+      "summary": "• Maintenance request for heating system received\n• Service completed same day\n• Additional extension approved for 3 days\n• Documentation requests fulfilled promptly\n• Guest communication: Professional and cooperative",
+      "version": 2
+    }
+  ],
+  "suggestedReplies": [
+    "We are coordinating with the vendor and will update you shortly.",
+    "The stay extension has been approved. I'll send you the updated details.",
+    "Your receipt has been received and is under review by our team.",
+    "Thank you for your patience. The maintenance team will arrive between 2-4 PM today.",
+    "I've sent the requested documents to your email. Please let me know if you need anything else.",
+    "We're working on resolving this issue as quickly as possible and will keep you informed."
+  ],
+  "followUpRecommendations": [
+    {
+      "icon": "fa-tools",
+      "text": "Follow up with vendor on heater repair status",
+      "priority": "high"
+    },
+    {
+      "icon": "fa-paper-plane",
+      "text": "Send status update to insurance adjuster",
+      "priority": "medium"
+    },
+    {
+      "icon": "fa-receipt",
+      "text": "Check receipt approval status from finance team",
+      "priority": "medium"
+    },
+    {
+      "icon": "fa-calendar-check",
+      "text": "Confirm extension dates with property manager",
+      "priority": "low"
+    }
+  ],
+  "messageCategories": [
+    "Maintenance",
+    "Billing",
+    "Extension",
+    "Document Request",
+    "General Inquiry",
+    "Complaint"
+  ],
+  "sentiments": [
+    "positive",
+    "neutral",
+    "negative"
+  ],
+  "receiptExtractionSample": {
+    "vendor": "Walmart",
+    "amount": 156.78,
+    "date": "2025-07-08",
+    "category": "Groceries",
+    "confidence": 0.95
+  }
+}

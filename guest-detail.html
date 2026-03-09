@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guest Detail - TalonPro Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40 h-16">
+        <div class="flex items-center justify-between h-full px-6">
+            <div class="flex items-center space-x-4">
+                <h1 class="text-xl font-bold text-gray-800">TalonPro Portal</h1>
+            </div>
+            <div class="flex-1 max-w-2xl mx-8">
+                <div class="relative">
+                    <input type="text" placeholder="Search guests, cases, tasks..."
+                           class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                <div class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 px-3 py-2 rounded-lg">
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="text-sm font-medium">Admin User</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="fixed left-0 top-16 bottom-0 w-64 bg-gray-900 text-white overflow-y-auto">
+        <nav class="p-4">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="guest-list-new.html" class="nav-item active">
+                <i class="fas fa-users"></i>
+                <span>Guests</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-folder-open"></i>
+                <span>Cases</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-comments"></i>
+                <span>Messages</span>
+            </a>
+            <a href="tasks.html" class="nav-item">
+                <i class="fas fa-tasks"></i>
+                <span>Tasks</span>
+            </a>
+            <a href="documents.html" class="nav-item">
+                <i class="fas fa-file-alt"></i>
+                <span>Documents</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-receipt"></i>
+                <span>Receipts</span>
+            </a>
+            <a href="templates.html" class="nav-item">
+                <i class="fas fa-file-invoice"></i>
+                <span>Templates</span>
+            </a>
+            <a href="rules.html" class="nav-item">
+                <i class="fas fa-cogs"></i>
+                <span>Automation Rules</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-chart-bar"></i>
+                <span>Reports</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ml-64 mt-16 flex h-[calc(100vh-4rem)]">
+        <!-- Guest List Sidebar -->
+        <div class="w-80 bg-white border-r border-gray-200 overflow-y-auto">
+            <div class="p-4">
+                <div class="relative mb-4">
+                    <input type="text" placeholder="Search guests..."
+                           class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+                <div id="guestSidebar" class="space-y-2">
+                    <!-- Guest list items will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Guest Detail Panel -->
+        <div class="flex-1 overflow-y-auto p-6">
+            <!-- Header -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 id="guestName" class="text-2xl font-bold text-gray-800">SanskarTesting PenTest0307</h2>
+                        <div class="flex items-center space-x-4 mt-2 text-sm text-gray-600">
+                            <span><strong>Case ID:</strong> <span id="caseId">447451</span></span>
+                            <span><strong>Unit ID:</strong> <span id="unitId">373275</span></span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">Active</span>
+                        <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                            <i class="fas fa-envelope"></i>
+                        </button>
+                        <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                            <i class="fas fa-check-circle"></i>
+                        </button>
+                        <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                            <i class="fas fa-file-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2 text-sm">
+                    <span class="text-gray-600">Coordinator:</span>
+                    <span id="coordinator" class="font-medium">John Smith</span>
+                </div>
+            </div>
+
+            <!-- AI Case Summary -->
+            <div class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-sm p-6 mb-6 border-2 border-purple-200">
+                <div class="collapsible-header bg-transparent p-0" onclick="toggleSection(this)">
+                    <h3 class="text-lg font-semibold text-gray-800">
+                        <span class="ai-badge mr-2">AI</span>
+                        AI Case Summary
+                    </h3>
+                    <i class="fas fa-chevron-down text-purple-600"></i>
+                </div>
+                <div class="collapsible-content p-0 mt-4">
+                    <div id="aiSummaryText" class="text-gray-700 whitespace-pre-line">
+• Guest reported heater issue on Oct 12
+• Technician scheduled for Oct 13
+• Stay extended 3 days due to repair delay
+• Lease agreement provided to guest
+• Overall sentiment: Satisfied with coordinator response
+                    </div>
+                    <button onclick="regenerateAISummary()" class="mt-4 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm">
+                        <i class="fas fa-sync mr-2"></i>
+                        Regenerate Summary
+                    </button>
+                </div>
+            </div>
+
+            <!-- AI Suggestions Widget -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                    <span class="ai-badge mr-2">AI</span>
+                    AI Suggestions
+                </h3>
+                <div id="aiRecommendations" class="space-y-2">
+                    <!-- AI recommendations will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="bg-white rounded-lg shadow-sm">
+                <div class="border-b border-gray-200">
+                    <nav class="flex space-x-8 px-6" aria-label="Tabs">
+                        <button onclick="switchTab('overview')" class="tab-button active" data-tab="overview">
+                            Overview
+                        </button>
+                        <button onclick="switchTab('messages')" class="tab-button" data-tab="messages">
+                            Messages
+                        </button>
+                        <button onclick="switchTab('tasks')" class="tab-button" data-tab="tasks">
+                            Tasks
+                        </button>
+                        <button onclick="switchTab('documents')" class="tab-button" data-tab="documents">
+                            Documents
+                        </button>
+                        <button onclick="switchTab('receipts')" class="tab-button" data-tab="receipts">
+                            Receipts
+                        </button>
+                        <button onclick="switchTab('timeline')" class="tab-button" data-tab="timeline">
+                            Timeline
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="p-6">
+                    <!-- Overview Tab -->
+                    <div id="overview-tab" class="tab-content">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <!-- Contact Details -->
+                            <div class="collapsible-section">
+                                <div class="collapsible-header" onclick="toggleSection(this)">
+                                    <h3 class="text-lg font-semibold text-gray-800">Contact Details</h3>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="collapsible-content">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="form-label">First Name</label>
+                                            <input type="text" class="form-input" value="SanskarTesting">
+                                        </div>
+                                        <div>
+                                            <label class="form-label">Last Name</label>
+                                            <input type="text" class="form-input" value="PenTest0307">
+                                        </div>
+                                        <div>
+                                            <label class="form-label">Phone</label>
+                                            <input type="tel" class="form-input" value="985758555444993">
+                                        </div>
+                                        <div>
+                                            <label class="form-label">Email</label>
+                                            <input type="email" class="form-input">
+                                        </div>
+                                        <div>
+                                            <label class="form-label">Company</label>
+                                            <input type="text" class="form-input">
+                                        </div>
+                                        <div>
+                                            <label class="form-label">Adjuster</label>
+                                            <input type="text" class="form-input">
+                                        </div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="rounded text-blue-600">
+                                            <span class="ml-2 text-sm">Send Message</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Case Details -->
+                            <div class="collapsible-section">
+                                <div class="collapsible-header" onclick="toggleSection(this)">
+                                    <h3 class="text-lg font-semibold text-gray-800">Guest Details</h3>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="collapsible-content">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="form-label">Check In</label>
+                                            <input type="date" class="form-input" value="2025-07-01">
+                                        </div>
+                                        <div>
+                                            <label class="form-label">Check Out</label>
+                                            <input type="date" class="form-input" value="2025-07-21">
+                                        </div>
+                                        <div>
+                                            <label class="form-label">Room</label>
+                                            <input type="text" class="form-input">
+                                        </div>
+                                        <div>
+                                            <label class="form-label">Number of Nights</label>
+                                            <input type="number" class="form-input" value="20">
+                                        </div>
+                                        <div>
+                                            <label class="form-label">Guest Status</label>
+                                            <select class="form-input">
+                                                <option>Active</option>
+                                                <option>Checked Out</option>
+                                                <option>Pending</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="form-label">Priority</label>
+                                            <select class="form-input">
+                                                <option>Normal</option>
+                                                <option>High</option>
+                                                <option>Urgent</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex justify-end">
+                            <button class="btn-primary">
+                                <i class="fas fa-save mr-2"></i>
+                                Update
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Messages Tab -->
+                    <div id="messages-tab" class="tab-content hidden">
+                        <div class="space-y-4 mb-4" id="messageThread">
+                            <!-- Messages will be loaded here -->
+                        </div>
+
+                        <!-- Message Composer -->
+                        <div class="border-t border-gray-200 pt-4 mt-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-4">
+                                    <select class="form-input w-40">
+                                        <option>Email</option>
+                                        <option>SMS</option>
+                                        <option>Portal</option>
+                                    </select>
+                                    <button onclick="showModal('templateSelectorModal')" class="btn-secondary">
+                                        <i class="fas fa-file-alt mr-2"></i>
+                                        Insert Template
+                                    </button>
+                                    <button class="btn-secondary">
+                                        <i class="fas fa-paperclip mr-2"></i>
+                                        Attach File
+                                    </button>
+                                </div>
+                                <button onclick="generateAIReply()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                                    <i class="fas fa-magic mr-2"></i>
+                                    Generate AI Reply
+                                </button>
+                            </div>
+                            <textarea class="form-input" rows="4" placeholder="Type your message..."></textarea>
+                            <div class="flex justify-end mt-3">
+                                <button class="btn-primary">
+                                    <i class="fas fa-paper-plane mr-2"></i>
+                                    Send
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tasks Tab -->
+                    <div id="tasks-tab" class="tab-content hidden">
+                        <div class="flex justify-end mb-4">
+                            <button onclick="showModal('createTaskModal')" class="btn-primary">
+                                <i class="fas fa-plus mr-2"></i>
+                                Create Task
+                            </button>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Task Name</th>
+                                    <th>Assigned To</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                </tr>
+                            </thead>
+                            <tbody id="guestTasksTable">
+                                <!-- Tasks will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Documents Tab -->
+                    <div id="documents-tab" class="tab-content hidden">
+                        <div class="flex justify-end mb-4">
+                            <button onclick="showModal('uploadDocumentModal')" class="btn-primary">
+                                <i class="fas fa-upload mr-2"></i>
+                                Upload Document
+                            </button>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Document Name</th>
+                                    <th>Category</th>
+                                    <th>Uploaded By</th>
+                                    <th>Upload Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="guestDocumentsTable">
+                                <!-- Documents will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Receipts Tab -->
+                    <div id="receipts-tab" class="tab-content hidden">
+                        <div class="flex justify-end mb-4">
+                            <button onclick="showModal('uploadReceiptModal')" class="btn-primary">
+                                <i class="fas fa-upload mr-2"></i>
+                                Upload Receipt
+                            </button>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Vendor</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="guestReceiptsTable">
+                                <!-- Receipts will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Timeline Tab -->
+                    <div id="timeline-tab" class="tab-content hidden">
+                        <div class="timeline" id="guestTimeline">
+                            <!-- Timeline events will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Template Selector Modal -->
+    <div id="templateSelectorModal" class="modal">
+        <div class="modal-content max-w-4xl">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-semibold">Select Template</h3>
+                <button onclick="hideModal('templateSelectorModal')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-medium mb-3">Templates</h4>
+                    <div class="space-y-2" id="templateList">
+                        <!-- Templates will be loaded here -->
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-medium mb-3">Preview</h4>
+                    <div id="templatePreview" class="border border-gray-200 rounded-lg p-4 bg-gray-50 min-h-64">
+                        Select a template to preview
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-3 mt-6">
+                <button onclick="hideModal('templateSelectorModal')" class="btn-secondary">Cancel</button>
+                <button class="btn-primary">Insert Template</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Receipt Modal -->
+    <div id="uploadReceiptModal" class="modal">
+        <div class="modal-content max-w-lg">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-semibold">Upload Receipt</h3>
+                <button onclick="hideModal('uploadReceiptModal')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form class="space-y-4">
+                <div>
+                    <label class="form-label">Receipt Image/PDF</label>
+                    <input type="file" class="form-input" accept="image/*,application/pdf">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="form-label">Vendor</label>
+                        <input type="text" class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label">Amount</label>
+                        <input type="number" step="0.01" class="form-input">
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Notes</label>
+                    <textarea class="form-input" rows="3"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" onclick="hideModal('uploadReceiptModal')" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Task Modal -->
+    <div id="createTaskModal" class="modal">
+        <div class="modal-content max-w-lg">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-semibold">Create Task</h3>
+                <button onclick="hideModal('createTaskModal')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form class="space-y-4">
+                <div>
+                    <label class="form-label">Title</label>
+                    <input type="text" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Description</label>
+                    <textarea class="form-input" rows="3"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="form-label">Assigned To</label>
+                        <select class="form-input">
+                            <option>John Smith</option>
+                            <option>Sarah Johnson</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Due Date</label>
+                        <input type="date" class="form-input">
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label">Priority</label>
+                    <select class="form-input">
+                        <option>Low</option>
+                        <option>Medium</option>
+                        <option>High</option>
+                        <option>Urgent</option>
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" onclick="hideModal('createTaskModal')" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Upload Document Modal -->
+    <div id="uploadDocumentModal" class="modal">
+        <div class="modal-content max-w-lg">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-semibold">Upload Document</h3>
+                <button onclick="hideModal('uploadDocumentModal')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form class="space-y-4">
+                <div>
+                    <label class="form-label">Category</label>
+                    <select class="form-input">
+                        <option>Insurance</option>
+                        <option>Lease Agreement</option>
+                        <option>ID Document</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">File</label>
+                    <input type="file" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Description</label>
+                    <textarea class="form-input" rows="3"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" onclick="hideModal('uploadDocumentModal')" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadGuestSidebar();
+            loadGuestDetail();
+            loadMessages();
+            loadGuestTasks();
+            loadGuestDocuments();
+            loadGuestReceipts();
+            loadGuestTimeline();
+            loadTemplateList();
+            loadAIRecommendations();
+        });
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+
+            // Add active class to clicked button
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        }
+
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('i');
+
+            content.classList.toggle('collapsed');
+            icon.classList.toggle('fa-chevron-down');
+            icon.classList.toggle('fa-chevron-up');
+        }
+    </script>
+</body>
+</html>

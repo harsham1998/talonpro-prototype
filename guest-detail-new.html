@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guest Detail - TalonPro Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40 h-16">
+        <div class="flex items-center justify-between h-full px-6">
+            <div class="flex items-center space-x-4">
+                <h1 class="text-xl font-bold text-gray-800">TalonPro Portal</h1>
+            </div>
+            <div class="flex-1 max-w-2xl mx-8">
+                <div class="relative">
+                    <input type="text" placeholder="Search guests, tasks..."
+                           class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                <div class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 px-3 py-2 rounded-lg">
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="text-sm font-medium">Admin User</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content (No Sidebar Navigation - Alacrity style) -->
+    <main class="mt-16 flex h-[calc(100vh-4rem)]">
+        <!-- Left Sidebar - Guest Info -->
+        <div class="w-80 bg-white border-r border-gray-200 overflow-y-auto">
+            <div class="p-4">
+                <!-- Guest Header -->
+                <div class="mb-4 pb-4 border-b">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Sarah Alves</h2>
+                    <div class="flex items-center text-sm text-gray-600 space-x-2 mb-2">
+                        <i class="fas fa-envelope"></i>
+                        <span>Sarahalves928@gmail.com</span>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-600 space-x-2 mb-2">
+                        <i class="fas fa-phone"></i>
+                        <span>+14252081527</span>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-600 space-x-2">
+                        <i class="fas fa-home"></i>
+                        <span>372401 (3rd Room)</span>
+                    </div>
+                </div>
+
+                <!-- Guest Status -->
+                <div class="mb-4 pb-4 border-b">
+                    <label class="form-label">Guest Status</label>
+                    <select class="form-input">
+                        <option>Arrival</option>
+                        <option>Active</option>
+                        <option>Checked Out</option>
+                    </select>
+                </div>
+
+                <!-- Record Type -->
+                <div class="mb-4 pb-4 border-b">
+                    <label class="form-label">Record Type</label>
+                    <select class="form-input">
+                        <option>Parent</option>
+                        <option>Child</option>
+                    </select>
+                </div>
+
+                <!-- Send Message Toggle -->
+                <div class="mb-4 pb-4 border-b">
+                    <label class="form-label flex items-center cursor-pointer">
+                        <input type="checkbox" class="mr-2">
+                        <span>Send Messages</span>
+                    </label>
+                    <button class="btn-primary w-full mt-2 text-sm">
+                        <i class="fas fa-comment mr-2"></i>
+                        Message Guest
+                    </button>
+                </div>
+
+                <!-- Search Messages -->
+                <div class="mb-4">
+                    <input type="text" placeholder="Search messages" class="form-input text-sm">
+                </div>
+
+                <!-- Send Message Dropdown -->
+                <div class="mb-4">
+                    <div class="relative">
+                        <select class="form-input text-sm" id="customMessageSelect">
+                            <option>Send a Message*</option>
+                            <option>Custom Message</option>
+                            <option>HOTELS- Hilton Hotel Perks For Insureds</option>
+                            <option>Assurance Services New Form: Direct Pay Authorization</option>
+                            <option>New Form : Direct Pay Authorization</option>
+                            <option>Regional Relations New Form: Direct Pay Authorization</option>
+                            <option>French Canada - Direct Payment Authorization</option>
+                        </select>
+                        <button class="absolute right-8 top-2 text-gray-600">
+                            <i class="fas fa-caret-down"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Collapsible Sections -->
+                <div class="space-y-2">
+                    <div class="collapsible-section-sidebar">
+                        <div class="collapsible-header-sidebar" onclick="toggleSidebarSection(this)">
+                            <span>Documents</span>
+                            <div class="flex items-center space-x-2">
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-sort"></i></button>
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-chevron-up"></i></button>
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-expand"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible-section-sidebar">
+                        <div class="collapsible-header-sidebar" onclick="toggleSidebarSection(this)">
+                            <span>Details</span>
+                            <div class="flex items-center space-x-2">
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-sort"></i></button>
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-chevron-up"></i></button>
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-expand"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible-section-sidebar">
+                        <div class="collapsible-header-sidebar" onclick="toggleSidebarSection(this)">
+                            <span>Tasks</span>
+                            <div class="flex items-center space-x-2">
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-sort"></i></button>
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-chevron-up"></i></button>
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-expand"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible-section-sidebar">
+                        <div class="collapsible-header-sidebar" onclick="toggleSidebarSection(this)">
+                            <span>Options</span>
+                            <div class="flex items-center space-x-2">
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-sort"></i></button>
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-chevron-up"></i></button>
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-expand"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible-section-sidebar">
+                        <div class="collapsible-header-sidebar" onclick="toggleSidebarSection(this)">
+                            <span>Expenses</span>
+                            <div class="flex items-center space-x-2">
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-sort"></i></button>
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-chevron-down"></i></button>
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-expand"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible-section-sidebar">
+                        <div class="collapsible-header-sidebar" onclick="toggleSidebarSection(this)">
+                            <span>Financials</span>
+                            <div class="flex items-center space-x-2">
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-sort"></i></button>
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-chevron-down"></i></button>
+                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-expand"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Detail Panel -->
+        <div class="flex-1 overflow-y-auto">
+            <!-- Top Action Bar -->
+            <div class="bg-white border-b border-gray-200 p-4 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <button class="p-2 hover:bg-gray-100 rounded" title="Check"><i class="fas fa-check text-green-600"></i></button>
+                    <button class="p-2 hover:bg-gray-100 rounded" title="Bell"><i class="fas fa-bell"></i></button>
+                    <button class="p-2 hover:bg-gray-100 rounded" title="Email"><i class="fas fa-envelope"></i></button>
+                    <button class="p-2 hover:bg-gray-100 rounded" title="Store"><i class="fas fa-store"></i></button>
+                    <button class="p-2 hover:bg-gray-100 rounded" title="User"><i class="fas fa-user"></i></button>
+                    <button class="p-2 hover:bg-gray-100 rounded" title="Archive"><i class="fas fa-archive"></i></button>
+                    <button class="p-2 hover:bg-gray-100 rounded" title="Copy"><i class="fas fa-copy"></i></button>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="btn-primary">
+                        <i class="fas fa-envelope mr-2"></i>
+                        Message
+                    </button>
+                    <button class="btn-secondary">
+                        <i class="fas fa-eye mr-2"></i>
+                        View
+                    </button>
+                    <button class="btn-secondary">
+                        <i class="fas fa-file-alt mr-2"></i>
+                        Documents
+                    </button>
+                    <button class="btn-secondary">
+                        <i class="fas fa-print mr-2"></i>
+                        Print
+                    </button>
+                    <button class="btn-secondary">
+                        <i class="fas fa-upload mr-2"></i>
+                        Upload
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="p-6">
+                <!-- Contact Details Section -->
+                <div class="card mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Contact Details</h3>
+                    <div class="grid grid-cols-4 gap-4">
+                        <div>
+                            <label class="form-label">Lead Requirements</label>
+                            <input type="text" class="form-input" value="">
+                        </div>
+                        <div>
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-input" value="Sarah">
+                        </div>
+                        <div>
+                            <label class="form-label">Middle Name</label>
+                            <input type="text" class="form-input" value="Alves">
+                        </div>
+                        <div>
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-input" value="">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-4 gap-4 mt-4">
+                        <div>
+                            <label class="form-label">Title</label>
+                            <input type="text" class="form-input">
+                        </div>
+                        <div>
+                            <label class="form-label">Mobile Phone</label>
+                            <input type="tel" class="form-input" value="+14252081527">
+                        </div>
+                        <div>
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" value="Sarahalves928@gmail.com">
+                        </div>
+                        <div>
+                            <label class="form-label">Mobile Phone 2</label>
+                            <input type="tel" class="form-input">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 mt-4">
+                        <div>
+                            <label class="form-label">Message Channel</label>
+                            <select class="form-input">
+                                <option>SMS</option>
+                                <option>Email</option>
+                                <option>Portal</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label">Company</label>
+                            <input type="text" class="form-input">
+                        </div>
+                        <div>
+                            <label class="form-label">Company Contact</label>
+                            <input type="text" class="form-input">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <label class="flex items-center cursor-pointer mt-6">
+                                <input type="checkbox" class="mr-2" checked>
+                                <span class="text-sm">Send Message</span>
+                            </label>
+                        </div>
+                        <div>
+                            <label class="form-label">Contact Type</label>
+                            <select class="form-input">
+                                <option>Primary</option>
+                                <option>Secondary</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn-primary mt-4">Update</button>
+                </div>
+
+                <!-- Guest Details Section -->
+                <div class="card mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Guest Details</h3>
+                    <div class="grid grid-cols-5 gap-4">
+                        <div>
+                            <label class="form-label">Room *</label>
+                            <input type="text" class="form-input" value="0">
+                        </div>
+                        <div>
+                            <label class="form-label">Arrived On</label>
+                            <input type="date" class="form-input" value="2025-03-17">
+                        </div>
+                        <div>
+                            <label class="form-label">Number Of Nights</label>
+                            <input type="number" class="form-input" value="356">
+                        </div>
+                        <div>
+                            <label class="form-label">Departing On</label>
+                            <input type="date" class="form-input" value="2026-03-08">
+                        </div>
+                        <div>
+                            <label class="form-label">Checkout Time</label>
+                            <input type="time" class="form-input" value="11:00">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <label class="form-label">ID</label>
+                            <input type="text" class="form-input" value="058940084-442569">
+                        </div>
+                        <div>
+                            <label class="form-label">Type</label>
+                            <select class="form-input">
+                                <option>Standard</option>
+                                <option>Extended</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn-primary mt-4">Update</button>
+                </div>
+
+                <!-- Extension Section -->
+                <div class="card mb-6">
+                    <button class="collapsible-header w-full" onclick="toggleExtSection(this)">
+                        <h3 class="text-lg font-semibold text-gray-800">Extension</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="collapsible-content-ext hidden mt-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="form-label">THD Contact Type</label>
+                                <select class="form-input">
+                                    <option>Primary</option>
+                                    <option>Secondary</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Case Summary -->
+                <div class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-sm p-6 mb-6 border-2 border-purple-200">
+                    <div class="collapsible-header bg-transparent p-0" onclick="toggleSection(this)">
+                        <h3 class="text-lg font-semibold text-gray-800">
+                            <span class="ai-badge mr-2">AI</span>
+                            AI Guest Summary
+                        </h3>
+                        <i class="fas fa-chevron-down text-purple-600"></i>
+                    </div>
+                    <div class="collapsible-content p-0 mt-4">
+                        <div id="aiSummaryText" class="text-gray-700 whitespace-pre-line">
+• Guest reported heater issue on Oct 12
+• Technician scheduled for Oct 13
+• Stay extended 3 days due to repair delay
+• Lease agreement provided to guest
+• Overall sentiment: Satisfied with coordinator response
+                        </div>
+                        <button onclick="regenerateAISummary()" class="mt-4 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm">
+                            <i class="fas fa-sync mr-2"></i>
+                            Regenerate Summary
+                        </button>
+                    </div>
+                </div>
+
+                <!-- AI Suggestions Widget -->
+                <div class="card mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                        <span class="ai-badge mr-2">AI</span>
+                        AI Suggestions
+                    </h3>
+                    <div id="aiRecommendations" class="space-y-2">
+                        <!-- AI recommendations will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Message Threads -->
+                <div class="card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Messages</h3>
+                        <button onclick="generateAIReply()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm">
+                            <i class="fas fa-magic mr-2"></i>
+                            Generate AI Reply
+                        </button>
+                    </div>
+
+                    <div id="aiReplySuggestions" class="hidden mb-4"></div>
+
+                    <!-- Message Threads -->
+                    <div class="space-y-4" id="messageThreads">
+                        <!-- Message threads will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Message threads data structure with 2-way conversations
+        const messageThreads = [
+            {
+                id: 1,
+                title: "Heater Repair Request",
+                lastMessage: "The heater is fixed now, thank you!",
+                sentBy: "Guest",
+                timestamp: "Today @ 02:30pm",
+                status: "Resolved",
+                unread: false,
+                messages: [
+                    {
+                        type: "guest",
+                        sender: "Sarah Alves",
+                        content: "Hi, the heater in my unit is not working properly. It's getting very cold.",
+                        timestamp: "Today @ 10:30am",
+                        channel: "SMS",
+                        category: "Maintenance",
+                        sentiment: "negative"
+                    },
+                    {
+                        type: "coordinator",
+                        sender: "Toni Westfall",
+                        content: "Thank you for letting us know. I've contacted maintenance and they will visit your unit today between 2-4 PM.",
+                        timestamp: "Today @ 10:45am",
+                        channel: "SMS"
+                    },
+                    {
+                        type: "guest",
+                        sender: "Sarah Alves",
+                        content: "Great, thank you! Also, can I get a copy of my lease agreement?",
+                        timestamp: "Today @ 11:00am",
+                        channel: "SMS",
+                        category: "Document Request",
+                        sentiment: "positive"
+                    },
+                    {
+                        type: "coordinator",
+                        sender: "Toni Westfall",
+                        content: "Of course! I'll email you a copy within the next hour.",
+                        timestamp: "Today @ 11:10am",
+                        channel: "Email"
+                    },
+                    {
+                        type: "guest",
+                        sender: "Sarah Alves",
+                        content: "The heater is fixed now, thank you!",
+                        timestamp: "Today @ 02:30pm",
+                        channel: "SMS",
+                        category: "Maintenance",
+                        sentiment: "positive"
+                    }
+                ]
+            },
+            {
+                id: 2,
+                title: "Stay Extension Request",
+                lastMessage: "Your extension has been approved through March 15",
+                sentBy: "Coordinator",
+                timestamp: "Yesterday @ 03:20pm",
+                status: "Completed",
+                unread: false,
+                messages: [
+                    {
+                        type: "guest",
+                        sender: "Sarah Alves",
+                        content: "Due to the repair delays, I might need to extend my stay by 3 days. Is that possible?",
+                        timestamp: "Yesterday @ 09:15am",
+                        channel: "Email",
+                        category: "Extension",
+                        sentiment: "neutral"
+                    },
+                    {
+                        type: "coordinator",
+                        sender: "Toni Westfall",
+                        content: "Let me check availability and get back to you within the hour.",
+                        timestamp: "Yesterday @ 09:30am",
+                        channel: "Email"
+                    },
+                    {
+                        type: "coordinator",
+                        sender: "Toni Westfall",
+                        content: "Good news! Your extension has been approved. Your new checkout date is March 15. I'll send updated paperwork shortly.",
+                        timestamp: "Yesterday @ 03:20pm",
+                        channel: "Email"
+                    },
+                    {
+                        type: "guest",
+                        sender: "Sarah Alves",
+                        content: "Perfect, thank you so much for your help!",
+                        timestamp: "Yesterday @ 03:35pm",
+                        channel: "Email",
+                        category: "Extension",
+                        sentiment: "positive"
+                    }
+                ]
+            },
+            {
+                id: 3,
+                title: "Furniture Pickup Coordination",
+                lastMessage: "Received copy, thanks",
+                sentBy: "Guest",
+                timestamp: "2/23/2026 @ 04:45pm",
+                status: "Opened",
+                unread: false,
+                messages: [
+                    {
+                        type: "coordinator",
+                        sender: "Andra Elk",
+                        content: "Hi Sarah, This is Alacrity Solutions confirming the pick up of the rental items scheduled for 03/6/2026, between 1-4pm. Our vendor, Cort Furniture, will give you a 1-hour pre-call to let you know they are on their way.",
+                        timestamp: "2/23/2026 @ 04:17pm",
+                        channel: "SMS"
+                    },
+                    {
+                        type: "guest",
+                        sender: "Sarah Alves",
+                        content: "Received copy, thanks",
+                        timestamp: "2/23/2026 @ 04:45pm",
+                        channel: "SMS",
+                        sentiment: "positive"
+                    }
+                ]
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMessageThreads();
+            loadAIRecommendations();
+        });
+
+        function loadMessageThreads() {
+            const container = document.getElementById('messageThreads');
+            if (!container) return;
+
+            const statusColors = {
+                'Resolved': 'bg-green-100 text-green-700',
+                'Completed': 'bg-blue-100 text-blue-700',
+                'Opened': 'bg-gray-100 text-gray-700',
+                'Pending': 'bg-yellow-100 text-yellow-700'
+            };
+
+            container.innerHTML = messageThreads.map(thread => `
+                <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                    <div class="bg-gray-50 p-4 cursor-pointer hover:bg-gray-100" onclick="toggleThread(${thread.id})">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-semibold text-gray-900">${thread.title}</h4>
+                            <span class="px-2 py-1 rounded text-xs font-semibold ${statusColors[thread.status] || 'bg-gray-100 text-gray-700'}">
+                                ${thread.status}
+                            </span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2 truncate">${thread.lastMessage}</p>
+                        <div class="flex items-center justify-between text-xs text-gray-500">
+                            <span>${thread.sentBy} • ${thread.timestamp}</span>
+                            <span class="text-blue-600 font-medium">
+                                <i class="fas fa-comment-dots mr-1"></i>
+                                ${thread.messages.length} messages
+                            </span>
+                        </div>
+                    </div>
+                    <div id="thread-${thread.id}" class="hidden bg-white p-4 border-t border-gray-200">
+                        <div class="space-y-4">
+                            ${thread.messages.map(msg => `
+                                <div class="message-bubble ${msg.type}">
+                                    ${msg.category ? `
+                                        <div class="flex items-center space-x-2 mb-2 ${msg.type === 'coordinator' ? 'justify-end' : ''}">
+                                            <span class="badge badge-purple text-xs">${msg.category}</span>
+                                            ${msg.sentiment ? `
+                                                <span class="sentiment-indicator sentiment-${msg.sentiment}">
+                                                    ${msg.sentiment}
+                                                </span>
+                                            ` : ''}
+                                        </div>
+                                    ` : ''}
+                                    <div class="message-content">
+                                        <p>${msg.content}</p>
+                                    </div>
+                                    <div class="message-meta ${msg.type === 'coordinator' ? 'text-right' : ''}">
+                                        ${msg.sender} • ${msg.timestamp} • ${msg.channel}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <button class="btn-primary w-full">
+                                <i class="fas fa-reply mr-2"></i>
+                                Reply to Thread
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleThread(threadId) {
+            const threadContent = document.getElementById(`thread-${threadId}`);
+            threadContent.classList.toggle('hidden');
+        }
+
+        function toggleSidebarSection(header) {
+            // Toggle sidebar section (placeholder)
+        }
+
+        function toggleExtSection(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('hidden');
+            const icon = header.querySelector('i');
+            icon.classList.toggle('fa-chevron-down');
+            icon.classList.toggle('fa-chevron-up');
+        }
+
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('collapsed');
+            const icon = header.querySelector('i');
+            icon.classList.toggle('fa-chevron-down');
+            icon.classList.toggle('fa-chevron-up');
+        }
+    </script>
+</body>
+</html>

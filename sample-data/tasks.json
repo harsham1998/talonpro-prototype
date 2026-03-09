@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "title": "Schedule maintenance for heater repair",
+    "caseId": "447451",
+    "guestName": "SanskarTesting PenTest0307",
+    "assignedTo": "John Smith",
+    "dueDate": "2025-07-12",
+    "status": "Completed",
+    "priority": "High"
+  },
+  {
+    "id": 2,
+    "title": "Send lease agreement copy",
+    "caseId": "447451",
+    "guestName": "SanskarTesting PenTest0307",
+    "assignedTo": "John Smith",
+    "dueDate": "2025-07-12",
+    "status": "Completed",
+    "priority": "Medium"
+  },
+  {
+    "id": 3,
+    "title": "Process stay extension request",
+    "caseId": "447451",
+    "guestName": "SanskarTesting PenTest0307",
+    "assignedTo": "John Smith",
+    "dueDate": "2025-07-14",
+    "status": "In Progress",
+    "priority": "Medium"
+  },
+  {
+    "id": 4,
+    "title": "Verify insurance approval",
+    "caseId": "447452",
+    "guestName": "Maria Garcia",
+    "assignedTo": "Sarah Johnson",
+    "dueDate": "2025-07-15",
+    "status": "Pending",
+    "priority": "High"
+  },
+  {
+    "id": 5,
+    "title": "Welcome call for new guest",
+    "caseId": "447453",
+    "guestName": "James Wilson",
+    "assignedTo": "Mike Davis",
+    "dueDate": "2025-07-10",
+    "status": "Pending",
+    "priority": "Low"
+  },
+  {
+    "id": 6,
+    "title": "Follow up on missing documents",
+    "caseId": "447454",
+    "guestName": "Lisa Anderson",
+    "assignedTo": "John Smith",
+    "dueDate": "2025-07-08",
+    "status": "Overdue",
+    "priority": "Urgent"
+  }
+]

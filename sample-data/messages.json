@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "guestId": 1,
+    "sender": "guest",
+    "content": "Hi, the heater in my unit is not working properly.",
+    "timestamp": "2025-07-12 10:30 AM",
+    "channel": "SMS",
+    "category": "Maintenance",
+    "sentiment": "negative"
+  },
+  {
+    "id": 2,
+    "guestId": 1,
+    "sender": "coordinator",
+    "content": "Thank you for letting us know. I've contacted maintenance and they will visit your unit today between 2-4 PM.",
+    "timestamp": "2025-07-12 10:45 AM",
+    "channel": "SMS",
+    "category": "Maintenance",
+    "sentiment": "positive"
+  },
+  {
+    "id": 3,
+    "guestId": 1,
+    "sender": "guest",
+    "content": "Great, thank you! Also, can I get a copy of my lease agreement?",
+    "timestamp": "2025-07-12 11:00 AM",
+    "channel": "SMS",
+    "category": "Document Request",
+    "sentiment": "positive"
+  },
+  {
+    "id": 4,
+    "guestId": 1,
+    "sender": "coordinator",
+    "content": "Of course! I'll email you a copy within the next hour.",
+    "timestamp": "2025-07-12 11:10 AM",
+    "channel": "SMS",
+    "category": "Document Request",
+    "sentiment": "positive"
+  },
+  {
+    "id": 5,
+    "guestId": 1,
+    "sender": "guest",
+    "content": "Due to the repair delays, I might need to extend my stay by 3 days.",
+    "timestamp": "2025-07-13 09:15 AM",
+    "channel": "Email",
+    "category": "Extension",
+    "sentiment": "neutral"
+  }
+]

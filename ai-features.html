@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Features - TalonPro Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40 h-16">
+        <div class="flex items-center justify-between h-full px-6">
+            <div class="flex items-center space-x-4">
+                <h1 class="text-xl font-bold text-gray-800">TalonPro Portal</h1>
+            </div>
+            <div class="flex-1 max-w-2xl mx-8">
+                <div class="relative">
+                    <input type="text" placeholder="Search guests, cases, tasks..."
+                           class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                <div class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 px-3 py-2 rounded-lg">
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="text-sm font-medium">Admin User</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="fixed left-0 top-16 bottom-0 w-64 bg-gray-900 text-white overflow-y-auto">
+        <nav class="p-4">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="guest-list-new.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Guests</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-comments"></i>
+                <span>Messages</span>
+            </a>
+            <a href="tasks.html" class="nav-item">
+                <i class="fas fa-tasks"></i>
+                <span>Tasks</span>
+            </a>
+            <a href="documents.html" class="nav-item">
+                <i class="fas fa-file-alt"></i>
+                <span>Documents</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-receipt"></i>
+                <span>Receipts</span>
+            </a>
+            <a href="templates.html" class="nav-item">
+                <i class="fas fa-file-invoice"></i>
+                <span>Templates</span>
+            </a>
+            <a href="rules.html" class="nav-item">
+                <i class="fas fa-cogs"></i>
+                <span>Automation Rules</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-chart-bar"></i>
+                <span>Reports</span>
+            </a>
+            <a href="ai-features.html" class="nav-item active">
+                <i class="fas fa-brain"></i>
+                <span>AI Uses</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ml-64 mt-16 p-6">
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                <i class="fas fa-brain mr-2 text-purple-600"></i>
+                AI Features & Use Cases
+            </h2>
+            <p class="text-gray-600">Explore how AI enhances the TalonPro Portal to improve efficiency and reduce manual work</p>
+        </div>
+
+        <!-- AI Features Grid -->
+        <div class="grid grid-cols-1 gap-4" id="aiFeaturesContainer">
+            <!-- AI features will be loaded here -->
+        </div>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+    <script>
+        const aiFeatures = [
+            {
+                id: 1,
+                name: 'AI Case Summary',
+                icon: 'fa-file-alt',
+                color: 'blue',
+                useCase: 'Automatically generates concise summaries of guest cases by analyzing message history, documents, receipts, and timeline events.',
+                helpful: 'Saves coordinators 10-15 minutes per case review. New team members can quickly understand case context without reading through entire message threads. Reduces onboarding time by 60%.',
+                costUsage: 'Estimated $0.02 - $0.05 per summary (1,500-3,000 tokens). Average 50 summaries/day = $1.00 - $2.50/day or ~$40-80/month.',
+                automation: 'AI processes: 1) All guest messages (categorized by topic), 2) Recent activity timeline, 3) Document uploads, 4) Outstanding tasks, 5) Payment status. Generates a structured summary highlighting key issues, next steps, and urgency indicators.',
+                location: 'Guest Detail Page (top section)',
+                benefit: '80% reduction in case review time',
+                example: '<strong>Input:</strong> Guest "Sarah Alves" has 15 messages, 3 documents, 2 receipts, and 4 timeline events over 2 weeks.<br><br><strong>AI Output:</strong><br>"Sarah Alves is currently staying at Room 372 (Hotel). <strong>Main Issues:</strong> Heater malfunction (resolved), extension request pending approval. <strong>Next Steps:</strong> 1) Follow up on extension approval with property manager, 2) Confirm move-out inspection date. <strong>Status:</strong> Guest sentiment positive, no urgent issues. Last contact: 2 days ago."'
+            },
+            {
+                id: 2,
+                name: 'AI Reply Generator',
+                icon: 'fa-comments',
+                color: 'green',
+                useCase: 'Suggests 3 contextual reply options for guest messages based on conversation history, message sentiment, and category (maintenance, billing, extension, etc.).',
+                helpful: 'Reduces response time from 5-10 minutes to 30 seconds. Ensures consistent, professional communication. Particularly valuable for after-hours or high-volume periods.',
+                costUsage: 'Estimated $0.01 - $0.03 per reply generation (800-1,500 tokens). Average 100 replies/day = $1.00 - $3.00/day or ~$30-90/month.',
+                automation: 'AI analyzes: 1) Current message content & sentiment, 2) Previous conversation context, 3) Message category (maintenance/billing/etc.), 4) Guest history & preferences. Generates 3 reply options: Professional, Friendly, and Detailed variants.',
+                location: 'Guest Detail Page → Messages Tab',
+                benefit: '90% faster response time',
+                example: '<strong>Guest Message:</strong> "Hi, the heater in my room is not working. It\'s getting really cold at night. Can someone fix this ASAP?"<br><br><strong>AI Generated Replies:</strong><br><br><strong>Option 1 (Professional):</strong> "Thank you for bringing this to our attention. We sincerely apologize for the inconvenience. I\'ve immediately dispatched our maintenance team to your unit. They should arrive within the next 2 hours. We\'ll follow up to ensure the issue is fully resolved."<br><br><strong>Option 2 (Friendly):</strong> "Oh no! I\'m so sorry you\'re dealing with a broken heater. That must be really uncomfortable. I\'ve already contacted maintenance and they\'re on their way to fix it ASAP. Hang tight - help is coming soon!"<br><br><strong>Option 3 (Detailed):</strong> "Thank you for reporting the heater issue. I\'ve created a priority maintenance ticket (#M-2847) and assigned it to our HVAC specialist, Mike. He will arrive at your unit between 2:00-4:00 PM today. In the meantime, we can provide a space heater if needed. Please let me know if you\'d like one delivered to your room."'
+            },
+            {
+                id: 3,
+                name: 'Message Categorization',
+                icon: 'fa-tags',
+                color: 'purple',
+                useCase: 'Automatically classifies incoming guest messages into categories: Maintenance, Billing, Extension Request, Document Request, General Inquiry, Complaint.',
+                helpful: 'Enables automatic routing to appropriate team members. Improves response SLAs by 40%. Creates data for analytics on common guest issues.',
+                costUsage: 'Estimated $0.005 - $0.01 per message (300-500 tokens). Average 200 messages/day = $1.00 - $2.00/day or ~$30-60/month.',
+                automation: 'AI uses natural language processing to: 1) Analyze message content, 2) Identify keywords and intent, 3) Match to predefined categories, 4) Assign category badge and priority level. Accuracy: ~92% based on training data.',
+                location: 'Dashboard, Guest Detail Page → Messages Tab',
+                benefit: '100% automated message triage',
+                example: '<strong>Message 1:</strong> "The AC unit is making a loud noise and not cooling properly."<br><strong>AI Category:</strong> <span class="badge badge-purple">Maintenance</span> (Confidence: 96%)<br><br><strong>Message 2:</strong> "I need a copy of my lease agreement for insurance purposes."<br><strong>AI Category:</strong> <span class="badge badge-blue">Document Request</span> (Confidence: 94%)<br><br><strong>Message 3:</strong> "Can I extend my stay for another month? My work project got delayed."<br><strong>AI Category:</strong> <span class="badge badge-yellow">Extension Request</span> (Confidence: 98%)<br><br><strong>Message 4:</strong> "The monthly charge on my last invoice doesn\'t match what we agreed on."<br><strong>AI Category:</strong> <span class="badge badge-orange">Billing</span> (Confidence: 91%)'
+            },
+            {
+                id: 4,
+                name: 'Sentiment Indicators',
+                icon: 'fa-smile',
+                color: 'yellow',
+                useCase: 'Analyzes guest message tone to detect positive, neutral, or negative sentiment. Flags urgent/negative messages for priority handling.',
+                helpful: 'Prevents escalations by surfacing unhappy guests immediately. Improves guest satisfaction scores by 25%. Enables proactive outreach before issues escalate.',
+                costUsage: 'Estimated $0.003 - $0.008 per message (200-400 tokens). Average 200 messages/day = $0.60 - $1.60/day or ~$20-50/month.',
+                automation: 'AI performs sentiment analysis on: 1) Message text content, 2) Punctuation/emphasis patterns, 3) Keyword urgency indicators (ASAP, urgent, frustrated). Assigns sentiment score: Positive (😊), Neutral (😐), Negative (😟). Negative messages auto-flagged for immediate review.',
+                location: 'Guest Detail Page → Messages Tab, Dashboard Alerts',
+                benefit: '95% accuracy in detecting urgent issues',
+                example: '<strong>Message 1:</strong> "Thank you so much for fixing the heater so quickly! You guys are amazing! 😊"<br><strong>AI Sentiment:</strong> <span style="color: green;">😊 Positive</span> (Score: 0.92) - No action needed<br><br><strong>Message 2:</strong> "Can you confirm the check-out date is still July 15th?"<br><strong>AI Sentiment:</strong> <span style="color: gray;">😐 Neutral</span> (Score: 0.05) - Standard response<br><br><strong>Message 3:</strong> "This is the THIRD time I\'ve asked about this! I\'m extremely frustrated and considering breaking my lease!"<br><strong>AI Sentiment:</strong> <span style="color: red;">😟 Negative</span> (Score: -0.87) - <strong style="color: red;">⚠️ URGENT - Auto-escalated to supervisor</strong>'
+            },
+            {
+                id: 5,
+                name: 'Receipt AI Extraction',
+                icon: 'fa-receipt',
+                color: 'orange',
+                useCase: 'Extracts vendor name, amount, date, category, and line items from uploaded receipt images or PDFs using OCR + AI.',
+                helpful: 'Eliminates 100% of manual data entry for receipts. Processes receipts in 2 seconds vs. 3-5 minutes manually. Reduces data entry errors by 98%.',
+                costUsage: 'Estimated $0.05 - $0.15 per receipt (includes OCR + extraction, 2,000-4,000 tokens). Average 30 receipts/day = $1.50 - $4.50/day or ~$50-140/month.',
+                automation: 'AI workflow: 1) OCR scans uploaded receipt image, 2) Identifies key fields (vendor, total, date, tax), 3) Extracts line items, 4) Categorizes expense type (food, repair, utility), 5) Validates amounts and dates, 6) Auto-populates receipt form. Supports images and PDFs.',
+                location: 'Guest Detail Page → Receipts Tab',
+                benefit: '100% automated receipt data entry',
+                example: '<strong>Uploaded Receipt:</strong> Photo of restaurant bill (blurry, wrinkled paper)<br><br><strong>AI Extracted Data:</strong><br>• <strong>Vendor:</strong> "Joe\'s Diner & Grill"<br>• <strong>Date:</strong> March 15, 2025<br>• <strong>Time:</strong> 6:42 PM<br>• <strong>Total Amount:</strong> $47.89<br>• <strong>Tax:</strong> $3.83<br>• <strong>Subtotal:</strong> $44.06<br>• <strong>Payment Method:</strong> Visa ****1234<br>• <strong>Category:</strong> Food & Dining<br>• <strong>Line Items:</strong><br>&nbsp;&nbsp;- Burger Deluxe: $12.99<br>&nbsp;&nbsp;- Caesar Salad: $8.50<br>&nbsp;&nbsp;- Grilled Chicken: $15.99<br>&nbsp;&nbsp;- Soda (2x): $5.58<br>&nbsp;&nbsp;- Coffee: $1.00<br><br><strong>Processing Time:</strong> 2.3 seconds | <strong>Confidence:</strong> 98%'
+            },
+            {
+                id: 6,
+                name: 'AI Follow-Up Recommendations',
+                icon: 'fa-tasks',
+                color: 'red',
+                useCase: 'Analyzes case status to suggest next actions: follow up with vendor, send status update, check approvals, confirm dates, etc.',
+                helpful: 'Prevents tasks from falling through cracks. Improves task completion rate by 35%. Prioritizes actions by urgency and impact.',
+                costUsage: 'Estimated $0.02 - $0.04 per case analysis (1,000-2,000 tokens). Analyzed once daily per active case. 100 active cases = $2.00 - $4.00/day or ~$60-120/month.',
+                automation: 'AI evaluates: 1) Days since last guest contact, 2) Pending approvals or documents, 3) Upcoming check-in/out dates, 4) Unresolved maintenance requests, 5) Payment status. Generates prioritized action list with urgency levels (High, Medium, Low).',
+                location: 'Guest Detail Page → Right Sidebar',
+                benefit: '40% increase in proactive communication',
+                example: '<strong>Guest:</strong> Sarah Alves (ID: 058940084)<br><strong>Last Contact:</strong> 5 days ago<br><strong>Check-out Date:</strong> 12 days away<br><br><strong>AI Recommended Actions:</strong><br><br><span style="color: red;">⚠️ <strong>HIGH PRIORITY</strong></span><br>1. <strong>Follow up with HVAC vendor</strong> - Heater repair marked "complete" but no confirmation from guest (4 days ago)<br><br><span style="color: orange;">⚡ <strong>MEDIUM PRIORITY</strong></span><br>2. <strong>Send extension approval update</strong> - Extension request pending manager approval for 3 days<br>3. <strong>Schedule move-out inspection</strong> - Check-out in 12 days, inspection not scheduled<br><br><span style="color: green;">✓ <strong>LOW PRIORITY</strong></span><br>4. <strong>Request feedback survey</strong> - Guest has been staying for 2+ weeks, good time to check satisfaction'
+            },
+            {
+                id: 7,
+                name: 'AI Template Generator',
+                icon: 'fa-file-invoice',
+                color: 'indigo',
+                useCase: 'Generates custom message templates based on purpose, tone (professional/friendly/formal/casual), and length preferences.',
+                helpful: 'Creates templates in 10 seconds vs. 10-15 minutes manually. Ensures brand-consistent communication. Generates variations for A/B testing.',
+                costUsage: 'Estimated $0.02 - $0.06 per template (1,500-3,000 tokens). Average 5-10 new templates/week = $0.10 - $0.60/week or ~$5-25/month.',
+                automation: 'AI generates templates by: 1) Understanding purpose/scenario (welcome, extension, billing reminder), 2) Applying tone guidelines, 3) Adjusting length (short/medium/long), 4) Including dynamic placeholders {{guestName}}, {{checkInDate}}, etc. Offers "Regenerate" for alternative versions.',
+                location: 'Templates Page',
+                benefit: '95% reduction in template creation time',
+                example: '<strong>User Input:</strong><br>• <strong>Purpose:</strong> Welcome message for new guests<br>• <strong>Tone:</strong> Friendly<br>• <strong>Length:</strong> Medium<br><br><strong>AI Generated Template:</strong><br><br>"Hi {{guestName}},<br><br>Welcome to your new temporary home! 🏠 We\'re so excited to have you staying with us.<br><br>Your check-in is confirmed for {{checkInDate}} at {{propertyAddress}}. Here are a few quick things to know:<br><br>✓ Your coordinator {{coordinatorName}} will be your main point of contact<br>✓ Check-in time is between 2:00 PM - 6:00 PM<br>✓ Parking instructions and WiFi password will be provided upon arrival<br><br>If you have any questions before your arrival, don\'t hesitate to reach out. We\'re here to make your stay as comfortable as possible!<br><br>Looking forward to welcoming you,<br>{{companyName}} Team"<br><br><em>Generation time: 8 seconds | Includes 6 dynamic placeholders</em>'
+            },
+            {
+                id: 8,
+                name: 'AI Automation Rules',
+                icon: 'fa-cogs',
+                color: 'teal',
+                useCase: 'Suggests automation rules based on common workflows: auto-assign coordinators, send reminders, escalate unresponded messages, etc.',
+                helpful: 'Identifies automation opportunities that save 5-10 hours/week. Learns from patterns in historical data. Confidence scores help prioritize which rules to implement.',
+                costUsage: 'Estimated $0.05 - $0.10 per analysis session (3,000-5,000 tokens). Analyzed weekly for pattern detection. ~$0.50/week or ~$2-4/month.',
+                automation: 'AI analyzes: 1) Historical workflow patterns, 2) Common manual tasks, 3) Message response times, 4) Task completion patterns. Suggests rules with confidence scores (85-98%). Shows estimated time savings per rule.',
+                location: 'Automation Rules Page',
+                benefit: 'Identifies 8-12 automation opportunities/week',
+                example: '<strong>AI Analyzed:</strong> 847 messages, 234 tasks, 156 cases over past 30 days<br><br><strong>Suggested Automation Rules:</strong><br><br><strong>Rule 1:</strong> "Auto-escalate unresponded maintenance messages after 4 hours"<br>• <strong>Confidence:</strong> 96%<br>• <strong>Trigger:</strong> Maintenance category + No response after 4 hours<br>• <strong>Action:</strong> Send to supervisor & create urgent task<br>• <strong>Impact:</strong> Saves 3.2 hours/week, affects ~18 cases/month<br><br><strong>Rule 2:</strong> "Auto-assign new guests to coordinator with lowest caseload"<br>• <strong>Confidence:</strong> 89%<br>• <strong>Trigger:</strong> New guest created + No coordinator assigned<br>• <strong>Action:</strong> Assign to coordinator with fewest active cases<br>• <strong>Impact:</strong> Saves 2.5 hours/week, balances workload<br><br><strong>Rule 3:</strong> "Send check-out reminder 48 hours before departure"<br>• <strong>Confidence:</strong> 94%<br>• <strong>Trigger:</strong> 48 hours before check-out date<br>• <strong>Action:</strong> Auto-send move-out checklist template<br>• <strong>Impact:</strong> Saves 1.8 hours/week, improves move-out process'
+            }
+        ];
+
+        function loadAIFeatures() {
+            const container = document.getElementById('aiFeaturesContainer');
+
+            const colorClasses = {
+                blue: 'bg-blue-50 border-blue-200 text-blue-700',
+                green: 'bg-green-50 border-green-200 text-green-700',
+                purple: 'bg-purple-50 border-purple-200 text-purple-700',
+                yellow: 'bg-yellow-50 border-yellow-200 text-yellow-700',
+                orange: 'bg-orange-50 border-orange-200 text-orange-700',
+                red: 'bg-red-50 border-red-200 text-red-700',
+                indigo: 'bg-indigo-50 border-indigo-200 text-indigo-700',
+                teal: 'bg-teal-50 border-teal-200 text-teal-700'
+            };
+
+            container.innerHTML = aiFeatures.map(feature => `
+                <div class="card border-l-4 ${colorClasses[feature.color].split(' ')[1]}" id="feature-${feature.id}">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 ${colorClasses[feature.color].split(' ')[0]} rounded-lg flex items-center justify-center">
+                                <i class="fas ${feature.icon} text-xl ${colorClasses[feature.color].split(' ')[2]}"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800">${feature.name}</h3>
+                                <p class="text-sm text-gray-500">
+                                    <i class="fas fa-map-marker-alt mr-1"></i>
+                                    ${feature.location}
+                                </p>
+                            </div>
+                        </div>
+                        <button onclick="toggleFeature(${feature.id})" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-chevron-down text-xl" id="icon-${feature.id}"></i>
+                        </button>
+                    </div>
+
+                    <div class="space-y-4" id="details-${feature.id}" style="display: none;">
+                        <!-- Use Case -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h4 class="text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-lightbulb mr-2 text-yellow-500"></i>
+                                Use Case
+                            </h4>
+                            <p class="text-sm text-gray-700">${feature.useCase}</p>
+                        </div>
+
+                        <!-- How It Helps -->
+                        <div class="bg-green-50 rounded-lg p-4">
+                            <h4 class="text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-check-circle mr-2 text-green-500"></i>
+                                How It Helps
+                            </h4>
+                            <p class="text-sm text-gray-700">${feature.helpful}</p>
+                            <div class="mt-2 inline-block px-3 py-1 bg-green-200 text-green-800 rounded-full text-xs font-bold">
+                                ${feature.benefit}
+                            </div>
+                        </div>
+
+                        <!-- Cost Usage -->
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h4 class="text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-dollar-sign mr-2 text-blue-500"></i>
+                                Expected Cost Usage
+                            </h4>
+                            <p class="text-sm text-gray-700">${feature.costUsage}</p>
+                        </div>
+
+                        <!-- How Automation Works -->
+                        <div class="bg-purple-50 rounded-lg p-4">
+                            <h4 class="text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-robot mr-2 text-purple-500"></i>
+                                How Automated Response Works
+                            </h4>
+                            <p class="text-sm text-gray-700">${feature.automation}</p>
+                        </div>
+
+                        <!-- Example -->
+                        <div class="bg-orange-50 rounded-lg p-4 border-2 border-orange-200">
+                            <h4 class="text-sm font-semibold text-gray-700 mb-3">
+                                <i class="fas fa-code mr-2 text-orange-500"></i>
+                                Real-World Example
+                            </h4>
+                            <div class="text-sm text-gray-700 leading-relaxed">
+                                ${feature.example}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleFeature(id) {
+            const details = document.getElementById(`details-${id}`);
+            const icon = document.getElementById(`icon-${id}`);
+
+            if (details.style.display === 'none') {
+                details.style.display = 'block';
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                details.style.display = 'none';
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAIFeatures();
+        });
+    </script>
+</body>
+</html>
