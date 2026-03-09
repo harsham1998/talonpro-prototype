@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guest Mobile View - TalonPro Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: #1e293b; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+        .phone-frame {
+            width: 390px;
+            height: 844px;
+            background: #000;
+            border-radius: 50px;
+            box-shadow: 0 0 0 12px #1a1a1a, 0 0 0 14px #333, 0 40px 80px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phone-screen {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #f2f2f7;
+            border-radius: 46px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Notch */
+        .phone-notch {
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 130px; height: 34px;
+            background: #000;
+            border-radius: 0 0 20px 20px;
+            z-index: 100;
+        }
+
+        /* Status bar */
+        .status-bar {
+            height: 50px;
+            background: transparent;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 0 28px 6px;
+            flex-shrink: 0;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1c1c1e;
+            z-index: 10;
+        }
+
+        /* Screens */
+        .screen { display: none; flex: 1; overflow-y: auto; flex-direction: column; }
+        .screen.active { display: flex; }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            height: 82px;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid #e5e5ea;
+            display: flex;
+            align-items: flex-start;
+            padding-top: 8px;
+            flex-shrink: 0;
+        }
+
+        .nav-tab {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            padding: 4px 0;
+            color: #8e8e93;
+        }
+        .nav-tab.active { color: #007aff; }
+        .nav-tab i { font-size: 22px; }
+        .nav-tab span { font-size: 10px; font-weight: 500; }
+
+        /* iOS-style cards */
+        .ios-card {
+            background: white;
+            border-radius: 12px;
+            margin: 0 16px 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .ios-section-header {
+            padding: 8px 16px 4px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* App header */
+        .app-header {
+            background: white;
+            padding: 12px 16px 12px;
+            border-bottom: 1px solid #e5e5ea;
+            flex-shrink: 0;
+        }
+
+        /* Chat */
+        .chat-bubble {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+            margin-bottom: 4px;
+        }
+        .chat-bubble.incoming {
+            background: white;
+            color: #1c1c1e;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .chat-bubble.outgoing {
+            background: #007aff;
+            color: white;
+            border-bottom-right-radius: 4px;
+            margin-left: auto;
+        }
+        .chat-bubble.email-incoming {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-bottom-left-radius: 4px;
+        }
+        .chat-bubble.email-outgoing {
+            background: #34c759;
+            color: white;
+            border-bottom-right-radius: 4px;
+            margin-left: auto;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            height: 6px;
+            background: #e5e5ea;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, #007aff, #5ac8fa);
+        }
+
+        /* Walkthrough overlay */
+        .walkthrough-nav {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .wt-btn {
+            background: white;
+            color: #1e293b;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .wt-btn:hover { background: #f1f5f9; transform: scale(1.03); }
+        .wt-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+        .wt-dots { display: flex; gap: 6px; align-items: center; }
+        .wt-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .wt-dot.active { background: white; width: 20px; border-radius: 4px; }
+
+        /* Screen label */
+        .screen-label {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.6);
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Slide transition */
+        .phone-screen { transition: transform 0.3s ease; }
+
+        /* scrollbar hide */
+        .screen::-webkit-scrollbar { display: none; }
+        .screen { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center">
+
+    <div class="screen-label" id="screenLabel">Dashboard</div>
+
+    <!-- Phone Frame -->
+    <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span>9:41</span>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-signal text-sm"></i>
+                    <i class="fas fa-wifi text-sm"></i>
+                    <i class="fas fa-battery-three-quarters text-sm"></i>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════ -->
+            <!-- SCREEN 1: HOME / DASHBOARD             -->
+            <!-- ═══════════════════════════════════════ -->
+            <div class="screen active" id="screen-home">
+                <!-- App Header -->
+                <div class="app-header">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-gray-500">Welcome back</p>
+                            <h1 class="text-lg font-bold text-gray-900">James Wilson</h1>
+                        </div>
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">JW</div>
+                    </div>
+                </div>
+
+                <div class="flex-1 overflow-y-auto pb-4 pt-3">
+                    <!-- Claim Status Banner -->
+                    <div class="mx-4 mb-3 bg-blue-600 rounded-2xl p-4 text-white">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold opacity-80">ACTIVE CLAIM</span>
+                            <span class="text-xs bg-white bg-opacity-20 px-2 py-0.5 rounded-full">Case #2024-0891</span>
+                        </div>
+                        <p class="text-lg font-bold">Hurricane Ian Relocation</p>
+                        <p class="text-xs opacity-80 mt-1">Adjuster: Sarah Mitchell · (555) 010-4200</p>
+                        <div class="mt-3 pt-3 border-t border-white border-opacity-20 grid grid-cols-2 gap-3">
+                            <div>
+                                <p class="text-xs opacity-70">ALE Limit</p>
+                                <p class="font-bold text-sm">$45,000.00</p>
+                                <p class="text-xs opacity-70">Term: 12 months</p>
+                            </div>
+                            <div>
+                                <p class="text-xs opacity-70">Amount Used</p>
+                                <p class="font-bold text-sm">$18,750.00</p>
+                                <p class="text-xs opacity-70">41.7% of limit</p>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <div class="progress-bar" style="background:rgba(255,255,255,0.2)">
+                                <div class="progress-fill" style="width:41.7%; background: rgba(255,255,255,0.8)"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Current Lodging -->
+                    <p class="ios-section-header">Current Lodging</p>
+                    <div class="ios-card">
+                        <div class="p-4">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                                        <i class="fas fa-hotel text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-gray-900 text-sm">Marriott Downtown</p>
+                                        <p class="text-xs text-gray-500">123 Main Street, New York NY</p>
+                                        <p class="text-xs text-gray-500 mt-0.5">Room 412 · King Suite</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">Active</span>
+                            </div>
+                            <div class="mt-3 pt-3 border-t border-gray-100 grid grid-cols-2 gap-2 text-xs">
+                                <div>
+                                    <p class="text-gray-500">Check-in</p>
+                                    <p class="font-medium text-gray-800">Mar 1, 2024</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500">Check-out</p>
+                                    <p class="font-medium text-gray-800">Mar 31, 2024</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500">Rate/night</p>
+                                    <p class="font-medium text-gray-800">$250.00</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500">Lodging Spent</p>
+                                    <p class="font-medium text-gray-800">$7,750.00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <p class="ios-section-header">Quick Actions</p>
+                    <div class="grid grid-cols-2 gap-3 mx-4 mb-3">
+                        <div onclick="goToScreen('messages')" class="bg-white rounded-2xl p-4 text-center cursor-pointer shadow-sm active:scale-95 transition-transform">
+                            <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-2">
+                                <i class="fas fa-comments text-blue-600 text-xl"></i>
+                            </div>
+                            <p class="text-xs font-semibold text-gray-800">Messages</p>
+                            <p class="text-xs text-blue-600 mt-0.5">2 unread</p>
+                        </div>
+                        <div onclick="goToScreen('receipts')" class="bg-white rounded-2xl p-4 text-center cursor-pointer shadow-sm active:scale-95 transition-transform">
+                            <div class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-2">
+                                <i class="fas fa-receipt text-orange-500 text-xl"></i>
+                            </div>
+                            <p class="text-xs font-semibold text-gray-800">Receipts</p>
+                            <p class="text-xs text-orange-500 mt-0.5">3 pending</p>
+                        </div>
+                        <div onclick="goToScreen('documents')" class="bg-white rounded-2xl p-4 text-center cursor-pointer shadow-sm active:scale-95 transition-transform">
+                            <div class="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-2">
+                                <i class="fas fa-file-alt text-purple-600 text-xl"></i>
+                            </div>
+                            <p class="text-xs font-semibold text-gray-800">Documents</p>
+                            <p class="text-xs text-purple-600 mt-0.5">5 files</p>
+                        </div>
+                        <div onclick="goToScreen('extension')" class="bg-white rounded-2xl p-4 text-center cursor-pointer shadow-sm active:scale-95 transition-transform">
+                            <div class="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-2">
+                                <i class="fas fa-calendar-plus text-green-600 text-xl"></i>
+                            </div>
+                            <p class="text-xs font-semibold text-gray-800">Request Ext.</p>
+                            <p class="text-xs text-gray-400 mt-0.5">Mar 31 deadline</p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <p class="ios-section-header">Recent Activity</p>
+                    <div class="ios-card">
+                        <div class="p-3 flex items-center gap-3 border-b border-gray-100">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-comment text-blue-500 text-xs"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-xs font-medium text-gray-800">New message from coordinator</p>
+                                <p class="text-xs text-gray-400">Your extension request is under review</p>
+                            </div>
+                            <span class="text-xs text-gray-400">10m</span>
+                        </div>
+                        <div class="p-3 flex items-center gap-3 border-b border-gray-100">
+                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-check text-green-500 text-xs"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-xs font-medium text-gray-800">Receipt RCP-001 approved</p>
+                                <p class="text-xs text-gray-400">Marriott Downtown · $1,250.00</p>
+                            </div>
+                            <span class="text-xs text-gray-400">2h</span>
+                        </div>
+                        <div class="p-3 flex items-center gap-3">
+                            <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-upload text-yellow-500 text-xs"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-xs font-medium text-gray-800">Document uploaded</p>
+                                <p class="text-xs text-gray-400">Insurance_Policy_2024.pdf</p>
+                            </div>
+                            <span class="text-xs text-gray-400">1d</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════ -->
+            <!-- SCREEN 2: MESSAGES                      -->
+            <!-- ═══════════════════════════════════════ -->
+            <div class="screen" id="screen-messages">
+                <div class="app-header">
+                    <h1 class="text-lg font-bold text-gray-900">Messages</h1>
+                    <p class="text-xs text-gray-500">Your coordinator conversations</p>
+                </div>
+
+                <div class="flex-1 overflow-y-auto pb-2 pt-2">
+                    <!-- SMS Conversation Thread -->
+                    <p class="ios-section-header">SMS</p>
+                    <div class="ios-card cursor-pointer" onclick="goToScreen('chat-sms')">
+                        <div class="p-3 flex items-center gap-3">
+                            <div class="relative">
+                                <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">SM</div>
+                                <div class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between">
+                                    <p class="font-semibold text-gray-900 text-sm">Sarah Mitchell</p>
+                                    <span class="text-xs text-gray-400">10:02 AM</span>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-0.5 truncate">Your extension request is under review...</p>
+                            </div>
+                            <div class="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                                <span class="text-xs text-white font-bold">2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email Conversation Thread -->
+                    <p class="ios-section-header">Email</p>
+                    <div class="ios-card cursor-pointer" onclick="goToScreen('chat-email')">
+                        <div class="p-3 flex items-center gap-3">
+                            <div class="relative">
+                                <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold">TM</div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between">
+                                    <p class="font-semibold text-gray-900 text-sm">TalonPro Team</p>
+                                    <span class="text-xs text-gray-400">Yesterday</span>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-0.5 truncate">Re: Relocation Schedule – March 2024</p>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+                        </div>
+                    </div>
+
+                    <!-- Second SMS thread -->
+                    <div class="ios-card cursor-pointer" onclick="goToScreen('chat-sms2')">
+                        <div class="p-3 flex items-center gap-3">
+                            <div class="relative">
+                                <div class="w-12 h-12 bg-teal-500 rounded-full flex items-center justify-center text-white font-bold">RC</div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between">
+                                    <p class="font-semibold text-gray-900 text-sm">Rachel Connor</p>
+                                    <span class="text-xs text-gray-400">Mar 5</span>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-0.5 truncate">✓✓ Got it — hotel confirmed for March 10!</p>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+                        </div>
+                    </div>
+
+                    <p class="text-center text-xs text-gray-400 mt-4 mb-2">All messages are end-to-end secured</p>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════ -->
+            <!-- SCREEN 3: SMS CHAT                      -->
+            <!-- ═══════════════════════════════════════ -->
+            <div class="screen" id="screen-chat-sms" style="background:white;">
+                <!-- Chat Header -->
+                <div class="bg-white border-b border-gray-100 px-4 pt-2 pb-3 flex items-center gap-3 flex-shrink-0">
+                    <button onclick="goToScreen('messages')" class="text-blue-500 mr-1">
+                        <i class="fas fa-chevron-left text-lg"></i>
+                    </button>
+                    <div class="w-9 h-9 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">SM</div>
+                    <div>
+                        <p class="font-semibold text-gray-900 text-sm">Sarah Mitchell</p>
+                        <p class="text-xs text-green-500">Online · Your Coordinator</p>
+                    </div>
+                    <div class="ml-auto flex gap-3 text-blue-500">
+                        <i class="fas fa-phone"></i>
+                        <i class="fas fa-ellipsis-v"></i>
+                    </div>
+                </div>
+
+                <!-- Messages -->
+                <div class="flex-1 overflow-y-auto p-4 space-y-3" style="background:#f2f2f7;">
+                    <div class="text-center text-xs text-gray-400 mb-2">Today</div>
+
+                    <div class="flex flex-col items-start">
+                        <div class="chat-bubble incoming">Hi James! I wanted to check in — how's everything going at the Marriott?</div>
+                        <p class="text-xs text-gray-400 mt-1 ml-1">9:15 AM</p>
+                    </div>
+
+                    <div class="flex flex-col items-end">
+                        <div class="chat-bubble outgoing">It's good, thanks! Just wanted to ask about extending my stay past March 31st.</div>
+                        <p class="text-xs text-gray-400 mt-1 mr-1">9:20 AM</p>
+                    </div>
+
+                    <div class="flex flex-col items-start">
+                        <div class="chat-bubble incoming">Of course! We can look into that. Do you know how many additional weeks you'd need?</div>
+                        <p class="text-xs text-gray-400 mt-1 ml-1">9:22 AM</p>
+                    </div>
+
+                    <div class="flex flex-col items-end">
+                        <div class="chat-bubble outgoing">Probably 3–4 more weeks. Repairs on my home are taking longer than expected.</div>
+                        <p class="text-xs text-gray-400 mt-1 mr-1">9:45 AM</p>
+                    </div>
+
+                    <div class="flex flex-col items-start">
+                        <div class="chat-bubble incoming">Understood. Please submit a formal Request Extension through the app and I'll prioritize reviewing it today. 👍</div>
+                        <p class="text-xs text-gray-400 mt-1 ml-1">9:50 AM</p>
+                    </div>
+
+                    <div class="flex flex-col items-end">
+                        <div class="chat-bubble outgoing">Just submitted it! Thank you Sarah.</div>
+                        <p class="text-xs text-gray-400 mt-1 mr-1">9:55 AM</p>
+                    </div>
+
+                    <div class="flex flex-col items-start">
+                        <div class="chat-bubble incoming">Your extension request is under review. We'll have an answer by EOD! 🏠</div>
+                        <p class="text-xs text-gray-400 mt-1 ml-1">10:02 AM</p>
+                    </div>
+                </div>
+
+                <!-- Reply Input -->
+                <div class="bg-white border-t border-gray-100 px-3 py-2 flex items-center gap-2 flex-shrink-0">
+                    <div class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm text-gray-400 cursor-text">Message...</div>
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center cursor-pointer">
+                        <i class="fas fa-arrow-up text-white text-xs"></i>
+                    </div>
+                </div>
+                <div style="height:82px;flex-shrink:0;"></div>
+            </div>
+
+            <!-- ═══════════════════════════════════════ -->
+            <!-- SCREEN 4: EMAIL CHAT                    -->
+            <!-- ═══════════════════════════════════════ -->
+            <div class="screen" id="screen-chat-email" style="background:white;">
+                <div class="bg-white border-b border-gray-100 px-4 pt-2 pb-3 flex items-center gap-3 flex-shrink-0">
+                    <button onclick="goToScreen('messages')" class="text-blue-500 mr-1">
+                        <i class="fas fa-chevron-left text-lg"></i>
+                    </button>
+                    <div class="w-9 h-9 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">TM</div>
+                    <div>
+                        <p class="font-semibold text-gray-900 text-sm">TalonPro Team</p>
+                        <p class="text-xs text-gray-500">support@talonpro.com</p>
+                    </div>
+                    <div class="ml-auto text-blue-500">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </div>
+                </div>
+
+                <div class="flex-1 overflow-y-auto p-4 space-y-3" style="background:#f2f2f7;">
+                    <div class="text-center text-xs text-gray-400 mb-2">Yesterday</div>
+
+                    <!-- Email from coordinator (outgoing to guest) -->
+                    <div class="flex flex-col items-start">
+                        <p class="text-xs text-gray-500 mb-1 ml-1">TalonPro Team</p>
+                        <div class="chat-bubble incoming" style="max-width:90%; font-size:13px;">
+                            <p class="text-xs font-semibold text-gray-500 border-b border-gray-100 pb-1.5 mb-2"><i class="fas fa-envelope mr-1"></i>Relocation Schedule - March 2024</p>
+                            Dear James,<br><br>
+                            We are pleased to confirm your relocation has been scheduled for March 15th, 2024. A moving coordinator will contact you within 24 hours with packing instructions and the crew's arrival window.<br><br>
+                            Best regards,<br>TalonPro Relocation Team
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1 ml-1">Yesterday, 2:00 PM</p>
+                    </div>
+
+                    <!-- Guest reply -->
+                    <div class="flex flex-col items-end">
+                        <div class="chat-bubble outgoing" style="max-width:90%; font-size:13px; background:#34c759;">
+                            <p class="text-xs font-semibold text-white border-b border-white border-opacity-30 pb-1.5 mb-2"><i class="fas fa-envelope mr-1"></i>Re: Relocation Schedule - March 2024</p>
+                            Thank you for the update! Will the movers handle furniture assembly at the new location? Could you also send me the storage unit address?<br><br>James Wilson
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1 mr-1">Today, 8:00 AM</p>
+                    </div>
+
+                    <div class="flex flex-col items-start">
+                        <p class="text-xs text-gray-500 mb-1 ml-1">TalonPro Team</p>
+                        <div class="chat-bubble incoming" style="max-width:90%; font-size:13px;">
+                            <p class="text-xs font-semibold text-gray-500 border-b border-gray-100 pb-1.5 mb-2"><i class="fas fa-envelope mr-1"></i>Re: Relocation Schedule - March 2024</p>
+                            Hi James,<br><br>Yes, the movers will handle furniture assembly. Storage unit address is 450 West Ave, Unit B-12, New York NY. Access code will be texted to you.<br><br>TalonPro Team
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1 ml-1">Today, 10:30 AM</p>
+                    </div>
+                </div>
+
+                <div class="bg-white border-t border-gray-100 px-3 py-2 flex items-center gap-2 flex-shrink-0">
+                    <div class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm text-gray-400">Reply...</div>
+                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center cursor-pointer">
+                        <i class="fas fa-arrow-up text-white text-xs"></i>
+                    </div>
+                </div>
+                <div style="height:82px;flex-shrink:0;"></div>
+            </div>
+
+            <!-- ═══════════════════════════════════════ -->
+            <!-- SCREEN 5: SMS CHAT 2                    -->
+            <!-- ═══════════════════════════════════════ -->
+            <div class="screen" id="screen-chat-sms2" style="background:white;">
+                <div class="bg-white border-b border-gray-100 px-4 pt-2 pb-3 flex items-center gap-3 flex-shrink-0">
+                    <button onclick="goToScreen('messages')" class="text-blue-500 mr-1"><i class="fas fa-chevron-left text-lg"></i></button>
+                    <div class="w-9 h-9 bg-teal-500 rounded-full flex items-center justify-center text-white font-bold text-sm">RC</div>
+                    <div>
+                        <p class="font-semibold text-gray-900 text-sm">Rachel Connor</p>
+                        <p class="text-xs text-gray-500">Lodging Specialist</p>
+                    </div>
+                </div>
+                <div class="flex-1 overflow-y-auto p-4 space-y-3" style="background:#f2f2f7;">
+                    <div class="text-center text-xs text-gray-400">Mar 5</div>
+                    <div class="flex flex-col items-start">
+                        <div class="chat-bubble incoming">Hi James! I found a great option for your extended stay — Marriott has availability through April 28.</div>
+                        <p class="text-xs text-gray-400 mt-1 ml-1">10:00 AM</p>
+                    </div>
+                    <div class="flex flex-col items-end">
+                        <div class="chat-bubble outgoing">That sounds perfect! Does the rate stay the same?</div>
+                        <p class="text-xs text-gray-400 mt-1 mr-1">10:15 AM</p>
+                    </div>
+                    <div class="flex flex-col items-start">
+                        <div class="chat-bubble incoming">Yes, same rate of $250/night, all within your ALE limit. Shall I confirm?</div>
+                        <p class="text-xs text-gray-400 mt-1 ml-1">10:18 AM</p>
+                    </div>
+                    <div class="flex flex-col items-end">
+                        <div class="chat-bubble outgoing">Yes please! Go ahead and confirm.</div>
+                        <p class="text-xs text-gray-400 mt-1 mr-1">10:25 AM</p>
+                    </div>
+                    <div class="flex flex-col items-start">
+                        <div class="chat-bubble incoming">✓✓ Got it — hotel confirmed for March 10! You'll receive a confirmation email shortly.</div>
+                        <p class="text-xs text-gray-400 mt-1 ml-1">10:30 AM</p>
+                    </div>
+                </div>
+                <div class="bg-white border-t border-gray-100 px-3 py-2 flex items-center gap-2 flex-shrink-0">
+                    <div class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm text-gray-400">Message...</div>
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center"><i class="fas fa-arrow-up text-white text-xs"></i></div>
+                </div>
+                <div style="height:82px;flex-shrink:0;"></div>
+            </div>
+
+            <!-- ═══════════════════════════════════════ -->
+            <!-- SCREEN 6: RECEIPTS                      -->
+            <!-- ═══════════════════════════════════════ -->
+            <div class="screen" id="screen-receipts">
+                <div class="app-header flex items-center justify-between">
+                    <div>
+                        <h1 class="text-lg font-bold text-gray-900">Receipts</h1>
+                        <p class="text-xs text-gray-500">Case #2024-0891</p>
+                    </div>
+                    <button class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-plus text-sm"></i>
+                    </button>
+                </div>
+
+                <div class="flex-1 overflow-y-auto pb-4 pt-3">
+                    <!-- Spend Summary -->
+                    <div class="mx-4 mb-3 grid grid-cols-3 gap-2">
+                        <div class="bg-white rounded-xl p-3 text-center shadow-sm">
+                            <p class="text-lg font-bold text-gray-900">$2,478</p>
+                            <p class="text-xs text-gray-500">Total</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 text-center shadow-sm">
+                            <p class="text-lg font-bold text-green-600">$1,838</p>
+                            <p class="text-xs text-gray-500">Approved</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 text-center shadow-sm">
+                            <p class="text-lg font-bold text-yellow-500">$640</p>
+                            <p class="text-xs text-gray-500">Pending</p>
+                        </div>
+                    </div>
+
+                    <p class="ios-section-header">Recent Receipts</p>
+
+                    <!-- Receipt items -->
+                    <div class="ios-card">
+                        <div class="p-3 flex items-center gap-3 border-b border-gray-50">
+                            <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-hotel text-blue-600 text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900 text-sm">Marriott Downtown</p>
+                                <p class="text-xs text-gray-400">Hotel · Mar 1, 2024</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-gray-900 text-sm">$1,250.00</p>
+                                <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Approved</span>
+                            </div>
+                        </div>
+                        <div class="p-3 flex items-center gap-3 border-b border-gray-50">
+                            <div class="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-car text-yellow-600 text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900 text-sm">Uber · JFK to Hotel</p>
+                                <p class="text-xs text-gray-400">Transport · Mar 3, 2024</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-gray-900 text-sm">$45.00</p>
+                                <span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">Pending</span>
+                            </div>
+                        </div>
+                        <div class="p-3 flex items-center gap-3 border-b border-gray-50">
+                            <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-utensils text-green-600 text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900 text-sm">Olive Garden</p>
+                                <p class="text-xs text-gray-400">Meals · Mar 2, 2024</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-gray-900 text-sm">$87.50</p>
+                                <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Approved</span>
+                            </div>
+                        </div>
+                        <div class="p-3 flex items-center gap-3 border-b border-gray-50">
+                            <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-shopping-cart text-orange-500 text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900 text-sm">Walmart Supercenter</p>
+                                <p class="text-xs text-gray-400">Supplies · Mar 5, 2024</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-gray-900 text-sm">$234.75</p>
+                                <span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">Pending</span>
+                            </div>
+                        </div>
+                        <div class="p-3 flex items-center gap-3">
+                            <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-pills text-red-500 text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900 text-sm">CVS Pharmacy</p>
+                                <p class="text-xs text-gray-400">Medical · Mar 5, 2024</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-gray-900 text-sm">$156.20</p>
+                                <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Approved</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upload button -->
+                    <div class="mx-4 mt-2">
+                        <button class="w-full bg-blue-500 text-white rounded-xl py-3 font-semibold text-sm flex items-center justify-center gap-2">
+                            <i class="fas fa-plus-circle"></i>Upload New Receipt
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════ -->
+            <!-- SCREEN 7: DOCUMENTS                     -->
+            <!-- ═══════════════════════════════════════ -->
+            <div class="screen" id="screen-documents">
+                <div class="app-header flex items-center justify-between">
+                    <div>
+                        <h1 class="text-lg font-bold text-gray-900">Documents</h1>
+                        <p class="text-xs text-gray-500">5 files · Case #2024-0891</p>
+                    </div>
+                    <button class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-plus text-sm"></i>
+                    </button>
+                </div>
+
+                <div class="flex-1 overflow-y-auto pb-4 pt-3">
+                    <p class="ios-section-header">My Documents</p>
+                    <div class="ios-card">
+                        <div class="p-3 flex items-center gap-3 border-b border-gray-50">
+                            <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-file-pdf text-red-500 text-lg"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900 text-sm">Insurance_Policy_2024.pdf</p>
+                                <p class="text-xs text-gray-400">2.4 MB · Mar 1, 2024</p>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+                        </div>
+                        <div class="p-3 flex items-center gap-3 border-b border-gray-50">
+                            <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-file-word text-blue-500 text-lg"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900 text-sm">Claim_Form_Signed.docx</p>
+                                <p class="text-xs text-gray-400">890 KB · Mar 2, 2024</p>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+                        </div>
+                        <div class="p-3 flex items-center gap-3 border-b border-gray-50">
+                            <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-file-image text-green-500 text-lg"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900 text-sm">Property_Damage_Photos.zip</p>
+                                <p class="text-xs text-gray-400">18.2 MB · Mar 3, 2024</p>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+                        </div>
+                        <div class="p-3 flex items-center gap-3 border-b border-gray-50">
+                            <div class="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-file-alt text-yellow-500 text-lg"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900 text-sm">Contractor_Estimate.pdf</p>
+                                <p class="text-xs text-gray-400">1.1 MB · Mar 5, 2024</p>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <span class="text-xs bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded-full">New</span>
+                                <i class="fas fa-chevron-right text-gray-300 text-xs ml-1"></i>
+                            </div>
+                        </div>
+                        <div class="p-3 flex items-center gap-3">
+                            <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-file-pdf text-purple-500 text-lg"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900 text-sm">Temporary_Housing_Agreement.pdf</p>
+                                <p class="text-xs text-gray-400">512 KB · Mar 6, 2024</p>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+                        </div>
+                    </div>
+
+                    <p class="ios-section-header">From Coordinator</p>
+                    <div class="ios-card">
+                        <div class="p-3 flex items-center gap-3">
+                            <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-file-pdf text-blue-500 text-lg"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900 text-sm">ALE_Approval_Letter.pdf</p>
+                                <p class="text-xs text-gray-400">340 KB · Feb 28, 2024</p>
+                            </div>
+                            <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Official</span>
+                        </div>
+                    </div>
+
+                    <div class="mx-4 mt-2">
+                        <button class="w-full bg-blue-500 text-white rounded-xl py-3 font-semibold text-sm flex items-center justify-center gap-2">
+                            <i class="fas fa-cloud-upload-alt"></i>Upload Document
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════ -->
+            <!-- SCREEN 8: REQUEST EXTENSION             -->
+            <!-- ═══════════════════════════════════════ -->
+            <div class="screen" id="screen-extension">
+                <div class="app-header">
+                    <h1 class="text-lg font-bold text-gray-900">Request Extension</h1>
+                    <p class="text-xs text-gray-500">Extend your temporary housing stay</p>
+                </div>
+
+                <div class="flex-1 overflow-y-auto pb-4 pt-3">
+                    <!-- Current Status -->
+                    <div class="mx-4 mb-3 bg-yellow-50 border border-yellow-200 rounded-2xl p-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-clock text-yellow-500"></i>
+                            <p class="font-semibold text-yellow-800 text-sm">Extension Under Review</p>
+                        </div>
+                        <p class="text-xs text-yellow-700">Your request for a 4-week extension was submitted on Mar 5, 2024. Expected decision: today by EOD.</p>
+                    </div>
+
+                    <!-- Current stay info -->
+                    <p class="ios-section-header">Current Stay</p>
+                    <div class="ios-card">
+                        <div class="p-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <div>
+                                    <p class="font-semibold text-gray-900 text-sm">Marriott Downtown</p>
+                                    <p class="text-xs text-gray-500">Room 412 · King Suite</p>
+                                </div>
+                                <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Active</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <p class="text-gray-500">Current End Date</p>
+                                    <p class="font-semibold text-gray-800">March 31, 2024</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500">Requested End Date</p>
+                                    <p class="font-semibold text-blue-600">April 28, 2024</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500">Extension Weeks</p>
+                                    <p class="font-semibold text-gray-800">4 weeks</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500">Est. Additional Cost</p>
+                                    <p class="font-semibold text-gray-800">$7,000</p>
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-3 border-t border-gray-100">
+                                <p class="text-xs text-gray-500 mb-1">Reason for Extension</p>
+                                <p class="text-xs text-gray-700 bg-gray-50 rounded-lg p-2">Home repairs taking longer than expected. Contractor estimates completion by April 20th, 2024.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ALE Balance Check -->
+                    <p class="ios-section-header">ALE Balance Check</p>
+                    <div class="ios-card">
+                        <div class="p-4">
+                            <div class="flex justify-between mb-2 text-sm">
+                                <span class="text-gray-500">ALE Limit</span>
+                                <span class="font-semibold">$45,000</span>
+                            </div>
+                            <div class="flex justify-between mb-2 text-sm">
+                                <span class="text-gray-500">Used to date</span>
+                                <span class="font-semibold text-orange-500">$18,750</span>
+                            </div>
+                            <div class="flex justify-between mb-3 text-sm">
+                                <span class="text-gray-500">If approved (est.)</span>
+                                <span class="font-semibold text-blue-600">$25,750</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width:57%"></div>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1.5">57% of limit if extension is approved</p>
+                        </div>
+                    </div>
+
+                    <!-- History -->
+                    <p class="ios-section-header">Extension History</p>
+                    <div class="ios-card">
+                        <div class="p-3 flex items-center gap-3">
+                            <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-clock text-yellow-500 text-xs"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-800">+4 weeks extension</p>
+                                <p class="text-xs text-gray-400">Submitted Mar 5, 2024</p>
+                            </div>
+                            <span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">Pending</span>
+                        </div>
+                    </div>
+
+                    <div class="mx-4 mt-2">
+                        <button class="w-full bg-blue-500 text-white rounded-xl py-3 font-semibold text-sm flex items-center justify-center gap-2">
+                            <i class="fas fa-plus-circle"></i>New Extension Request
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════ -->
+            <!-- SCREEN 9: PROFILE                       -->
+            <!-- ═══════════════════════════════════════ -->
+            <div class="screen" id="screen-profile">
+                <div class="app-header">
+                    <h1 class="text-lg font-bold text-gray-900">Profile</h1>
+                </div>
+
+                <div class="flex-1 overflow-y-auto pb-4">
+                    <!-- Profile Card -->
+                    <div class="flex flex-col items-center py-6 bg-white border-b border-gray-100">
+                        <div class="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-3">JW</div>
+                        <p class="font-bold text-gray-900 text-lg">James Wilson</p>
+                        <p class="text-sm text-gray-500">james.wilson@email.com</p>
+                        <p class="text-xs text-gray-400 mt-1">+1 (555) 234-5678</p>
+                        <span class="mt-2 text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full">Active Claimant</span>
+                    </div>
+
+                    <!-- Claim Info -->
+                    <p class="ios-section-header mt-3">Claim Information</p>
+                    <div class="ios-card">
+                        <div class="p-3 flex justify-between border-b border-gray-50">
+                            <span class="text-sm text-gray-500">Case Number</span>
+                            <span class="text-sm font-medium text-blue-600">#2024-0891</span>
+                        </div>
+                        <div class="p-3 flex justify-between border-b border-gray-50">
+                            <span class="text-sm text-gray-500">Adjuster</span>
+                            <span class="text-sm font-medium text-gray-800">Sarah Mitchell</span>
+                        </div>
+                        <div class="p-3 flex justify-between border-b border-gray-50">
+                            <span class="text-sm text-gray-500">Phone</span>
+                            <span class="text-sm font-medium text-blue-600">(555) 010-4200</span>
+                        </div>
+                        <div class="p-3 flex justify-between">
+                            <span class="text-sm text-gray-500">Claim Type</span>
+                            <span class="text-sm font-medium text-gray-800">Hurricane Ian</span>
+                        </div>
+                    </div>
+
+                    <!-- Settings -->
+                    <p class="ios-section-header">Preferences</p>
+                    <div class="ios-card">
+                        <div class="p-3 flex justify-between items-center border-b border-gray-50">
+                            <span class="text-sm text-gray-700">Push Notifications</span>
+                            <div class="w-10 h-6 bg-green-500 rounded-full flex items-center justify-end px-0.5">
+                                <div class="w-5 h-5 bg-white rounded-full shadow"></div>
+                            </div>
+                        </div>
+                        <div class="p-3 flex justify-between items-center border-b border-gray-50">
+                            <span class="text-sm text-gray-700">SMS Alerts</span>
+                            <div class="w-10 h-6 bg-green-500 rounded-full flex items-center justify-end px-0.5">
+                                <div class="w-5 h-5 bg-white rounded-full shadow"></div>
+                            </div>
+                        </div>
+                        <div class="p-3 flex justify-between items-center">
+                            <span class="text-sm text-gray-700">Email Updates</span>
+                            <div class="w-10 h-6 bg-gray-300 rounded-full flex items-center px-0.5">
+                                <div class="w-5 h-5 bg-white rounded-full shadow"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mx-4 mt-3">
+                        <button class="w-full bg-red-50 text-red-500 border border-red-200 rounded-xl py-3 font-semibold text-sm">
+                            Sign Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav" id="bottomNav">
+                <div class="nav-tab active" id="tab-home" onclick="switchTab('home')">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </div>
+                <div class="nav-tab" id="tab-messages" onclick="switchTab('messages')">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>Messages</span>
+                </div>
+                <div class="nav-tab" id="tab-receipts" onclick="switchTab('receipts')">
+                    <i class="fas fa-receipt"></i>
+                    <span>Receipts</span>
+                </div>
+                <div class="nav-tab" id="tab-documents" onclick="switchTab('documents')">
+                    <i class="fas fa-folder"></i>
+                    <span>Docs</span>
+                </div>
+                <div class="nav-tab" id="tab-profile" onclick="switchTab('profile')">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Walkthrough Controls -->
+    <div class="walkthrough-nav" id="walkthroughNav">
+        <button class="wt-btn" id="prevBtn" onclick="walkthroughPrev()" disabled>← Prev</button>
+        <div class="wt-dots" id="wt-dots"></div>
+        <button class="wt-btn" id="nextBtn" onclick="walkthroughNext()">Next →</button>
+    </div>
+
+    <script>
+        // All walkthrough screens in order
+        const walkthroughScreens = [
+            { id: 'home',      tab: 'home',      label: 'Home Dashboard' },
+            { id: 'messages',  tab: 'messages',  label: 'Messages Inbox' },
+            { id: 'chat-sms',  tab: 'messages',  label: 'SMS Conversation' },
+            { id: 'chat-email',tab: 'messages',  label: 'Email Thread' },
+            { id: 'receipts',  tab: 'receipts',  label: 'Receipts' },
+            { id: 'documents', tab: 'documents', label: 'Documents' },
+            { id: 'extension', tab: 'documents', label: 'Request Extension' },
+            { id: 'profile',   tab: 'profile',   label: 'Profile' },
+        ];
+
+        let currentWTIndex = 0;
+
+        // Build dots
+        const dotsContainer = document.getElementById('wt-dots');
+        walkthroughScreens.forEach((s, i) => {
+            const dot = document.createElement('div');
+            dot.className = 'wt-dot' + (i === 0 ? ' active' : '');
+            dot.onclick = () => goToWT(i);
+            dotsContainer.appendChild(dot);
+        });
+
+        function updateDots() {
+            document.querySelectorAll('.wt-dot').forEach((d, i) => {
+                d.classList.toggle('active', i === currentWTIndex);
+            });
+        }
+
+        function showScreen(screenId, tabId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const el = document.getElementById('screen-' + screenId);
+            if (el) el.classList.add('active');
+
+            // Update bottom nav
+            const isSubScreen = ['chat-sms','chat-email','chat-sms2'].includes(screenId);
+            document.getElementById('bottomNav').style.display = isSubScreen ? 'none' : 'flex';
+
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            if (tabId) {
+                const tab = document.getElementById('tab-' + tabId);
+                if (tab) tab.classList.add('active');
+            }
+
+            document.getElementById('screenLabel').textContent =
+                walkthroughScreens.find(s => s.id === screenId)?.label || screenId;
+        }
+
+        function goToWT(index) {
+            currentWTIndex = index;
+            const s = walkthroughScreens[index];
+            showScreen(s.id, s.tab);
+            updateDots();
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === walkthroughScreens.length - 1;
+        }
+
+        function walkthroughNext() {
+            if (currentWTIndex < walkthroughScreens.length - 1) goToWT(currentWTIndex + 1);
+        }
+
+        function walkthroughPrev() {
+            if (currentWTIndex > 0) goToWT(currentWTIndex - 1);
+        }
+
+        // Called from bottom nav tabs
+        function switchTab(tab) {
+            const map = { home: 0, messages: 1, receipts: 4, documents: 5, profile: 7 };
+            goToWT(map[tab] ?? 0);
+        }
+
+        // Called from quick action buttons / back buttons
+        function goToScreen(id) {
+            const idx = walkthroughScreens.findIndex(s => s.id === id);
+            if (idx >= 0) {
+                goToWT(idx);
+            } else {
+                showScreen(id, null);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight') walkthroughNext();
+            if (e.key === 'ArrowLeft') walkthroughPrev();
+        });
+
+        // Init
+        goToWT(0);
+    </script>
+</body>
+</html>
