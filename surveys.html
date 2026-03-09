@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surveys - TalonPro Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40 h-16">
+        <div class="flex items-center justify-between h-full px-6">
+            <h1 class="text-xl font-bold text-gray-800">TalonPro Portal</h1>
+            <div class="flex-1 max-w-2xl mx-8">
+                <div class="relative">
+                    <input type="text" placeholder="Search surveys..." id="searchInput"
+                           class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                <div class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 px-3 py-2 rounded-lg">
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="text-sm font-medium">Admin User</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="fixed left-0 top-16 bottom-0 w-64 bg-gray-900 text-white overflow-y-auto">
+        <nav class="p-4">
+            <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Dashboard</span></a>
+            <a href="guest-list-new.html" class="nav-item"><i class="fas fa-users"></i><span>Guests</span></a>
+            <a href="messages.html" class="nav-item"><i class="fas fa-comments"></i><span>Messages</span></a>
+            <a href="tasks.html" class="nav-item"><i class="fas fa-tasks"></i><span>Tasks</span></a>
+            <a href="documents.html" class="nav-item"><i class="fas fa-file-alt"></i><span>Documents</span></a>
+            <a href="receipts.html" class="nav-item"><i class="fas fa-receipt"></i><span>Receipts</span></a>
+            <a href="surveys.html" class="nav-item active"><i class="fas fa-clipboard-list"></i><span>Surveys</span></a>
+            <a href="templates.html" class="nav-item"><i class="fas fa-file-invoice"></i><span>Templates</span></a>
+            <a href="rules.html" class="nav-item"><i class="fas fa-cogs"></i><span>Automation Rules</span></a>
+            <a href="reports.html" class="nav-item"><i class="fas fa-chart-bar"></i><span>Reports</span></a>
+            <a href="ai-features.html" class="nav-item"><i class="fas fa-brain"></i><span>AI Uses</span></a>
+            <a href="guest-mobile.html" class="nav-item">
+                <i class="fas fa-mobile-alt"></i>
+                <span>Guest Mobile</span>
+            </a>
+            <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ml-64 mt-16 flex h-[calc(100vh-64px)]">
+
+        <!-- Left Panel: Survey Templates -->
+        <div class="w-80 bg-white border-r border-gray-200 flex flex-col flex-shrink-0">
+            <div class="p-4 border-b border-gray-200">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-lg font-semibold text-gray-800">Survey Templates</h2>
+                    <button onclick="showModal('newSurveyModal')" class="w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center hover:bg-blue-600">
+                        <i class="fas fa-plus text-sm"></i>
+                    </button>
+                </div>
+                <!-- Filter -->
+                <select id="filterStatus" onchange="renderList()" class="form-input text-sm w-full">
+                    <option value="all">All Surveys</option>
+                    <option value="active" selected>Active</option>
+                    <option value="draft">Draft</option>
+                    <option value="archived">Archived</option>
+                </select>
+            </div>
+            <div class="flex-1 overflow-y-auto" id="surveyList"></div>
+        </div>
+
+        <!-- Right Panel: Survey Detail -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Empty state -->
+            <div class="flex-1 flex items-center justify-center" id="emptyState">
+                <div class="text-center text-gray-400">
+                    <i class="fas fa-clipboard-list text-6xl mb-4"></i>
+                    <p class="text-lg font-medium">Select a survey</p>
+                    <p class="text-sm">Choose a template to preview or send</p>
+                </div>
+            </div>
+
+            <!-- Survey Detail -->
+            <div class="flex-1 flex-col hidden overflow-y-auto" id="surveyDetail">
+                <!-- Detail Header -->
+                <div class="bg-white border-b border-gray-200 p-5 flex-shrink-0">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <h2 class="text-xl font-bold text-gray-800" id="detailTitle"></h2>
+                                <span class="badge" id="detailBadge"></span>
+                            </div>
+                            <p class="text-sm text-gray-500" id="detailMeta"></p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="showModal('sendSurveyModal')" class="btn-primary text-sm">
+                                <i class="fas fa-paper-plane mr-2"></i>Send Survey
+                            </button>
+                            <button class="btn-secondary text-sm">
+                                <i class="fas fa-edit mr-1"></i>Edit
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Stats row -->
+                    <div class="flex gap-6 mt-4" id="detailStats"></div>
+                </div>
+
+                <!-- Survey Questions Preview -->
+                <div class="p-6 flex-1">
+                    <div class="max-w-2xl">
+                        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Survey Preview</h3>
+                        <div id="questionList" class="space-y-4"></div>
+
+                        <!-- Responses Tab -->
+                        <div class="mt-8">
+                            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Recent Responses</h3>
+                            <div id="responseList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Send Survey Modal -->
+    <div id="sendSurveyModal" class="modal">
+        <div class="modal-content max-w-lg">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-semibold">Send Survey</h3>
+                <button onclick="hideModal('sendSurveyModal')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <form class="space-y-4">
+                <div>
+                    <label class="form-label">Survey</label>
+                    <input type="text" class="form-input bg-gray-50" id="sendSurveyName" readonly>
+                </div>
+                <div>
+                    <label class="form-label">Send To</label>
+                    <select class="form-input">
+                        <option>Select Guest...</option>
+                        <option>James Wilson — Case #2024-0891</option>
+                        <option>Maria Garcia — Case #2024-0892</option>
+                        <option>Robert Chen — Case #2024-0893</option>
+                        <option>Sarah Thompson — Case #2024-0894</option>
+                        <option>David Martinez — Case #2024-0895</option>
+                        <option>Jennifer Lee — Case #2024-0896</option>
+                        <option>All Active Guests (46)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Delivery Channel</label>
+                    <div class="flex gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked class="rounded"> <span class="text-sm">SMS</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked class="rounded"> <span class="text-sm">Email</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" class="rounded"> <span class="text-sm">In-App (Mobile)</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label">Personal Message (optional)</label>
+                    <textarea rows="2" class="form-input" placeholder="Add a note before the survey link..."></textarea>
+                </div>
+                <div>
+                    <label class="form-label">Send At</label>
+                    <div class="flex gap-2">
+                        <label class="flex items-center gap-2 text-sm cursor-pointer">
+                            <input type="radio" name="sendTime" checked> Now
+                        </label>
+                        <label class="flex items-center gap-2 text-sm cursor-pointer">
+                            <input type="radio" name="sendTime"> Schedule
+                        </label>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="hideModal('sendSurveyModal')" class="btn-secondary">Cancel</button>
+                    <button type="button" onclick="hideModal('sendSurveyModal')" class="btn-primary"><i class="fas fa-paper-plane mr-2"></i>Send Survey</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- New Survey Modal -->
+    <div id="newSurveyModal" class="modal">
+        <div class="modal-content max-w-lg">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-semibold">New Survey Template</h3>
+                <button onclick="hideModal('newSurveyModal')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <form class="space-y-4">
+                <div>
+                    <label class="form-label">Survey Name</label>
+                    <input type="text" class="form-input" placeholder="e.g. Post Check-Out Satisfaction">
+                </div>
+                <div>
+                    <label class="form-label">Category</label>
+                    <select class="form-input">
+                        <option>Guest Experience</option>
+                        <option>Property</option>
+                        <option>Extension / Stay</option>
+                        <option>Financial / Approval</option>
+                        <option>Check-In / Check-Out</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Description</label>
+                    <textarea rows="2" class="form-input" placeholder="Brief description of this survey's purpose..."></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="hideModal('newSurveyModal')" class="btn-secondary">Cancel</button>
+                    <button type="button" onclick="hideModal('newSurveyModal')" class="btn-primary">Create Template</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+    <script>
+        const surveys = [
+            {
+                id: 1, name: 'Guest Survey', tag: 'Default Survey', status: 'active', category: 'Guest Experience',
+                sent: 46, responses: 38, rate: 83,
+                description: 'Collects overall satisfaction and feedback from guests during their temporary housing stay.',
+                questions: [
+                    { type: 'rating', q: 'How satisfied are you with your temporary housing overall?' },
+                    { type: 'rating', q: 'How would you rate the communication from your coordinator?' },
+                    { type: 'radio', q: 'Has your living situation met your expectations?', opts: ['Yes, fully', 'Somewhat', 'No'] },
+                    { type: 'text', q: 'Is there anything we can improve for your comfort?' },
+                ],
+                responses: [
+                    { guest: 'James Wilson', date: 'Mar 5', rating: 4, comment: 'Good experience overall, coordinator very helpful.' },
+                    { guest: 'Sarah Thompson', date: 'Mar 4', rating: 5, comment: 'Excellent service, very responsive team.' },
+                    { guest: 'Maria Garcia', date: 'Mar 3', rating: 3, comment: 'Some delays in communication could be improved.' },
+                ]
+            },
+            {
+                id: 2, name: 'Check In Confirmation', tag: '', status: 'active', category: 'Check-In / Check-Out',
+                sent: 46, responses: 44, rate: 96,
+                description: 'Confirms that the guest has successfully checked in and verifies all arrangements are satisfactory.',
+                questions: [
+                    { type: 'radio', q: 'Have you successfully checked in to your lodging?', opts: ['Yes', 'No — I need help'] },
+                    { type: 'radio', q: 'Is the room/unit as described?', opts: ['Yes', 'Minor issues', 'Significant issues'] },
+                    { type: 'radio', q: 'Do you have all necessary access (keys, parking, WiFi)?', opts: ['Yes', 'Missing some', 'No'] },
+                    { type: 'text', q: 'Please describe any issues or concerns with your check-in.' },
+                ],
+                responses: [
+                    { guest: 'Michael Brown', date: 'Mar 6', rating: 5, comment: 'Smooth check-in, everything was ready.' },
+                    { guest: 'Lisa Anderson', date: 'Mar 5', rating: 5, comment: 'No issues at all.' },
+                ]
+            },
+            {
+                id: 3, name: 'Check Out Confirmation', tag: '', status: 'active', category: 'Check-In / Check-Out',
+                sent: 31, responses: 29, rate: 94,
+                description: 'Collects guest feedback at checkout and confirms all belongings and items are in order.',
+                questions: [
+                    { type: 'radio', q: 'Have you completed check-out?', opts: ['Yes', 'Not yet'] },
+                    { type: 'radio', q: 'Were all your belongings accounted for?', opts: ['Yes', 'No — items missing'] },
+                    { type: 'rating', q: 'How would you rate your overall stay experience?' },
+                    { type: 'text', q: 'Any final comments or feedback?' },
+                ],
+                responses: [
+                    { guest: 'Robert Chen', date: 'Mar 7', rating: 4, comment: 'Quick checkout process.' },
+                ]
+            },
+            {
+                id: 4, name: 'Hotel - Post Stay Survey', tag: '', status: 'active', category: 'Guest Experience',
+                sent: 18, responses: 14, rate: 78,
+                description: 'Gathers detailed feedback specifically about hotel accommodations after the guest\'s hotel stay concludes.',
+                questions: [
+                    { type: 'rating', q: 'Rate the cleanliness of your hotel room.' },
+                    { type: 'rating', q: 'Rate the hotel staff and service.' },
+                    { type: 'rating', q: 'Rate the location and convenience of the hotel.' },
+                    { type: 'radio', q: 'Would you stay at this hotel again?', opts: ['Yes', 'Maybe', 'No'] },
+                    { type: 'text', q: 'What did you like most / least about the hotel?' },
+                ],
+                responses: [
+                    { guest: 'Jennifer Lee', date: 'Mar 6', rating: 4, comment: 'Great location, staff was friendly.' },
+                    { guest: 'David Martinez', date: 'Mar 5', rating: 3, comment: 'Room was small but clean.' },
+                ]
+            },
+            {
+                id: 5, name: 'Housing - Post Stay Survey', tag: '', status: 'active', category: 'Guest Experience',
+                sent: 12, responses: 9, rate: 75,
+                description: 'Collects detailed feedback about temporary housing (apartments/units) after the guest\'s stay ends.',
+                questions: [
+                    { type: 'rating', q: 'How would you rate the condition of the housing unit?' },
+                    { type: 'rating', q: 'How was the neighborhood and surrounding area?' },
+                    { type: 'rating', q: 'Were all appliances and utilities functioning properly?' },
+                    { type: 'radio', q: 'Did the housing meet your family\'s needs?', opts: ['Yes, fully', 'Mostly', 'No'] },
+                    { type: 'text', q: 'What improvements would you suggest for the housing?' },
+                ],
+                responses: []
+            },
+            {
+                id: 6, name: 'Extension Request', tag: '', status: 'active', category: 'Extension / Stay',
+                sent: 8, responses: 8, rate: 100,
+                description: 'Collects reason and details for a guest\'s request to extend their temporary housing stay.',
+                questions: [
+                    { type: 'radio', q: 'Why are you requesting an extension?', opts: ['Home repairs incomplete', 'Insurance processing delay', 'Medical reason', 'Other'] },
+                    { type: 'text', q: 'Please provide details about why you need additional time.' },
+                    { type: 'radio', q: 'How many additional weeks do you estimate needing?', opts: ['1–2 weeks', '3–4 weeks', '5–6 weeks', 'More than 6 weeks'] },
+                    { type: 'radio', q: 'Do you have a contractor estimate for completion?', opts: ['Yes', 'No', 'In progress'] },
+                ],
+                responses: [
+                    { guest: 'James Wilson', date: 'Mar 5', rating: null, comment: 'Home repairs extended — contractor estimate attached.' },
+                ]
+            },
+            {
+                id: 7, name: 'Property Condition', tag: '', status: 'active', category: 'Property',
+                sent: 22, responses: 19, rate: 86,
+                description: 'Documents the condition of the guest\'s original property to support the insurance claim.',
+                questions: [
+                    { type: 'radio', q: 'What is the current accessibility of your property?', opts: ['Fully inaccessible', 'Partially accessible', 'Accessible but uninhabitable'] },
+                    { type: 'radio', q: 'What type of damage occurred?', opts: ['Fire', 'Water/Flood', 'Wind/Storm', 'Structural', 'Multiple'] },
+                    { type: 'radio', q: 'Has a contractor assessed the damage?', opts: ['Yes', 'No', 'Scheduled'] },
+                    { type: 'text', q: 'Describe the current condition of the property in detail.' },
+                    { type: 'radio', q: 'Is the property secured?', opts: ['Yes', 'No', 'Partially'] },
+                ],
+                responses: [
+                    { guest: 'Maria Garcia', date: 'Feb 28', rating: null, comment: 'Water damage to first floor, contractor scheduled for Mar 10.' },
+                ]
+            },
+            {
+                id: 8, name: 'Furniture Selection', tag: '', status: 'active', category: 'Property',
+                sent: 14, responses: 11, rate: 79,
+                description: 'Allows guests to specify furniture preferences for furnished temporary housing units.',
+                questions: [
+                    { type: 'radio', q: 'Do you require a furnished unit?', opts: ['Yes — fully furnished', 'Yes — partially', 'No — I have my own'] },
+                    { type: 'radio', q: 'Bed preference?', opts: ['King', 'Queen', 'Twin(s)', 'Flexible'] },
+                    { type: 'radio', q: 'How many people will be staying?', opts: ['1', '2', '3–4', '5+'] },
+                    { type: 'text', q: 'Any specific furniture or accessibility requirements?' },
+                ],
+                responses: []
+            },
+            {
+                id: 9, name: 'Refundable Deposit', tag: '', status: 'active', category: 'Financial / Approval',
+                sent: 9, responses: 7, rate: 78,
+                description: 'Confirms guest acknowledgment of refundable deposit terms and conditions for their housing.',
+                questions: [
+                    { type: 'radio', q: 'Do you understand that a refundable security deposit is required?', opts: ['Yes', 'No — I have questions'] },
+                    { type: 'radio', q: 'Preferred deposit payment method?', opts: ['Credit/Debit card', 'ACH/Bank transfer', 'Check', 'Insurance waiver'] },
+                    { type: 'radio', q: 'Do you agree to the deposit terms and conditions?', opts: ['Yes, I agree', 'No, I need to discuss'] },
+                ],
+                responses: []
+            },
+            {
+                id: 10, name: 'Do you approve Lease Approval option #1', tag: '', status: 'active', category: 'Financial / Approval',
+                sent: 5, responses: 4, rate: 80,
+                description: 'Requests guest approval for lease option #1 presented by the housing coordinator.',
+                questions: [
+                    { type: 'radio', q: 'Have you reviewed Lease Approval Option #1?', opts: ['Yes', 'No — send again'] },
+                    { type: 'radio', q: 'Do you approve Lease Option #1?', opts: ['Yes — I approve', 'No — I decline', 'I need more information'] },
+                    { type: 'text', q: 'Comments or concerns about this lease option?' },
+                ],
+                responses: [
+                    { guest: 'Sarah Thompson', date: 'Mar 4', rating: null, comment: 'Approved — please proceed.' },
+                ]
+            },
+            {
+                id: 11, name: 'Normal Expenses Survey', tag: '', status: 'active', category: 'Financial / Approval',
+                sent: 16, responses: 13, rate: 81,
+                description: 'Collects guest-reported normal living expenses to verify ALE reimbursement claims.',
+                questions: [
+                    { type: 'radio', q: 'Are you submitting normal expenses for reimbursement?', opts: ['Yes', 'No'] },
+                    { type: 'radio', q: 'Expense category?', opts: ['Meals', 'Transportation', 'Medical', 'Supplies', 'Laundry', 'Other'] },
+                    { type: 'text', q: 'List the expenses and amounts you are submitting.' },
+                    { type: 'radio', q: 'Do you have receipts for all expenses?', opts: ['Yes — all', 'Some', 'No'] },
+                ],
+                responses: []
+            },
+            {
+                id: 12, name: 'Task Survey', tag: 'Default Task Survey', status: 'active', category: 'Guest Experience',
+                sent: 30, responses: 24, rate: 80,
+                description: 'Captures guest feedback specifically tied to completed coordinator tasks.',
+                questions: [
+                    { type: 'rating', q: 'How satisfied are you with how this task was handled?' },
+                    { type: 'radio', q: 'Was your request resolved to your satisfaction?', opts: ['Yes', 'Partially', 'No'] },
+                    { type: 'text', q: 'Any additional feedback on this task?' },
+                ],
+                responses: []
+            },
+            {
+                id: 13, name: 'Please let us know your decision about Insured\'s stay extension', tag: '', status: 'active', category: 'Extension / Stay',
+                sent: 6, responses: 5, rate: 83,
+                description: 'Sent to adjusters or decision-makers to collect a formal decision on a guest\'s extension request.',
+                questions: [
+                    { type: 'radio', q: 'Do you approve the requested extension?', opts: ['Yes — approved', 'No — declined', 'Approved with modifications'] },
+                    { type: 'text', q: 'If approved with modifications, please specify the approved duration.' },
+                    { type: 'text', q: 'Reason for decision (optional):' },
+                ],
+                responses: []
+            },
+            {
+                id: 14, name: 'Receipt Form', tag: '', status: 'draft', category: 'Financial / Approval',
+                sent: 0, responses: 0, rate: 0,
+                description: 'A structured form for guests to submit receipts and expense documentation digitally.',
+                questions: [
+                    { type: 'radio', q: 'Expense type?', opts: ['Hotel', 'Meals', 'Transportation', 'Medical', 'Supplies', 'Other'] },
+                    { type: 'text', q: 'Vendor / merchant name:' },
+                    { type: 'text', q: 'Total amount ($):' },
+                    { type: 'text', q: 'Date of expense:' },
+                    { type: 'radio', q: 'Receipt attached?', opts: ['Yes', 'Will submit separately'] },
+                ],
+                responses: []
+            },
+        ];
+
+        let activeSurveyId = null;
+
+        function renderList() {
+            const filter = document.getElementById('filterStatus').value;
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = surveys.filter(s => {
+                const matchStatus = filter === 'all' || s.status === filter;
+                const matchSearch = s.name.toLowerCase().includes(search) || s.category.toLowerCase().includes(search);
+                return matchStatus && matchSearch;
+            });
+
+            const grouped = {};
+            filtered.forEach(s => {
+                if (!grouped[s.category]) grouped[s.category] = [];
+                grouped[s.category].push(s);
+            });
+
+            const list = document.getElementById('surveyList');
+            list.innerHTML = Object.entries(grouped).map(([cat, items]) => `
+                <div>
+                    <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wide bg-gray-50 border-b border-gray-100">${cat}</p>
+                    ${items.map(s => `
+                        <div onclick="openSurvey(${s.id})"
+                            class="px-4 py-3 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors ${activeSurveyId === s.id ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''}">
+                            <div class="flex items-start justify-between gap-2">
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-medium text-gray-800 text-sm leading-tight">${s.name}</p>
+                                    ${s.tag ? `<p class="text-xs text-blue-600 mt-0.5">${s.tag}</p>` : ''}
+                                    <div class="flex items-center gap-3 mt-1.5 text-xs text-gray-400">
+                                        <span><i class="fas fa-paper-plane mr-1"></i>${s.sent} sent</span>
+                                        <span><i class="fas fa-check-circle mr-1"></i>${s.rate}%</span>
+                                    </div>
+                                </div>
+                                <span class="text-xs px-1.5 py-0.5 rounded flex-shrink-0 ${s.status === 'active' ? 'bg-green-100 text-green-700' : s.status === 'draft' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-500'}">${s.status}</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+
+        function openSurvey(id) {
+            activeSurveyId = id;
+            const s = surveys.find(x => x.id === id);
+            renderList();
+
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('surveyDetail').classList.remove('hidden');
+            document.getElementById('surveyDetail').classList.add('flex');
+
+            document.getElementById('detailTitle').textContent = s.name;
+            document.getElementById('sendSurveyName').value = s.name;
+
+            const badgeEl = document.getElementById('detailBadge');
+            badgeEl.textContent = s.status;
+            badgeEl.className = `badge text-xs ${s.status === 'active' ? 'badge-green' : s.status === 'draft' ? 'badge-yellow' : 'badge-gray'}`;
+
+            document.getElementById('detailMeta').textContent = `${s.category} · ${s.questions.length} questions · ${s.description}`;
+
+            document.getElementById('detailStats').innerHTML = `
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-gray-800">${s.sent}</p>
+                    <p class="text-xs text-gray-500">Sent</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-blue-600">${s.responses.length || s.responses}</p>
+                    <p class="text-xs text-gray-500">Responses</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-2xl font-bold ${s.rate >= 80 ? 'text-green-600' : s.rate >= 60 ? 'text-yellow-500' : 'text-red-500'}">${s.rate}%</p>
+                    <p class="text-xs text-gray-500">Response Rate</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-gray-800">${s.questions.length}</p>
+                    <p class="text-xs text-gray-500">Questions</p>
+                </div>
+            `;
+
+            // Questions
+            const qTypes = { rating: 'fas fa-star', radio: 'fas fa-dot-circle', text: 'fas fa-align-left' };
+            document.getElementById('questionList').innerHTML = s.questions.map((q, i) => `
+                <div class="card">
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <span class="text-xs font-bold text-blue-600">${i + 1}</span>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium text-gray-800 text-sm mb-2">${q.q}</p>
+                            ${q.type === 'rating' ? `
+                                <div class="flex gap-1">
+                                    ${[1,2,3,4,5].map(n => `<div class="w-8 h-8 border border-gray-200 rounded flex items-center justify-center text-sm text-gray-400 cursor-pointer hover:bg-blue-50 hover:border-blue-300">${n}</div>`).join('')}
+                                    <span class="text-xs text-gray-400 self-center ml-2">1 = Poor, 5 = Excellent</span>
+                                </div>
+                            ` : q.type === 'radio' ? `
+                                <div class="space-y-1">
+                                    ${q.opts.map(o => `<label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer"><input type="radio" class="text-blue-500"> ${o}</label>`).join('')}
+                                </div>
+                            ` : `
+                                <textarea rows="2" class="form-input text-sm" placeholder="Guest response..."></textarea>
+                            `}
+                        </div>
+                        <span class="text-xs text-gray-400 capitalize flex-shrink-0"><i class="${qTypes[q.type] || 'fas fa-question'} mr-1"></i>${q.type}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Responses
+            const resp = Array.isArray(s.responses) ? s.responses : [];
+            document.getElementById('responseList').innerHTML = resp.length === 0
+                ? `<div class="text-center text-gray-400 py-6 border-2 border-dashed border-gray-200 rounded-lg"><i class="fas fa-inbox text-2xl mb-2"></i><p class="text-sm">No responses yet</p></div>`
+                : `<div class="space-y-3">${resp.map(r => `
+                    <div class="card">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">${r.guest.split(' ').map(n=>n[0]).join('')}</div>
+                                <div>
+                                    <p class="font-medium text-gray-800 text-sm">${r.guest}</p>
+                                    <p class="text-xs text-gray-400">${r.date}</p>
+                                </div>
+                            </div>
+                            ${r.rating ? `<div class="flex gap-0.5">${[1,2,3,4,5].map(n=>`<i class="fas fa-star text-xs ${n<=r.rating?'text-yellow-400':'text-gray-200'}"></i>`).join('')}</div>` : ''}
+                        </div>
+                        ${r.comment ? `<p class="text-sm text-gray-600 mt-2 pl-10">"${r.comment}"</p>` : ''}
+                    </div>
+                `).join('')}</div>`;
+        }
+
+        function showModal(id) { document.getElementById(id).classList.add('active'); }
+        function hideModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', function(e) { if (e.target===this) hideModal(this.id); }));
+        document.getElementById('searchInput').addEventListener('input', renderList);
+
+        renderList();
+    </script>
+</body>
+</html>

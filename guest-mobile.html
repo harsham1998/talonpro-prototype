@@ -632,7 +632,188 @@
             </div>
 
             <!-- ═══════════════════════════════════════ -->
-            <!-- SCREEN 6: RECEIPTS                      -->
+            <!-- SCREEN 6: SURVEYS                       -->
+            <!-- ═══════════════════════════════════════ -->
+            <div class="screen" id="screen-surveys">
+                <div class="app-header flex items-center justify-between">
+                    <div>
+                        <h1 class="text-lg font-bold text-gray-900">Surveys</h1>
+                        <p class="text-xs text-gray-500">2 pending · 3 completed</p>
+                    </div>
+                </div>
+
+                <div class="flex-1 overflow-y-auto pb-4 pt-3">
+                    <p class="ios-section-header">Pending</p>
+                    <div class="ios-card mx-4">
+                        <!-- Survey 1: pending -->
+                        <div class="p-3 flex items-start gap-3 border-b border-gray-50" onclick="goToScreen('survey-form')" style="cursor:pointer">
+                            <div class="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="fas fa-star text-yellow-500 text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-medium text-gray-900 text-sm">Guest Experience Survey</p>
+                                    <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-0.5">How has your stay been so far?</p>
+                                <p class="text-xs text-yellow-600 mt-1"><i class="fas fa-clock mr-1"></i>Due Mar 12, 2024</p>
+                            </div>
+                        </div>
+                        <!-- Survey 2: pending -->
+                        <div class="p-3 flex items-start gap-3">
+                            <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="fas fa-home text-blue-500 text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-medium text-gray-900 text-sm">Property Condition Check</p>
+                                    <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-0.5">Rate the condition of your temporary lodging</p>
+                                <p class="text-xs text-yellow-600 mt-1"><i class="fas fa-clock mr-1"></i>Due Mar 15, 2024</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="ios-section-header">Completed</p>
+                    <div class="ios-card mx-4">
+                        <!-- Completed 1 -->
+                        <div class="p-3 flex items-start gap-3 border-b border-gray-50">
+                            <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="fas fa-check-circle text-green-500 text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-medium text-gray-900 text-sm">Check-In Confirmation</p>
+                                    <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Done</span>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-0.5">Completed Feb 28, 2024</p>
+                            </div>
+                        </div>
+                        <!-- Completed 2 -->
+                        <div class="p-3 flex items-start gap-3 border-b border-gray-50">
+                            <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="fas fa-check-circle text-green-500 text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-medium text-gray-900 text-sm">Extension Request Survey</p>
+                                    <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Done</span>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-0.5">Completed Mar 1, 2024</p>
+                            </div>
+                        </div>
+                        <!-- Completed 3 -->
+                        <div class="p-3 flex items-start gap-3">
+                            <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="fas fa-check-circle text-green-500 text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-medium text-gray-900 text-sm">Normal Expenses Survey</p>
+                                    <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Done</span>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-0.5">Completed Feb 25, 2024</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="height:82px;flex-shrink:0;"></div>
+            </div>
+
+            <!-- ═══════════════════════════════════════ -->
+            <!-- SCREEN 7: SURVEY FORM                   -->
+            <!-- ═══════════════════════════════════════ -->
+            <div class="screen" id="screen-survey-form">
+                <div class="app-header flex items-center gap-3">
+                    <button onclick="goToScreen('surveys')" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
+                        <i class="fas fa-arrow-left text-gray-600 text-sm"></i>
+                    </button>
+                    <div>
+                        <h1 class="text-base font-bold text-gray-900">Guest Experience Survey</h1>
+                        <p class="text-xs text-gray-500">4 questions · ~2 min</p>
+                    </div>
+                </div>
+
+                <div class="flex-1 overflow-y-auto px-4 pb-4 pt-3">
+                    <!-- Q1: Rating -->
+                    <div class="bg-white rounded-2xl p-4 mb-3 shadow-sm">
+                        <p class="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-1">Question 1 of 4</p>
+                        <p class="font-medium text-gray-900 text-sm mb-3">How would you rate your overall experience so far?</p>
+                        <div class="flex justify-between gap-2">
+                            <button class="flex-1 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold text-gray-500 hover:border-blue-400 transition-colors">1</button>
+                            <button class="flex-1 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold text-gray-500 hover:border-blue-400 transition-colors">2</button>
+                            <button class="flex-1 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold text-gray-500 hover:border-blue-400 transition-colors">3</button>
+                            <button class="flex-1 py-2.5 rounded-xl border-2 border-blue-500 bg-blue-50 text-sm font-semibold text-blue-600">4</button>
+                            <button class="flex-1 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold text-gray-500 hover:border-blue-400 transition-colors">5</button>
+                        </div>
+                        <div class="flex justify-between mt-1">
+                            <span class="text-xs text-gray-400">Poor</span>
+                            <span class="text-xs text-gray-400">Excellent</span>
+                        </div>
+                    </div>
+
+                    <!-- Q2: Radio -->
+                    <div class="bg-white rounded-2xl p-4 mb-3 shadow-sm">
+                        <p class="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-1">Question 2 of 4</p>
+                        <p class="font-medium text-gray-900 text-sm mb-3">How quickly has your coordinator responded to requests?</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-3 p-2.5 rounded-xl border border-blue-300 bg-blue-50 cursor-pointer">
+                                <div class="w-4 h-4 rounded-full border-2 border-blue-500 bg-blue-500 flex items-center justify-center flex-shrink-0">
+                                    <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+                                </div>
+                                <span class="text-sm text-gray-800">Within a few hours</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-2.5 rounded-xl border border-gray-200 cursor-pointer">
+                                <div class="w-4 h-4 rounded-full border-2 border-gray-300 flex-shrink-0"></div>
+                                <span class="text-sm text-gray-600">Same day</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-2.5 rounded-xl border border-gray-200 cursor-pointer">
+                                <div class="w-4 h-4 rounded-full border-2 border-gray-300 flex-shrink-0"></div>
+                                <span class="text-sm text-gray-600">Next day or more</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Q3: Text -->
+                    <div class="bg-white rounded-2xl p-4 mb-3 shadow-sm">
+                        <p class="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-1">Question 3 of 4</p>
+                        <p class="font-medium text-gray-900 text-sm mb-3">Is there anything we can do to improve your experience?</p>
+                        <div class="bg-gray-50 rounded-xl p-3 text-sm text-gray-400 border border-gray-200 min-h-16">
+                            The team has been very helpful...
+                        </div>
+                    </div>
+
+                    <!-- Q4: Radio -->
+                    <div class="bg-white rounded-2xl p-4 mb-4 shadow-sm">
+                        <p class="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-1">Question 4 of 4</p>
+                        <p class="font-medium text-gray-900 text-sm mb-3">Would you recommend TalonPro to others?</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-3 p-2.5 rounded-xl border border-green-300 bg-green-50 cursor-pointer">
+                                <div class="w-4 h-4 rounded-full border-2 border-green-500 bg-green-500 flex items-center justify-center flex-shrink-0">
+                                    <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+                                </div>
+                                <span class="text-sm text-gray-800">Yes, definitely</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-2.5 rounded-xl border border-gray-200 cursor-pointer">
+                                <div class="w-4 h-4 rounded-full border-2 border-gray-300 flex-shrink-0"></div>
+                                <span class="text-sm text-gray-600">Maybe</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-2.5 rounded-xl border border-gray-200 cursor-pointer">
+                                <div class="w-4 h-4 rounded-full border-2 border-gray-300 flex-shrink-0"></div>
+                                <span class="text-sm text-gray-600">No</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="w-full bg-blue-600 text-white font-semibold py-3.5 rounded-2xl text-sm shadow-md">
+                        Submit Survey
+                    </button>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════ -->
+            <!-- SCREEN 8: RECEIPTS                      -->
             <!-- ═══════════════════════════════════════ -->
             <div class="screen" id="screen-receipts">
                 <div class="app-header flex items-center justify-between">
@@ -1017,6 +1198,10 @@
                     <i class="fas fa-comment-dots"></i>
                     <span>Messages</span>
                 </div>
+                <div class="nav-tab" id="tab-surveys" onclick="switchTab('surveys')">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Surveys</span>
+                </div>
                 <div class="nav-tab" id="tab-receipts" onclick="switchTab('receipts')">
                     <i class="fas fa-receipt"></i>
                     <span>Receipts</span>
@@ -1044,14 +1229,16 @@
     <script>
         // All walkthrough screens in order
         const walkthroughScreens = [
-            { id: 'home',      tab: 'home',      label: 'Home Dashboard' },
-            { id: 'messages',  tab: 'messages',  label: 'Messages Inbox' },
-            { id: 'chat-sms',  tab: 'messages',  label: 'SMS Conversation' },
-            { id: 'chat-email',tab: 'messages',  label: 'Email Thread' },
-            { id: 'receipts',  tab: 'receipts',  label: 'Receipts' },
-            { id: 'documents', tab: 'documents', label: 'Documents' },
-            { id: 'extension', tab: 'documents', label: 'Request Extension' },
-            { id: 'profile',   tab: 'profile',   label: 'Profile' },
+            { id: 'home',        tab: 'home',      label: 'Home Dashboard' },
+            { id: 'messages',    tab: 'messages',  label: 'Messages Inbox' },
+            { id: 'chat-sms',    tab: 'messages',  label: 'SMS Conversation' },
+            { id: 'chat-email',  tab: 'messages',  label: 'Email Thread' },
+            { id: 'surveys',     tab: 'surveys',   label: 'My Surveys' },
+            { id: 'survey-form', tab: 'surveys',   label: 'Guest Experience Survey' },
+            { id: 'receipts',    tab: 'receipts',  label: 'Receipts' },
+            { id: 'documents',   tab: 'documents', label: 'Documents' },
+            { id: 'extension',   tab: 'documents', label: 'Request Extension' },
+            { id: 'profile',     tab: 'profile',   label: 'Profile' },
         ];
 
         let currentWTIndex = 0;
@@ -1077,7 +1264,7 @@
             if (el) el.classList.add('active');
 
             // Update bottom nav
-            const isSubScreen = ['chat-sms','chat-email','chat-sms2'].includes(screenId);
+            const isSubScreen = ['chat-sms','chat-email','chat-sms2','survey-form'].includes(screenId);
             document.getElementById('bottomNav').style.display = isSubScreen ? 'none' : 'flex';
 
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -1109,7 +1296,7 @@
 
         // Called from bottom nav tabs
         function switchTab(tab) {
-            const map = { home: 0, messages: 1, receipts: 4, documents: 5, profile: 7 };
+            const map = { home: 0, messages: 1, surveys: 4, receipts: 6, documents: 7, profile: 9 };
             goToWT(map[tab] ?? 0);
         }
 
