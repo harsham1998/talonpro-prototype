@@ -199,9 +199,9 @@
                 status: 'unresolved', lastMessage: 'When will my claim be processed? It\'s been 3 weeks.',
                 time: '25 min ago', unread: 1, color: 'bg-pink-500',
                 messages: [
-                    { from: 'Maria Garcia', text: 'I submitted my claim on Feb 15th and haven\'t heard back. Case #2024-0892', time: 'Feb 28, 8:30 AM', out: false },
-                    { from: 'me', text: 'Hi Maria, I can confirm we received your claim. It\'s currently under review by our team.', time: 'Feb 28, 10:00 AM', out: true },
-                    { from: 'Maria Garcia', text: 'When will my claim be processed? It\'s been 3 weeks.', time: 'Today, 9:35 AM', out: false },
+                    { from: 'Maria Garcia', subject: 'Claim Status Inquiry - Case #2024-0892', text: 'Dear TalonPro Team,\n\nI submitted my claim on February 15th (Case #2024-0892) and have not received any update. Could you please advise on the current status and expected timeline?\n\nThank you,\nMaria Garcia', time: 'Feb 28, 8:30 AM', out: false },
+                    { from: 'me', subject: 'Re: Claim Status Inquiry - Case #2024-0892', text: 'Dear Maria,\n\nThank you for reaching out. We have confirmed receipt of your claim #2024-0892. Your case is currently under review by our processing team and we will notify you once a decision has been made.\n\nBest regards,\nTalonPro Support', time: 'Feb 28, 10:00 AM', out: true },
+                    { from: 'Maria Garcia', subject: 'Re: Claim Status Inquiry - Case #2024-0892', text: 'It has now been 3 weeks with no update. When will my claim be processed? This delay is causing significant hardship.\n\nMaria Garcia', time: 'Today, 9:35 AM', out: false },
                 ]
             },
             {
@@ -218,9 +218,9 @@
                 status: 'unresolved', lastMessage: 'Can I get an update on my relocation timeline?',
                 time: '2 hrs ago', unread: 1, color: 'bg-teal-500',
                 messages: [
-                    { from: 'me', text: 'Hi Sarah, your relocation has been scheduled for March 15th. We\'ll send details shortly.', time: 'Yesterday, 2:00 PM', out: true },
-                    { from: 'Sarah Thompson', text: 'Thank you! Can I get an update on my relocation timeline?', time: 'Today, 8:00 AM', out: false },
-                    { from: 'Sarah Thompson', text: 'Can I get an update on my relocation timeline?', time: 'Today, 9:00 AM', out: false },
+                    { from: 'me', subject: 'Relocation Schedule - March 2024', text: 'Dear Sarah,\n\nWe are pleased to inform you that your relocation has been scheduled for March 15th, 2024. A moving coordinator will contact you within 24 hours with full details including packing instructions and the moving crew\'s arrival window.\n\nBest regards,\nTalonPro Relocation Team', time: 'Yesterday, 2:00 PM', out: true },
+                    { from: 'Sarah Thompson', subject: 'Re: Relocation Schedule - March 2024', text: 'Thank you for the update. I wanted to confirm — will the movers handle furniture assembly at the new location? Also, could you send me the address for the storage unit?\n\nSarah Thompson', time: 'Today, 8:00 AM', out: false },
+                    { from: 'Sarah Thompson', subject: 'Re: Relocation Schedule - March 2024', text: 'Following up on my earlier email. Can I get an update on my relocation timeline and the moving crew contact details?\n\nSarah', time: 'Today, 9:00 AM', out: false },
                 ]
             },
             {
@@ -238,8 +238,9 @@
                 status: 'unresolved', lastMessage: 'I need receipts for my expenses from last month.',
                 time: '4 hrs ago', unread: 1, color: 'bg-indigo-500',
                 messages: [
-                    { from: 'Jennifer Lee', text: 'Could you send me receipts for all expenses related to my case last month?', time: '6:00 AM', out: false },
-                    { from: 'Jennifer Lee', text: 'I need receipts for my expenses from last month.', time: '6:30 AM', out: false },
+                    { from: 'Jennifer Lee', subject: 'Request for Expense Receipts - February 2024', text: 'Hello,\n\nI am preparing my monthly expense report and require copies of all receipts associated with my case (Case #2024-0896) for the month of February 2024. This includes hotel, meals, transportation, and medical expenses.\n\nCould you please send these at your earliest convenience?\n\nRegards,\nJennifer Lee', time: '6:00 AM', out: false },
+                    { from: 'me', subject: 'Re: Request for Expense Receipts - February 2024', text: 'Dear Jennifer,\n\nWe have received your request. We are compiling all expense receipts for Case #2024-0896 and will send them to you in a PDF bundle within the next 2 business days.\n\nThanks,\nTalonPro Finance Team', time: '6:20 AM', out: true },
+                    { from: 'Jennifer Lee', subject: 'Re: Request for Expense Receipts - February 2024', text: 'Thank you for your response. I still need receipts for my expenses from last month, especially the hotel stays and pharmacy receipts. Please expedite as my report is due Friday.\n\nJennifer', time: '6:30 AM', out: false },
                 ]
             },
             {
@@ -257,9 +258,9 @@
                 status: 'resolved', lastMessage: 'Perfect, I\'ll be there at 9am. Thanks!',
                 time: '2 days ago', unread: 0, color: 'bg-yellow-500',
                 messages: [
-                    { from: 'Lisa Anderson', text: 'What time should I arrive for the property inspection?', time: '2 days ago, 2:00 PM', out: false },
-                    { from: 'me', text: 'Please arrive at 9:00 AM sharp at 123 Main St. Bring your ID and claim documents.', time: '2 days ago, 3:00 PM', out: true },
-                    { from: 'Lisa Anderson', text: 'Perfect, I\'ll be there at 9am. Thanks!', time: '2 days ago, 3:15 PM', out: false },
+                    { from: 'Lisa Anderson', subject: 'Property Inspection Appointment - Case #2024-0898', text: 'Hi,\n\nI received the appointment notice for the property inspection. Could you please confirm the exact time and address I should report to? Also, what documents should I bring with me?\n\nThank you,\nLisa Anderson', time: '2 days ago, 2:00 PM', out: false },
+                    { from: 'me', subject: 'Re: Property Inspection Appointment - Case #2024-0898', text: 'Dear Lisa,\n\nPlease arrive at 9:00 AM sharp at 123 Main Street, Suite 200. Kindly bring a valid government-issued photo ID and all original claim documents. The inspection is expected to take approximately 90 minutes.\n\nBest regards,\nTalonPro Claims Team', time: '2 days ago, 3:00 PM', out: true },
+                    { from: 'Lisa Anderson', subject: 'Re: Property Inspection Appointment - Case #2024-0898', text: 'Perfect, I\'ll be there at 9am with all the required documents. Thank you for the details!\n\nLisa', time: '2 days ago, 3:15 PM', out: false },
                 ]
             },
         ];
@@ -346,13 +347,15 @@
                 document.getElementById('resolveBtn').classList.add('hidden');
             }
 
+            const isEmail = conv.channel === 'Email';
             const thread = document.getElementById('messageThread');
             thread.innerHTML = conv.messages.map(m => `
                 <div class="flex ${m.out ? 'justify-end' : 'justify-start'}">
-                    <div class="max-w-sm">
+                    <div class="${isEmail ? 'max-w-lg w-full' : 'max-w-sm'}">
                         ${!m.out ? `<p class="text-xs text-gray-500 mb-1 ml-1">${m.from}</p>` : ''}
                         <div class="${m.out ? 'bg-blue-600 text-white' : 'bg-white text-gray-800 border border-gray-200'} rounded-2xl ${m.out ? 'rounded-tr-sm' : 'rounded-tl-sm'} px-4 py-2.5 shadow-sm">
-                            <p class="text-sm">${m.text}</p>
+                            ${m.subject ? `<p class="text-xs font-semibold mb-2 pb-2 border-b ${m.out ? 'border-blue-400 text-blue-100 opacity-90' : 'border-gray-200 text-gray-500'}"><i class="fas fa-envelope mr-1"></i>${m.subject}</p>` : ''}
+                            <p class="text-sm whitespace-pre-line">${m.text}</p>
                         </div>
                         <p class="text-xs text-gray-400 mt-1 ${m.out ? 'text-right mr-1' : 'ml-1'}">${m.time}</p>
                     </div>
