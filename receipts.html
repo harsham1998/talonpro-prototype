@@ -9,15 +9,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-gray-50">
+
     <!-- Header -->
     <header class="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40 h-16">
         <div class="flex items-center justify-between h-full px-6">
-            <div class="flex items-center space-x-4">
-                <h1 class="text-xl font-bold text-gray-800">TalonPro Portal</h1>
-            </div>
+            <h1 class="text-xl font-bold text-gray-800">TalonPro Portal</h1>
             <div class="flex-1 max-w-2xl mx-8">
                 <div class="relative">
-                    <input type="text" placeholder="Search receipts..."
+                    <input type="text" placeholder="Search receipts..." id="searchInput"
                            class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                 </div>
@@ -40,57 +39,36 @@
     <!-- Sidebar -->
     <aside class="fixed left-0 top-16 bottom-0 w-64 bg-gray-900 text-white overflow-y-auto">
         <nav class="p-4">
-            <a href="index.html" class="nav-item">
-                <i class="fas fa-home"></i><span>Dashboard</span>
-            </a>
-            <a href="guest-list-new.html" class="nav-item">
-                <i class="fas fa-users"></i><span>Guests</span>
-            </a>
-            <a href="messages.html" class="nav-item">
-                <i class="fas fa-comments"></i><span>Messages</span>
-            </a>
-            <a href="tasks.html" class="nav-item">
-                <i class="fas fa-tasks"></i><span>Tasks</span>
-            </a>
-            <a href="documents.html" class="nav-item">
-                <i class="fas fa-file-alt"></i><span>Documents</span>
-            </a>
-            <a href="receipts.html" class="nav-item active">
-                <i class="fas fa-receipt"></i><span>Receipts</span>
-            </a>
-            <a href="templates.html" class="nav-item">
-                <i class="fas fa-file-invoice"></i><span>Templates</span>
-            </a>
-            <a href="rules.html" class="nav-item">
-                <i class="fas fa-cogs"></i><span>Automation Rules</span>
-            </a>
-            <a href="reports.html" class="nav-item">
-                <i class="fas fa-chart-bar"></i><span>Reports</span>
-            </a>
-            <a href="ai-features.html" class="nav-item">
-                <i class="fas fa-brain"></i><span>AI Uses</span>
-            </a>
-            <a href="settings.html" class="nav-item">
-                <i class="fas fa-cog"></i><span>Settings</span>
-            </a>
+            <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Dashboard</span></a>
+            <a href="guest-list-new.html" class="nav-item"><i class="fas fa-users"></i><span>Guests</span></a>
+            <a href="messages.html" class="nav-item"><i class="fas fa-comments"></i><span>Messages</span></a>
+            <a href="tasks.html" class="nav-item"><i class="fas fa-tasks"></i><span>Tasks</span></a>
+            <a href="documents.html" class="nav-item"><i class="fas fa-file-alt"></i><span>Documents</span></a>
+            <a href="receipts.html" class="nav-item active"><i class="fas fa-receipt"></i><span>Receipts</span></a>
+            <a href="templates.html" class="nav-item"><i class="fas fa-file-invoice"></i><span>Templates</span></a>
+            <a href="rules.html" class="nav-item"><i class="fas fa-cogs"></i><span>Automation Rules</span></a>
+            <a href="reports.html" class="nav-item"><i class="fas fa-chart-bar"></i><span>Reports</span></a>
+            <a href="ai-features.html" class="nav-item"><i class="fas fa-brain"></i><span>AI Uses</span></a>
+            <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i><span>Settings</span></a>
         </nav>
     </aside>
 
     <!-- Main Content -->
     <main class="ml-64 mt-16 p-6">
+
+        <!-- Page Header -->
         <div class="flex items-center justify-between mb-6">
             <div>
                 <h2 class="text-2xl font-bold text-gray-800">Receipts</h2>
-                <p class="text-gray-600">Manage and track expense receipts for all cases</p>
+                <p class="text-gray-500 text-sm mt-1">Manage and track expense receipts for all cases</p>
             </div>
-            <button onclick="document.getElementById('uploadModal').classList.remove('hidden')"
-                class="btn-primary">
+            <button onclick="showModal('uploadModal')" class="btn-primary">
                 <i class="fas fa-plus mr-2"></i>Upload Receipt
             </button>
         </div>
 
         <!-- Summary Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div class="card text-center">
                 <p class="text-3xl font-bold text-gray-800">$24,850</p>
                 <p class="text-sm text-gray-500 mt-1">Total This Month</p>
@@ -112,7 +90,7 @@
         <!-- Filter Bar -->
         <div class="card mb-4">
             <div class="flex flex-wrap items-center gap-3">
-                <select class="form-input w-auto text-sm">
+                <select class="form-input w-auto text-sm" style="width:auto">
                     <option>All Categories</option>
                     <option>Hotel</option>
                     <option>Meals</option>
@@ -120,13 +98,13 @@
                     <option>Supplies</option>
                     <option>Medical</option>
                 </select>
-                <select class="form-input w-auto text-sm">
+                <select class="form-input w-auto text-sm" style="width:auto">
                     <option>All Statuses</option>
                     <option>Approved</option>
                     <option>Pending</option>
                     <option>Rejected</option>
                 </select>
-                <select class="form-input w-auto text-sm">
+                <select class="form-input w-auto text-sm" style="width:auto">
                     <option>This Month</option>
                     <option>Last Month</option>
                     <option>Last 3 Months</option>
@@ -138,13 +116,219 @@
             </div>
         </div>
 
-        <!-- Receipt Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6" id="receiptGrid">
+        <!-- Receipt Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
+
+            <!-- Receipt Card 1 -->
+            <div class="card hover:shadow-lg transition-shadow cursor-pointer" onclick="showModal('previewModal1')">
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border border-blue-200 p-4 mb-3">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs bg-blue-600 text-white px-2 py-0.5 rounded font-medium">HOTEL</span>
+                        <span class="badge badge-green text-xs">Approved</span>
+                    </div>
+                    <!-- Receipt visual -->
+                    <div class="bg-white rounded border border-gray-200 p-3 shadow-sm" style="font-family: 'Courier New', monospace; font-size: 11px;">
+                        <div class="text-center font-bold text-gray-800 mb-1" style="font-size:13px;">MARRIOTT DOWNTOWN</div>
+                        <div class="text-center text-gray-400 text-xs mb-2">123 Main Street, New York NY</div>
+                        <div class="border-t border-dashed border-gray-300 my-2"></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Room 412 - 5 nights</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Check-in:</span><span>Mar 1, 2024</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Check-out:</span><span>Mar 6, 2024</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Rate/night:</span><span>$250.00</span></div>
+                        <div class="border-t border-dashed border-gray-300 my-2"></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Subtotal:</span><span>$1,250.00</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Tax (8%):</span><span>$100.00</span></div>
+                        <div class="border-t border-gray-300 my-1"></div>
+                        <div class="flex justify-between font-bold text-gray-800"><span>TOTAL:</span><span>$1,250.00</span></div>
+                        <div class="text-center text-gray-300 mt-2" style="letter-spacing:2px;">|||||||||||||||||||||</div>
+                        <div class="text-center text-gray-400" style="font-size:9px;">RCP-001 · TalonPro Portal</div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-medium text-gray-800 text-sm">James Wilson</p>
+                        <p class="text-xs text-gray-500">Case #2024-0891 · Mar 1, 2024</p>
+                    </div>
+                    <p class="font-bold text-gray-800">$1,250.00</p>
+                </div>
+            </div>
+
+            <!-- Receipt Card 2 -->
+            <div class="card hover:shadow-lg transition-shadow cursor-pointer" onclick="showModal('previewModal2')">
+                <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-lg border border-green-200 p-4 mb-3">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs bg-green-600 text-white px-2 py-0.5 rounded font-medium">MEALS</span>
+                        <span class="badge badge-green text-xs">Approved</span>
+                    </div>
+                    <div class="bg-white rounded border border-gray-200 p-3 shadow-sm" style="font-family: 'Courier New', monospace; font-size: 11px;">
+                        <div class="text-center font-bold text-gray-800 mb-1" style="font-size:13px;">OLIVE GARDEN</div>
+                        <div class="text-center text-gray-400 text-xs mb-2">456 Oak Ave, Chicago IL</div>
+                        <div class="border-t border-dashed border-gray-300 my-2"></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Fettuccine Alfredo</span><span>$22.50</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Chicken Parmigiana</span><span>$24.95</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Breadsticks (2)</span><span>$0.00</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Beverages (2)</span><span>$12.00</span></div>
+                        <div class="border-t border-dashed border-gray-300 my-2"></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Subtotal:</span><span>$59.45</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Tax:</span><span>$5.95</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Tip:</span><span>$12.10</span></div>
+                        <div class="border-t border-gray-300 my-1"></div>
+                        <div class="flex justify-between font-bold text-gray-800"><span>TOTAL:</span><span>$87.50</span></div>
+                        <div class="text-center text-gray-300 mt-2" style="letter-spacing:2px;">|||||||||||||||||||||</div>
+                        <div class="text-center text-gray-400" style="font-size:9px;">RCP-002 · TalonPro Portal</div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-medium text-gray-800 text-sm">Maria Garcia</p>
+                        <p class="text-xs text-gray-500">Case #2024-0892 · Mar 2, 2024</p>
+                    </div>
+                    <p class="font-bold text-gray-800">$87.50</p>
+                </div>
+            </div>
+
+            <!-- Receipt Card 3 -->
+            <div class="card hover:shadow-lg transition-shadow cursor-pointer" onclick="showModal('previewModal3')">
+                <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg border border-yellow-200 p-4 mb-3">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs bg-yellow-600 text-white px-2 py-0.5 rounded font-medium">TRANSPORT</span>
+                        <span class="badge badge-yellow text-xs">Pending</span>
+                    </div>
+                    <div class="bg-white rounded border border-gray-200 p-3 shadow-sm" style="font-family: 'Courier New', monospace; font-size: 11px;">
+                        <div class="text-center font-bold text-gray-800 mb-1" style="font-size:13px;">UBER RECEIPT</div>
+                        <div class="text-center text-gray-400 text-xs mb-2">uber.com/trip/receipt</div>
+                        <div class="border-t border-dashed border-gray-300 my-2"></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Trip date:</span><span>Mar 3, 2024</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>From:</span><span>JFK Airport</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>To:</span><span>Marriott Hotel</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Duration:</span><span>42 mins</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Distance:</span><span>18.3 miles</span></div>
+                        <div class="border-t border-dashed border-gray-300 my-2"></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Base fare:</span><span>$30.00</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Surge (1.5x):</span><span>$15.00</span></div>
+                        <div class="border-t border-gray-300 my-1"></div>
+                        <div class="flex justify-between font-bold text-gray-800"><span>TOTAL:</span><span>$45.00</span></div>
+                        <div class="text-center text-gray-300 mt-2" style="letter-spacing:2px;">|||||||||||||||||||||</div>
+                        <div class="text-center text-gray-400" style="font-size:9px;">RCP-003 · TalonPro Portal</div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-medium text-gray-800 text-sm">Robert Chen</p>
+                        <p class="text-xs text-gray-500">Case #2024-0893 · Mar 3, 2024</p>
+                    </div>
+                    <p class="font-bold text-gray-800">$45.00</p>
+                </div>
+            </div>
+
+            <!-- Receipt Card 4 -->
+            <div class="card hover:shadow-lg transition-shadow cursor-pointer" onclick="showModal('previewModal4')">
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg border border-indigo-200 p-4 mb-3">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs bg-blue-600 text-white px-2 py-0.5 rounded font-medium">HOTEL</span>
+                        <span class="badge badge-green text-xs">Approved</span>
+                    </div>
+                    <div class="bg-white rounded border border-gray-200 p-3 shadow-sm" style="font-family: 'Courier New', monospace; font-size: 11px;">
+                        <div class="text-center font-bold text-gray-800 mb-1" style="font-size:13px;">HILTON GARDEN INN</div>
+                        <div class="text-center text-gray-400 text-xs mb-2">789 Park Blvd, Dallas TX</div>
+                        <div class="border-t border-dashed border-gray-300 my-2"></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Room 210 - 4 nights</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Check-in:</span><span>Mar 4, 2024</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Check-out:</span><span>Mar 8, 2024</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Rate/night:</span><span>$245.00</span></div>
+                        <div class="border-t border-dashed border-gray-300 my-2"></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Subtotal:</span><span>$980.00</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Tax (8%):</span><span>$78.40</span></div>
+                        <div class="border-t border-gray-300 my-1"></div>
+                        <div class="flex justify-between font-bold text-gray-800"><span>TOTAL:</span><span>$980.00</span></div>
+                        <div class="text-center text-gray-300 mt-2" style="letter-spacing:2px;">|||||||||||||||||||||</div>
+                        <div class="text-center text-gray-400" style="font-size:9px;">RCP-004 · TalonPro Portal</div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-medium text-gray-800 text-sm">Sarah Thompson</p>
+                        <p class="text-xs text-gray-500">Case #2024-0894 · Mar 4, 2024</p>
+                    </div>
+                    <p class="font-bold text-gray-800">$980.00</p>
+                </div>
+            </div>
+
+            <!-- Receipt Card 5 -->
+            <div class="card hover:shadow-lg transition-shadow cursor-pointer" onclick="showModal('previewModal5')">
+                <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg border border-orange-200 p-4 mb-3">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs bg-orange-600 text-white px-2 py-0.5 rounded font-medium">SUPPLIES</span>
+                        <span class="badge badge-yellow text-xs">Pending</span>
+                    </div>
+                    <div class="bg-white rounded border border-gray-200 p-3 shadow-sm" style="font-family: 'Courier New', monospace; font-size: 11px;">
+                        <div class="text-center font-bold text-gray-800 mb-1" style="font-size:13px;">WALMART SUPERCENTER</div>
+                        <div class="text-center text-gray-400 text-xs mb-2">Store #4521 · Mar 5, 2024</div>
+                        <div class="border-t border-dashed border-gray-300 my-2"></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Bedding Set</span><span>$89.00</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Towels (4pk)</span><span>$34.50</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Toiletries Kit</span><span>$28.75</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Kitchen Items</span><span>$52.50</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Misc Items</span><span>$30.00</span></div>
+                        <div class="border-t border-dashed border-gray-300 my-2"></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Subtotal:</span><span>$234.75</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Tax:</span><span>$18.78</span></div>
+                        <div class="border-t border-gray-300 my-1"></div>
+                        <div class="flex justify-between font-bold text-gray-800"><span>TOTAL:</span><span>$234.75</span></div>
+                        <div class="text-center text-gray-300 mt-2" style="letter-spacing:2px;">|||||||||||||||||||||</div>
+                        <div class="text-center text-gray-400" style="font-size:9px;">RCP-005 · TalonPro Portal</div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-medium text-gray-800 text-sm">David Martinez</p>
+                        <p class="text-xs text-gray-500">Case #2024-0895 · Mar 5, 2024</p>
+                    </div>
+                    <p class="font-bold text-gray-800">$234.75</p>
+                </div>
+            </div>
+
+            <!-- Receipt Card 6 -->
+            <div class="card hover:shadow-lg transition-shadow cursor-pointer" onclick="showModal('previewModal6')">
+                <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-lg border border-red-200 p-4 mb-3">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs bg-red-600 text-white px-2 py-0.5 rounded font-medium">MEDICAL</span>
+                        <span class="badge badge-green text-xs">Approved</span>
+                    </div>
+                    <div class="bg-white rounded border border-gray-200 p-3 shadow-sm" style="font-family: 'Courier New', monospace; font-size: 11px;">
+                        <div class="text-center font-bold text-gray-800 mb-1" style="font-size:13px;">CVS PHARMACY</div>
+                        <div class="text-center text-gray-400 text-xs mb-2">Store #3892 · Mar 5, 2024</div>
+                        <div class="border-t border-dashed border-gray-300 my-2"></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Rx #8823711</span><span>$45.20</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Rx #8823712</span><span>$62.00</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Bandages</span><span>$12.50</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>First Aid Kit</span><span>$36.50</span></div>
+                        <div class="border-t border-dashed border-gray-300 my-2"></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Subtotal:</span><span>$156.20</span></div>
+                        <div class="flex justify-between text-gray-600 mb-1"><span>Tax (exempt)</span><span>$0.00</span></div>
+                        <div class="border-t border-gray-300 my-1"></div>
+                        <div class="flex justify-between font-bold text-gray-800"><span>TOTAL:</span><span>$156.20</span></div>
+                        <div class="text-center text-gray-300 mt-2" style="letter-spacing:2px;">|||||||||||||||||||||</div>
+                        <div class="text-center text-gray-400" style="font-size:9px;">RCP-006 · TalonPro Portal</div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-medium text-gray-800 text-sm">Jennifer Lee</p>
+                        <p class="text-xs text-gray-500">Case #2024-0896 · Mar 5, 2024</p>
+                    </div>
+                    <p class="font-bold text-gray-800">$156.20</p>
+                </div>
+            </div>
+
         </div>
 
-        <!-- Receipt Table -->
+        <!-- Receipts Table -->
         <div class="card">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">All Receipts</h3>
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">All Receipts</h3>
+                <span class="text-sm text-gray-500">9 receipts found</span>
+            </div>
             <div class="overflow-x-auto">
                 <table class="data-table">
                     <thead>
@@ -159,37 +343,269 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="receiptTable"></tbody>
+                    <tbody>
+                        <tr>
+                            <td class="font-medium text-blue-600">RCP-001</td>
+                            <td><div class="font-medium text-gray-800">James Wilson</div><div class="text-xs text-gray-500">Case #2024-0891</div></td>
+                            <td><span class="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">Hotel</span></td>
+                            <td>Marriott Downtown</td>
+                            <td>Mar 1, 2024</td>
+                            <td class="font-semibold">$1,250.00</td>
+                            <td><span class="badge badge-green">Approved</span></td>
+                            <td><div class="flex space-x-2"><button onclick="showModal('previewModal1')" class="text-blue-500 hover:text-blue-700 text-sm"><i class="fas fa-eye"></i></button><button class="text-gray-400 hover:text-gray-600 text-sm"><i class="fas fa-download"></i></button></div></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-blue-600">RCP-002</td>
+                            <td><div class="font-medium text-gray-800">Maria Garcia</div><div class="text-xs text-gray-500">Case #2024-0892</div></td>
+                            <td><span class="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700">Meals</span></td>
+                            <td>Olive Garden</td>
+                            <td>Mar 2, 2024</td>
+                            <td class="font-semibold">$87.50</td>
+                            <td><span class="badge badge-green">Approved</span></td>
+                            <td><div class="flex space-x-2"><button onclick="showModal('previewModal2')" class="text-blue-500 hover:text-blue-700 text-sm"><i class="fas fa-eye"></i></button><button class="text-gray-400 hover:text-gray-600 text-sm"><i class="fas fa-download"></i></button></div></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-blue-600">RCP-003</td>
+                            <td><div class="font-medium text-gray-800">Robert Chen</div><div class="text-xs text-gray-500">Case #2024-0893</div></td>
+                            <td><span class="text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">Transportation</span></td>
+                            <td>Uber</td>
+                            <td>Mar 3, 2024</td>
+                            <td class="font-semibold">$45.00</td>
+                            <td><span class="badge badge-yellow">Pending</span></td>
+                            <td><div class="flex space-x-2"><button onclick="showModal('previewModal3')" class="text-blue-500 hover:text-blue-700 text-sm"><i class="fas fa-eye"></i></button><button class="text-gray-400 hover:text-gray-600 text-sm"><i class="fas fa-download"></i></button></div></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-blue-600">RCP-004</td>
+                            <td><div class="font-medium text-gray-800">Sarah Thompson</div><div class="text-xs text-gray-500">Case #2024-0894</div></td>
+                            <td><span class="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">Hotel</span></td>
+                            <td>Hilton Garden Inn</td>
+                            <td>Mar 4, 2024</td>
+                            <td class="font-semibold">$980.00</td>
+                            <td><span class="badge badge-green">Approved</span></td>
+                            <td><div class="flex space-x-2"><button onclick="showModal('previewModal4')" class="text-blue-500 hover:text-blue-700 text-sm"><i class="fas fa-eye"></i></button><button class="text-gray-400 hover:text-gray-600 text-sm"><i class="fas fa-download"></i></button></div></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-blue-600">RCP-005</td>
+                            <td><div class="font-medium text-gray-800">David Martinez</div><div class="text-xs text-gray-500">Case #2024-0895</div></td>
+                            <td><span class="text-xs px-2 py-0.5 rounded-full bg-orange-100 text-orange-700">Supplies</span></td>
+                            <td>Walmart</td>
+                            <td>Mar 5, 2024</td>
+                            <td class="font-semibold">$234.75</td>
+                            <td><span class="badge badge-yellow">Pending</span></td>
+                            <td><div class="flex space-x-2"><button onclick="showModal('previewModal5')" class="text-blue-500 hover:text-blue-700 text-sm"><i class="fas fa-eye"></i></button><button class="text-gray-400 hover:text-gray-600 text-sm"><i class="fas fa-download"></i></button></div></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-blue-600">RCP-006</td>
+                            <td><div class="font-medium text-gray-800">Jennifer Lee</div><div class="text-xs text-gray-500">Case #2024-0896</div></td>
+                            <td><span class="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-700">Medical</span></td>
+                            <td>CVS Pharmacy</td>
+                            <td>Mar 5, 2024</td>
+                            <td class="font-semibold">$156.20</td>
+                            <td><span class="badge badge-green">Approved</span></td>
+                            <td><div class="flex space-x-2"><button onclick="showModal('previewModal6')" class="text-blue-500 hover:text-blue-700 text-sm"><i class="fas fa-eye"></i></button><button class="text-gray-400 hover:text-gray-600 text-sm"><i class="fas fa-download"></i></button></div></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-blue-600">RCP-007</td>
+                            <td><div class="font-medium text-gray-800">Michael Brown</div><div class="text-xs text-gray-500">Case #2024-0897</div></td>
+                            <td><span class="text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">Transportation</span></td>
+                            <td>Enterprise Rental</td>
+                            <td>Mar 6, 2024</td>
+                            <td class="font-semibold">$320.00</td>
+                            <td><span class="badge badge-red">Rejected</span></td>
+                            <td><div class="flex space-x-2"><button class="text-blue-500 hover:text-blue-700 text-sm"><i class="fas fa-eye"></i></button><button class="text-gray-400 hover:text-gray-600 text-sm"><i class="fas fa-download"></i></button></div></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-blue-600">RCP-008</td>
+                            <td><div class="font-medium text-gray-800">Lisa Anderson</div><div class="text-xs text-gray-500">Case #2024-0898</div></td>
+                            <td><span class="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700">Meals</span></td>
+                            <td>Chili's</td>
+                            <td>Mar 6, 2024</td>
+                            <td class="font-semibold">$65.30</td>
+                            <td><span class="badge badge-yellow">Pending</span></td>
+                            <td><div class="flex space-x-2"><button class="text-blue-500 hover:text-blue-700 text-sm"><i class="fas fa-eye"></i></button><button class="text-gray-400 hover:text-gray-600 text-sm"><i class="fas fa-download"></i></button></div></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-blue-600">RCP-009</td>
+                            <td><div class="font-medium text-gray-800">James Wilson</div><div class="text-xs text-gray-500">Case #2024-0891</div></td>
+                            <td><span class="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">Hotel</span></td>
+                            <td>Marriott Downtown</td>
+                            <td>Mar 7, 2024</td>
+                            <td class="font-semibold">$1,250.00</td>
+                            <td><span class="badge badge-green">Approved</span></td>
+                            <td><div class="flex space-x-2"><button class="text-blue-500 hover:text-blue-700 text-sm"><i class="fas fa-eye"></i></button><button class="text-gray-400 hover:text-gray-600 text-sm"><i class="fas fa-download"></i></button></div></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
     </main>
 
-    <!-- Receipt Preview Modal -->
-    <div id="previewModal" class="modal hidden">
-        <div class="modal-content max-w-lg">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-semibold" id="previewTitle">Receipt Preview</h3>
-                <button onclick="document.getElementById('previewModal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <div id="receiptPreview" class="bg-white border border-gray-200 rounded-lg p-6 font-mono text-sm"></div>
-            <div class="flex justify-end space-x-3 mt-4">
-                <button onclick="document.getElementById('previewModal').classList.add('hidden')" class="btn-secondary">Close</button>
-                <button class="btn-primary"><i class="fas fa-download mr-1"></i> Download</button>
-            </div>
+    <!-- Preview Modals (one per receipt) -->
+    <div id="previewModal1" class="modal"><div class="modal-content max-w-sm">
+        <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-semibold">Receipt RCP-001</h3><button onclick="hideModal('previewModal1')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button></div>
+        <div class="bg-white border border-gray-200 rounded-lg p-6" style="font-family:'Courier New',monospace;font-size:12px;">
+            <div class="text-center font-bold text-gray-800 text-lg mb-1">MARRIOTT DOWNTOWN</div>
+            <div class="text-center text-gray-500 text-xs mb-1">123 Main Street, New York NY 10001</div>
+            <div class="text-center text-gray-500 text-xs mb-3">Tel: (212) 555-0100</div>
+            <div class="border-t-2 border-dashed border-gray-400 my-3"></div>
+            <div class="text-gray-600 mb-1">Guest: James Wilson</div>
+            <div class="text-gray-600 mb-1">Room: 412 (King Suite)</div>
+            <div class="text-gray-600 mb-1">Check-in: Mar 1, 2024</div>
+            <div class="text-gray-600 mb-3">Check-out: Mar 6, 2024</div>
+            <div class="border-t border-dashed border-gray-300 my-3"></div>
+            <div class="flex justify-between mb-1"><span>Room (5 nights × $250)</span><span>$1,250.00</span></div>
+            <div class="flex justify-between mb-1"><span>Parking</span><span>$0.00</span></div>
+            <div class="flex justify-between mb-3"><span>Resort Fee</span><span>$0.00</span></div>
+            <div class="border-t border-gray-400 my-2"></div>
+            <div class="flex justify-between font-bold text-base"><span>TOTAL</span><span>$1,250.00</span></div>
+            <div class="flex justify-between mt-1 text-gray-500 text-xs"><span>Payment: Corp Card</span><span>APPROVED</span></div>
+            <div class="text-center mt-4 text-gray-300" style="letter-spacing:3px;font-size:14px;">|||||||||||||||||||||||||||</div>
+            <div class="text-center text-gray-400 text-xs mt-1">RCP-001 · TalonPro Expense Management</div>
         </div>
-    </div>
+        <div class="flex justify-end space-x-2 mt-4">
+            <button onclick="hideModal('previewModal1')" class="btn-secondary text-sm">Close</button>
+            <button class="btn-primary text-sm"><i class="fas fa-download mr-1"></i>Download</button>
+        </div>
+    </div></div>
+
+    <div id="previewModal2" class="modal"><div class="modal-content max-w-sm">
+        <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-semibold">Receipt RCP-002</h3><button onclick="hideModal('previewModal2')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button></div>
+        <div class="bg-white border border-gray-200 rounded-lg p-6" style="font-family:'Courier New',monospace;font-size:12px;">
+            <div class="text-center font-bold text-gray-800 text-lg mb-1">OLIVE GARDEN</div>
+            <div class="text-center text-gray-500 text-xs mb-1">456 Oak Avenue, Chicago IL 60601</div>
+            <div class="text-center text-gray-500 text-xs mb-3">Check #4421 · Table 12 · Server: Mike</div>
+            <div class="border-t-2 border-dashed border-gray-400 my-3"></div>
+            <div class="flex justify-between mb-1"><span>Fettuccine Alfredo</span><span>$22.50</span></div>
+            <div class="flex justify-between mb-1"><span>Chicken Parmigiana</span><span>$24.95</span></div>
+            <div class="flex justify-between mb-1"><span>Breadsticks</span><span>$0.00</span></div>
+            <div class="flex justify-between mb-1"><span>Soft Drinks (2)</span><span>$8.00</span></div>
+            <div class="flex justify-between mb-3"><span>Coffee (2)</span><span>$4.00</span></div>
+            <div class="border-t border-dashed border-gray-300 my-3"></div>
+            <div class="flex justify-between mb-1"><span>Subtotal</span><span>$59.45</span></div>
+            <div class="flex justify-between mb-1"><span>Tax (10%)</span><span>$5.95</span></div>
+            <div class="flex justify-between mb-3"><span>Tip (20%)</span><span>$12.10</span></div>
+            <div class="border-t border-gray-400 my-2"></div>
+            <div class="flex justify-between font-bold text-base"><span>TOTAL</span><span>$87.50</span></div>
+            <div class="text-center mt-4 text-gray-300" style="letter-spacing:3px;font-size:14px;">|||||||||||||||||||||||||||</div>
+            <div class="text-center text-gray-400 text-xs mt-1">RCP-002 · TalonPro Expense Management</div>
+        </div>
+        <div class="flex justify-end space-x-2 mt-4">
+            <button onclick="hideModal('previewModal2')" class="btn-secondary text-sm">Close</button>
+            <button class="btn-primary text-sm"><i class="fas fa-download mr-1"></i>Download</button>
+        </div>
+    </div></div>
+
+    <div id="previewModal3" class="modal"><div class="modal-content max-w-sm">
+        <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-semibold">Receipt RCP-003</h3><button onclick="hideModal('previewModal3')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button></div>
+        <div class="bg-white border border-gray-200 rounded-lg p-6" style="font-family:'Courier New',monospace;font-size:12px;">
+            <div class="text-center font-bold text-gray-800 text-lg mb-1">UBER TECHNOLOGIES</div>
+            <div class="text-center text-gray-500 text-xs mb-3">Trip Receipt · Mar 3, 2024</div>
+            <div class="border-t-2 border-dashed border-gray-400 my-3"></div>
+            <div class="text-gray-600 mb-1">Driver: David K. ⭐ 4.9</div>
+            <div class="text-gray-600 mb-1">Vehicle: Toyota Camry · ABC-1234</div>
+            <div class="text-gray-600 mb-1">Pickup: JFK Airport T4</div>
+            <div class="text-gray-600 mb-3">Dropoff: Marriott Downtown</div>
+            <div class="border-t border-dashed border-gray-300 my-3"></div>
+            <div class="flex justify-between mb-1"><span>Base fare</span><span>$12.00</span></div>
+            <div class="flex justify-between mb-1"><span>Distance (18.3 mi)</span><span>$18.00</span></div>
+            <div class="flex justify-between mb-1"><span>Time (42 min)</span><span>$8.40</span></div>
+            <div class="flex justify-between mb-1"><span>Surge pricing</span><span>-$8.40</span></div>
+            <div class="flex justify-between mb-3"><span>Booking fee</span><span>$3.00</span></div>
+            <div class="border-t border-gray-400 my-2"></div>
+            <div class="flex justify-between font-bold text-base"><span>TOTAL</span><span>$45.00</span></div>
+            <div class="text-center mt-4 text-gray-300" style="letter-spacing:3px;font-size:14px;">|||||||||||||||||||||||||||</div>
+            <div class="text-center text-gray-400 text-xs mt-1">RCP-003 · TalonPro Expense Management</div>
+        </div>
+        <div class="flex justify-end space-x-2 mt-4">
+            <button onclick="hideModal('previewModal3')" class="btn-secondary text-sm">Close</button>
+            <button class="btn-primary text-sm"><i class="fas fa-download mr-1"></i>Download</button>
+        </div>
+    </div></div>
+
+    <div id="previewModal4" class="modal"><div class="modal-content max-w-sm">
+        <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-semibold">Receipt RCP-004</h3><button onclick="hideModal('previewModal4')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button></div>
+        <div class="bg-white border border-gray-200 rounded-lg p-6" style="font-family:'Courier New',monospace;font-size:12px;">
+            <div class="text-center font-bold text-gray-800 text-lg mb-1">HILTON GARDEN INN</div>
+            <div class="text-center text-gray-500 text-xs mb-1">789 Park Blvd, Dallas TX 75201</div>
+            <div class="text-center text-gray-500 text-xs mb-3">Confirmation: HGI-892341</div>
+            <div class="border-t-2 border-dashed border-gray-400 my-3"></div>
+            <div class="text-gray-600 mb-1">Guest: Sarah Thompson</div>
+            <div class="text-gray-600 mb-1">Room: 210 (Standard King)</div>
+            <div class="text-gray-600 mb-1">Check-in: Mar 4, 2024</div>
+            <div class="text-gray-600 mb-3">Check-out: Mar 8, 2024</div>
+            <div class="border-t border-dashed border-gray-300 my-3"></div>
+            <div class="flex justify-between mb-1"><span>Room (4 nights × $245)</span><span>$980.00</span></div>
+            <div class="border-t border-gray-400 my-2"></div>
+            <div class="flex justify-between font-bold text-base"><span>TOTAL</span><span>$980.00</span></div>
+            <div class="text-center mt-4 text-gray-300" style="letter-spacing:3px;font-size:14px;">|||||||||||||||||||||||||||</div>
+            <div class="text-center text-gray-400 text-xs mt-1">RCP-004 · TalonPro Expense Management</div>
+        </div>
+        <div class="flex justify-end space-x-2 mt-4">
+            <button onclick="hideModal('previewModal4')" class="btn-secondary text-sm">Close</button>
+            <button class="btn-primary text-sm"><i class="fas fa-download mr-1"></i>Download</button>
+        </div>
+    </div></div>
+
+    <div id="previewModal5" class="modal"><div class="modal-content max-w-sm">
+        <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-semibold">Receipt RCP-005</h3><button onclick="hideModal('previewModal5')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button></div>
+        <div class="bg-white border border-gray-200 rounded-lg p-6" style="font-family:'Courier New',monospace;font-size:12px;">
+            <div class="text-center font-bold text-gray-800 text-lg mb-1">WALMART SUPERCENTER</div>
+            <div class="text-center text-gray-500 text-xs mb-1">Store #4521 · 100 Commerce Dr</div>
+            <div class="text-center text-gray-500 text-xs mb-3">Mar 5, 2024 · 2:34 PM</div>
+            <div class="border-t-2 border-dashed border-gray-400 my-3"></div>
+            <div class="flex justify-between mb-1"><span>Queen Bedding Set</span><span>$89.00</span></div>
+            <div class="flex justify-between mb-1"><span>Bath Towels 4-Pk</span><span>$34.50</span></div>
+            <div class="flex justify-between mb-1"><span>Toiletries Bundle</span><span>$28.75</span></div>
+            <div class="flex justify-between mb-1"><span>Kitchen Starter Kit</span><span>$52.50</span></div>
+            <div class="flex justify-between mb-3"><span>Miscellaneous</span><span>$30.00</span></div>
+            <div class="border-t border-dashed border-gray-300 my-3"></div>
+            <div class="flex justify-between mb-1"><span>Subtotal</span><span>$234.75</span></div>
+            <div class="flex justify-between mb-3"><span>Tax</span><span>$18.78</span></div>
+            <div class="border-t border-gray-400 my-2"></div>
+            <div class="flex justify-between font-bold text-base"><span>TOTAL</span><span>$253.53</span></div>
+            <div class="text-center mt-4 text-gray-300" style="letter-spacing:3px;font-size:14px;">|||||||||||||||||||||||||||</div>
+            <div class="text-center text-gray-400 text-xs mt-1">RCP-005 · TalonPro Expense Management</div>
+        </div>
+        <div class="flex justify-end space-x-2 mt-4">
+            <button onclick="hideModal('previewModal5')" class="btn-secondary text-sm">Close</button>
+            <button class="btn-primary text-sm"><i class="fas fa-download mr-1"></i>Download</button>
+        </div>
+    </div></div>
+
+    <div id="previewModal6" class="modal"><div class="modal-content max-w-sm">
+        <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-semibold">Receipt RCP-006</h3><button onclick="hideModal('previewModal6')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button></div>
+        <div class="bg-white border border-gray-200 rounded-lg p-6" style="font-family:'Courier New',monospace;font-size:12px;">
+            <div class="text-center font-bold text-gray-800 text-lg mb-1">CVS PHARMACY</div>
+            <div class="text-center text-gray-500 text-xs mb-1">Store #3892 · 500 Health Ave</div>
+            <div class="text-center text-gray-500 text-xs mb-3">Mar 5, 2024 · Pharmacist: J. Patel</div>
+            <div class="border-t-2 border-dashed border-gray-400 my-3"></div>
+            <div class="text-gray-600 mb-1">Patient: Jennifer Lee</div>
+            <div class="text-gray-600 mb-3">Insurance: Self-Pay</div>
+            <div class="border-t border-dashed border-gray-300 my-3"></div>
+            <div class="flex justify-between mb-1"><span>Rx #8823711 - Amoxicillin</span><span>$45.20</span></div>
+            <div class="flex justify-between mb-1"><span>Rx #8823712 - Ibuprofen 800</span><span>$62.00</span></div>
+            <div class="flex justify-between mb-1"><span>Adhesive Bandages</span><span>$12.50</span></div>
+            <div class="flex justify-between mb-3"><span>First Aid Kit</span><span>$36.50</span></div>
+            <div class="border-t border-dashed border-gray-300 my-3"></div>
+            <div class="flex justify-between mb-1"><span>Subtotal</span><span>$156.20</span></div>
+            <div class="flex justify-between mb-3"><span>Tax (Rx Exempt)</span><span>$0.00</span></div>
+            <div class="border-t border-gray-400 my-2"></div>
+            <div class="flex justify-between font-bold text-base"><span>TOTAL</span><span>$156.20</span></div>
+            <div class="text-center mt-4 text-gray-300" style="letter-spacing:3px;font-size:14px;">|||||||||||||||||||||||||||</div>
+            <div class="text-center text-gray-400 text-xs mt-1">RCP-006 · TalonPro Expense Management</div>
+        </div>
+        <div class="flex justify-end space-x-2 mt-4">
+            <button onclick="hideModal('previewModal6')" class="btn-secondary text-sm">Close</button>
+            <button class="btn-primary text-sm"><i class="fas fa-download mr-1"></i>Download</button>
+        </div>
+    </div></div>
 
     <!-- Upload Modal -->
-    <div id="uploadModal" class="modal hidden">
+    <div id="uploadModal" class="modal">
         <div class="modal-content max-w-lg">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-xl font-semibold">Upload Receipt</h3>
-                <button onclick="document.getElementById('uploadModal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
+                <button onclick="hideModal('uploadModal')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
             </div>
             <form class="space-y-4">
                 <div>
@@ -198,6 +614,7 @@
                         <option>James Wilson - Case #2024-0891</option>
                         <option>Maria Garcia - Case #2024-0892</option>
                         <option>Robert Chen - Case #2024-0893</option>
+                        <option>Sarah Thompson - Case #2024-0894</option>
                     </select>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
@@ -222,18 +639,14 @@
                 </div>
                 <div>
                     <label class="form-label">Receipt Image / PDF</label>
-                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-400">
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-400 transition-colors">
                         <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
                         <p class="text-sm text-gray-500">Click or drag to upload</p>
-                        <p class="text-xs text-gray-400">PNG, JPG, PDF up to 10MB</p>
+                        <p class="text-xs text-gray-400 mt-1">PNG, JPG, PDF up to 10MB</p>
                     </div>
                 </div>
-                <div>
-                    <label class="form-label">Notes</label>
-                    <textarea class="form-input" rows="2" placeholder="Optional notes..."></textarea>
-                </div>
                 <div class="flex justify-end space-x-3 mt-4">
-                    <button type="button" onclick="document.getElementById('uploadModal').classList.add('hidden')" class="btn-secondary">Cancel</button>
+                    <button type="button" onclick="hideModal('uploadModal')" class="btn-secondary">Cancel</button>
                     <button type="submit" class="btn-primary">Upload Receipt</button>
                 </div>
             </form>
@@ -243,124 +656,18 @@
     <script src="data.js"></script>
     <script src="app.js"></script>
     <script>
-        const receipts = [
-            { id: 'RCP-001', guest: 'James Wilson', case: '#2024-0891', category: 'Hotel', vendor: 'Marriott Downtown', date: 'Mar 1, 2024', amount: 1250.00, status: 'approved', icon: 'fa-hotel', color: 'blue' },
-            { id: 'RCP-002', guest: 'Maria Garcia', case: '#2024-0892', category: 'Meals', vendor: 'Olive Garden', date: 'Mar 2, 2024', amount: 87.50, status: 'approved', icon: 'fa-utensils', color: 'green' },
-            { id: 'RCP-003', guest: 'Robert Chen', case: '#2024-0893', category: 'Transportation', vendor: 'Uber', date: 'Mar 3, 2024', amount: 45.00, status: 'pending', icon: 'fa-car', color: 'yellow' },
-            { id: 'RCP-004', guest: 'Sarah Thompson', case: '#2024-0894', category: 'Hotel', vendor: 'Hilton Garden Inn', date: 'Mar 4, 2024', amount: 980.00, status: 'approved', icon: 'fa-hotel', color: 'blue' },
-            { id: 'RCP-005', guest: 'David Martinez', case: '#2024-0895', category: 'Supplies', vendor: 'Walmart', date: 'Mar 5, 2024', amount: 234.75, status: 'pending', icon: 'fa-shopping-cart', color: 'orange' },
-            { id: 'RCP-006', guest: 'Jennifer Lee', case: '#2024-0896', category: 'Medical', vendor: 'CVS Pharmacy', date: 'Mar 5, 2024', amount: 156.20, status: 'approved', icon: 'fa-pills', color: 'red' },
-            { id: 'RCP-007', guest: 'Michael Brown', case: '#2024-0897', category: 'Transportation', vendor: 'Enterprise Rental', date: 'Mar 6, 2024', amount: 320.00, status: 'rejected', icon: 'fa-car', color: 'red' },
-            { id: 'RCP-008', guest: 'Lisa Anderson', case: '#2024-0898', category: 'Meals', vendor: 'Chili\'s', date: 'Mar 6, 2024', amount: 65.30, status: 'pending', icon: 'fa-utensils', color: 'green' },
-            { id: 'RCP-009', guest: 'James Wilson', case: '#2024-0891', category: 'Hotel', vendor: 'Marriott Downtown', date: 'Mar 7, 2024', amount: 1250.00, status: 'approved', icon: 'fa-hotel', color: 'blue' },
-        ];
-
-        const statusColors = {
-            approved: 'bg-green-100 text-green-700',
-            pending: 'bg-yellow-100 text-yellow-700',
-            rejected: 'bg-red-100 text-red-700'
-        };
-
-        const categoryColors = {
-            Hotel: 'bg-blue-100 text-blue-600',
-            Meals: 'bg-green-100 text-green-600',
-            Transportation: 'bg-purple-100 text-purple-600',
-            Supplies: 'bg-orange-100 text-orange-600',
-            Medical: 'bg-red-100 text-red-600'
-        };
-
-        function renderReceipts() {
-            // Card view for top receipts
-            const grid = document.getElementById('receiptGrid');
-            grid.innerHTML = receipts.slice(0, 6).map(r => `
-                <div class="card hover:shadow-lg transition-shadow cursor-pointer" onclick="showPreview('${r.id}')">
-                    <!-- Receipt Image Mockup -->
-                    <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border border-gray-200 p-4 mb-3 relative overflow-hidden">
-                        <div class="absolute top-2 right-2">
-                            <span class="text-xs px-2 py-0.5 rounded-full ${statusColors[r.status]} font-medium capitalize">${r.status}</span>
-                        </div>
-                        <!-- Receipt mockup design -->
-                        <div class="bg-white rounded border border-gray-200 p-3 shadow-sm font-mono text-xs">
-                            <div class="text-center font-bold text-gray-700 mb-2 text-sm">${r.vendor}</div>
-                            <div class="border-t border-dashed border-gray-300 my-2"></div>
-                            <div class="flex justify-between text-gray-500"><span>Date:</span><span>${r.date}</span></div>
-                            <div class="flex justify-between text-gray-500 mt-1"><span>Category:</span><span>${r.category}</span></div>
-                            <div class="border-t border-dashed border-gray-300 my-2"></div>
-                            <div class="flex justify-between font-bold text-gray-800 text-sm">
-                                <span>TOTAL</span>
-                                <span>$${r.amount.toFixed(2)}</span>
-                            </div>
-                            <div class="text-center text-gray-300 text-xs mt-2">|||||||||||||||||||||||||||</div>
-                            <div class="text-center text-gray-400 text-xs">${r.id}</div>
-                        </div>
-                    </div>
-                    <div class="flex items-start justify-between">
-                        <div>
-                            <p class="font-medium text-gray-800 text-sm">${r.guest}</p>
-                            <p class="text-xs text-gray-500">${r.case}</p>
-                        </div>
-                        <span class="text-xs px-2 py-0.5 rounded-full ${categoryColors[r.category] || 'bg-gray-100 text-gray-600'}">${r.category}</span>
-                    </div>
-                </div>
-            `).join('');
-
-            // Table view
-            const table = document.getElementById('receiptTable');
-            table.innerHTML = receipts.map(r => `
-                <tr>
-                    <td class="font-medium text-blue-600">${r.id}</td>
-                    <td>
-                        <div class="font-medium text-gray-800">${r.guest}</div>
-                        <div class="text-xs text-gray-500">Case ${r.case}</div>
-                    </td>
-                    <td><span class="text-xs px-2 py-0.5 rounded-full ${categoryColors[r.category] || ''}">${r.category}</span></td>
-                    <td>${r.vendor}</td>
-                    <td>${r.date}</td>
-                    <td class="font-semibold">$${r.amount.toFixed(2)}</td>
-                    <td><span class="badge ${r.status === 'approved' ? 'badge-green' : r.status === 'pending' ? 'badge-yellow' : 'badge-red'} capitalize">${r.status}</span></td>
-                    <td>
-                        <div class="flex space-x-2">
-                            <button onclick="showPreview('${r.id}')" class="text-blue-500 hover:text-blue-700 text-sm"><i class="fas fa-eye"></i></button>
-                            <button class="text-gray-500 hover:text-gray-700 text-sm"><i class="fas fa-download"></i></button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
+        function showModal(id) {
+            document.getElementById(id).classList.add('active');
         }
-
-        function showPreview(id) {
-            const r = receipts.find(r => r.id === id);
-            if (!r) return;
-            document.getElementById('previewTitle').textContent = 'Receipt ' + r.id;
-            document.getElementById('receiptPreview').innerHTML = `
-                <div class="text-center mb-4">
-                    <div class="text-xl font-bold">${r.vendor}</div>
-                    <div class="text-gray-500 text-xs mt-1">${r.date}</div>
-                </div>
-                <div class="border-t border-dashed border-gray-300 my-3"></div>
-                <div class="space-y-2 text-xs">
-                    <div class="flex justify-between"><span class="text-gray-500">Receipt #:</span><span>${r.id}</span></div>
-                    <div class="flex justify-between"><span class="text-gray-500">Guest:</span><span>${r.guest}</span></div>
-                    <div class="flex justify-between"><span class="text-gray-500">Case:</span><span>${r.case}</span></div>
-                    <div class="flex justify-between"><span class="text-gray-500">Category:</span><span>${r.category}</span></div>
-                    <div class="flex justify-between"><span class="text-gray-500">Status:</span>
-                        <span class="capitalize font-medium ${r.status === 'approved' ? 'text-green-600' : r.status === 'pending' ? 'text-yellow-600' : 'text-red-600'}">${r.status}</span>
-                    </div>
-                </div>
-                <div class="border-t border-dashed border-gray-300 my-3"></div>
-                <div class="flex justify-between font-bold">
-                    <span>TOTAL AMOUNT</span>
-                    <span>$${r.amount.toFixed(2)}</span>
-                </div>
-                <div class="text-center mt-4">
-                    <div class="text-gray-300 text-lg tracking-widest">|||||||||||||||||||</div>
-                    <div class="text-gray-400 text-xs mt-1">${r.id} · TalonPro Portal</div>
-                </div>
-            `;
-            document.getElementById('previewModal').classList.remove('hidden');
+        function hideModal(id) {
+            document.getElementById(id).classList.remove('active');
         }
-
-        renderReceipts();
+        // Close modal on backdrop click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) hideModal(this.id);
+            });
+        });
     </script>
 </body>
 </html>
