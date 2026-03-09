@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipts - TalonPro Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40 h-16">
+        <div class="flex items-center justify-between h-full px-6">
+            <div class="flex items-center space-x-4">
+                <h1 class="text-xl font-bold text-gray-800">TalonPro Portal</h1>
+            </div>
+            <div class="flex-1 max-w-2xl mx-8">
+                <div class="relative">
+                    <input type="text" placeholder="Search receipts..."
+                           class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                <div class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 px-3 py-2 rounded-lg">
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="text-sm font-medium">Admin User</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="fixed left-0 top-16 bottom-0 w-64 bg-gray-900 text-white overflow-y-auto">
+        <nav class="p-4">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i><span>Dashboard</span>
+            </a>
+            <a href="guest-list-new.html" class="nav-item">
+                <i class="fas fa-users"></i><span>Guests</span>
+            </a>
+            <a href="messages.html" class="nav-item">
+                <i class="fas fa-comments"></i><span>Messages</span>
+            </a>
+            <a href="tasks.html" class="nav-item">
+                <i class="fas fa-tasks"></i><span>Tasks</span>
+            </a>
+            <a href="documents.html" class="nav-item">
+                <i class="fas fa-file-alt"></i><span>Documents</span>
+            </a>
+            <a href="receipts.html" class="nav-item active">
+                <i class="fas fa-receipt"></i><span>Receipts</span>
+            </a>
+            <a href="templates.html" class="nav-item">
+                <i class="fas fa-file-invoice"></i><span>Templates</span>
+            </a>
+            <a href="rules.html" class="nav-item">
+                <i class="fas fa-cogs"></i><span>Automation Rules</span>
+            </a>
+            <a href="reports.html" class="nav-item">
+                <i class="fas fa-chart-bar"></i><span>Reports</span>
+            </a>
+            <a href="ai-features.html" class="nav-item">
+                <i class="fas fa-brain"></i><span>AI Uses</span>
+            </a>
+            <a href="settings.html" class="nav-item">
+                <i class="fas fa-cog"></i><span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ml-64 mt-16 p-6">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800">Receipts</h2>
+                <p class="text-gray-600">Manage and track expense receipts for all cases</p>
+            </div>
+            <button onclick="document.getElementById('uploadModal').classList.remove('hidden')"
+                class="btn-primary">
+                <i class="fas fa-plus mr-2"></i>Upload Receipt
+            </button>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div class="card text-center">
+                <p class="text-3xl font-bold text-gray-800">$24,850</p>
+                <p class="text-sm text-gray-500 mt-1">Total This Month</p>
+            </div>
+            <div class="card text-center">
+                <p class="text-3xl font-bold text-green-600">$18,200</p>
+                <p class="text-sm text-gray-500 mt-1">Approved</p>
+            </div>
+            <div class="card text-center">
+                <p class="text-3xl font-bold text-yellow-500">$4,650</p>
+                <p class="text-sm text-gray-500 mt-1">Pending Review</p>
+            </div>
+            <div class="card text-center">
+                <p class="text-3xl font-bold text-red-500">$2,000</p>
+                <p class="text-sm text-gray-500 mt-1">Rejected</p>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="card mb-4">
+            <div class="flex flex-wrap items-center gap-3">
+                <select class="form-input w-auto text-sm">
+                    <option>All Categories</option>
+                    <option>Hotel</option>
+                    <option>Meals</option>
+                    <option>Transportation</option>
+                    <option>Supplies</option>
+                    <option>Medical</option>
+                </select>
+                <select class="form-input w-auto text-sm">
+                    <option>All Statuses</option>
+                    <option>Approved</option>
+                    <option>Pending</option>
+                    <option>Rejected</option>
+                </select>
+                <select class="form-input w-auto text-sm">
+                    <option>This Month</option>
+                    <option>Last Month</option>
+                    <option>Last 3 Months</option>
+                    <option>All Time</option>
+                </select>
+                <button class="btn-secondary text-sm ml-auto">
+                    <i class="fas fa-download mr-1"></i> Export CSV
+                </button>
+            </div>
+        </div>
+
+        <!-- Receipt Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6" id="receiptGrid">
+        </div>
+
+        <!-- Receipt Table -->
+        <div class="card">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">All Receipts</h3>
+            <div class="overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Receipt #</th>
+                            <th>Guest</th>
+                            <th>Category</th>
+                            <th>Vendor</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="receiptTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Receipt Preview Modal -->
+    <div id="previewModal" class="modal hidden">
+        <div class="modal-content max-w-lg">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-semibold" id="previewTitle">Receipt Preview</h3>
+                <button onclick="document.getElementById('previewModal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="receiptPreview" class="bg-white border border-gray-200 rounded-lg p-6 font-mono text-sm"></div>
+            <div class="flex justify-end space-x-3 mt-4">
+                <button onclick="document.getElementById('previewModal').classList.add('hidden')" class="btn-secondary">Close</button>
+                <button class="btn-primary"><i class="fas fa-download mr-1"></i> Download</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div id="uploadModal" class="modal hidden">
+        <div class="modal-content max-w-lg">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-semibold">Upload Receipt</h3>
+                <button onclick="document.getElementById('uploadModal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form class="space-y-4">
+                <div>
+                    <label class="form-label">Guest / Case</label>
+                    <select class="form-input">
+                        <option>James Wilson - Case #2024-0891</option>
+                        <option>Maria Garcia - Case #2024-0892</option>
+                        <option>Robert Chen - Case #2024-0893</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="form-label">Category</label>
+                        <select class="form-input">
+                            <option>Hotel</option>
+                            <option>Meals</option>
+                            <option>Transportation</option>
+                            <option>Supplies</option>
+                            <option>Medical</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Amount ($)</label>
+                        <input type="number" class="form-input" placeholder="0.00">
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label">Vendor / Merchant</label>
+                    <input type="text" class="form-input" placeholder="e.g. Marriott Hotel">
+                </div>
+                <div>
+                    <label class="form-label">Receipt Image / PDF</label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-400">
+                        <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                        <p class="text-sm text-gray-500">Click or drag to upload</p>
+                        <p class="text-xs text-gray-400">PNG, JPG, PDF up to 10MB</p>
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label">Notes</label>
+                    <textarea class="form-input" rows="2" placeholder="Optional notes..."></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 mt-4">
+                    <button type="button" onclick="document.getElementById('uploadModal').classList.add('hidden')" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Upload Receipt</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+    <script>
+        const receipts = [
+            { id: 'RCP-001', guest: 'James Wilson', case: '#2024-0891', category: 'Hotel', vendor: 'Marriott Downtown', date: 'Mar 1, 2024', amount: 1250.00, status: 'approved', icon: 'fa-hotel', color: 'blue' },
+            { id: 'RCP-002', guest: 'Maria Garcia', case: '#2024-0892', category: 'Meals', vendor: 'Olive Garden', date: 'Mar 2, 2024', amount: 87.50, status: 'approved', icon: 'fa-utensils', color: 'green' },
+            { id: 'RCP-003', guest: 'Robert Chen', case: '#2024-0893', category: 'Transportation', vendor: 'Uber', date: 'Mar 3, 2024', amount: 45.00, status: 'pending', icon: 'fa-car', color: 'yellow' },
+            { id: 'RCP-004', guest: 'Sarah Thompson', case: '#2024-0894', category: 'Hotel', vendor: 'Hilton Garden Inn', date: 'Mar 4, 2024', amount: 980.00, status: 'approved', icon: 'fa-hotel', color: 'blue' },
+            { id: 'RCP-005', guest: 'David Martinez', case: '#2024-0895', category: 'Supplies', vendor: 'Walmart', date: 'Mar 5, 2024', amount: 234.75, status: 'pending', icon: 'fa-shopping-cart', color: 'orange' },
+            { id: 'RCP-006', guest: 'Jennifer Lee', case: '#2024-0896', category: 'Medical', vendor: 'CVS Pharmacy', date: 'Mar 5, 2024', amount: 156.20, status: 'approved', icon: 'fa-pills', color: 'red' },
+            { id: 'RCP-007', guest: 'Michael Brown', case: '#2024-0897', category: 'Transportation', vendor: 'Enterprise Rental', date: 'Mar 6, 2024', amount: 320.00, status: 'rejected', icon: 'fa-car', color: 'red' },
+            { id: 'RCP-008', guest: 'Lisa Anderson', case: '#2024-0898', category: 'Meals', vendor: 'Chili\'s', date: 'Mar 6, 2024', amount: 65.30, status: 'pending', icon: 'fa-utensils', color: 'green' },
+            { id: 'RCP-009', guest: 'James Wilson', case: '#2024-0891', category: 'Hotel', vendor: 'Marriott Downtown', date: 'Mar 7, 2024', amount: 1250.00, status: 'approved', icon: 'fa-hotel', color: 'blue' },
+        ];
+
+        const statusColors = {
+            approved: 'bg-green-100 text-green-700',
+            pending: 'bg-yellow-100 text-yellow-700',
+            rejected: 'bg-red-100 text-red-700'
+        };
+
+        const categoryColors = {
+            Hotel: 'bg-blue-100 text-blue-600',
+            Meals: 'bg-green-100 text-green-600',
+            Transportation: 'bg-purple-100 text-purple-600',
+            Supplies: 'bg-orange-100 text-orange-600',
+            Medical: 'bg-red-100 text-red-600'
+        };
+
+        function renderReceipts() {
+            // Card view for top receipts
+            const grid = document.getElementById('receiptGrid');
+            grid.innerHTML = receipts.slice(0, 6).map(r => `
+                <div class="card hover:shadow-lg transition-shadow cursor-pointer" onclick="showPreview('${r.id}')">
+                    <!-- Receipt Image Mockup -->
+                    <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border border-gray-200 p-4 mb-3 relative overflow-hidden">
+                        <div class="absolute top-2 right-2">
+                            <span class="text-xs px-2 py-0.5 rounded-full ${statusColors[r.status]} font-medium capitalize">${r.status}</span>
+                        </div>
+                        <!-- Receipt mockup design -->
+                        <div class="bg-white rounded border border-gray-200 p-3 shadow-sm font-mono text-xs">
+                            <div class="text-center font-bold text-gray-700 mb-2 text-sm">${r.vendor}</div>
+                            <div class="border-t border-dashed border-gray-300 my-2"></div>
+                            <div class="flex justify-between text-gray-500"><span>Date:</span><span>${r.date}</span></div>
+                            <div class="flex justify-between text-gray-500 mt-1"><span>Category:</span><span>${r.category}</span></div>
+                            <div class="border-t border-dashed border-gray-300 my-2"></div>
+                            <div class="flex justify-between font-bold text-gray-800 text-sm">
+                                <span>TOTAL</span>
+                                <span>$${r.amount.toFixed(2)}</span>
+                            </div>
+                            <div class="text-center text-gray-300 text-xs mt-2">|||||||||||||||||||||||||||</div>
+                            <div class="text-center text-gray-400 text-xs">${r.id}</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="font-medium text-gray-800 text-sm">${r.guest}</p>
+                            <p class="text-xs text-gray-500">${r.case}</p>
+                        </div>
+                        <span class="text-xs px-2 py-0.5 rounded-full ${categoryColors[r.category] || 'bg-gray-100 text-gray-600'}">${r.category}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Table view
+            const table = document.getElementById('receiptTable');
+            table.innerHTML = receipts.map(r => `
+                <tr>
+                    <td class="font-medium text-blue-600">${r.id}</td>
+                    <td>
+                        <div class="font-medium text-gray-800">${r.guest}</div>
+                        <div class="text-xs text-gray-500">Case ${r.case}</div>
+                    </td>
+                    <td><span class="text-xs px-2 py-0.5 rounded-full ${categoryColors[r.category] || ''}">${r.category}</span></td>
+                    <td>${r.vendor}</td>
+                    <td>${r.date}</td>
+                    <td class="font-semibold">$${r.amount.toFixed(2)}</td>
+                    <td><span class="badge ${r.status === 'approved' ? 'badge-green' : r.status === 'pending' ? 'badge-yellow' : 'badge-red'} capitalize">${r.status}</span></td>
+                    <td>
+                        <div class="flex space-x-2">
+                            <button onclick="showPreview('${r.id}')" class="text-blue-500 hover:text-blue-700 text-sm"><i class="fas fa-eye"></i></button>
+                            <button class="text-gray-500 hover:text-gray-700 text-sm"><i class="fas fa-download"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function showPreview(id) {
+            const r = receipts.find(r => r.id === id);
+            if (!r) return;
+            document.getElementById('previewTitle').textContent = 'Receipt ' + r.id;
+            document.getElementById('receiptPreview').innerHTML = `
+                <div class="text-center mb-4">
+                    <div class="text-xl font-bold">${r.vendor}</div>
+                    <div class="text-gray-500 text-xs mt-1">${r.date}</div>
+                </div>
+                <div class="border-t border-dashed border-gray-300 my-3"></div>
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between"><span class="text-gray-500">Receipt #:</span><span>${r.id}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Guest:</span><span>${r.guest}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Case:</span><span>${r.case}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Category:</span><span>${r.category}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Status:</span>
+                        <span class="capitalize font-medium ${r.status === 'approved' ? 'text-green-600' : r.status === 'pending' ? 'text-yellow-600' : 'text-red-600'}">${r.status}</span>
+                    </div>
+                </div>
+                <div class="border-t border-dashed border-gray-300 my-3"></div>
+                <div class="flex justify-between font-bold">
+                    <span>TOTAL AMOUNT</span>
+                    <span>$${r.amount.toFixed(2)}</span>
+                </div>
+                <div class="text-center mt-4">
+                    <div class="text-gray-300 text-lg tracking-widest">|||||||||||||||||||</div>
+                    <div class="text-gray-400 text-xs mt-1">${r.id} · TalonPro Portal</div>
+                </div>
+            `;
+            document.getElementById('previewModal').classList.remove('hidden');
+        }
+
+        renderReceipts();
+    </script>
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - TalonPro Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40 h-16">
+        <div class="flex items-center justify-between h-full px-6">
+            <div class="flex items-center space-x-4">
+                <h1 class="text-xl font-bold text-gray-800">TalonPro Portal</h1>
+            </div>
+            <div class="flex-1 max-w-2xl mx-8">
+                <div class="relative">
+                    <input type="text" placeholder="Search messages..." id="searchInput"
+                           class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                <div class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 px-3 py-2 rounded-lg">
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="text-sm font-medium">Admin User</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="fixed left-0 top-16 bottom-0 w-64 bg-gray-900 text-white overflow-y-auto">
+        <nav class="p-4">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="guest-list-new.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Guests</span>
+            </a>
+            <a href="messages.html" class="nav-item active">
+                <i class="fas fa-comments"></i>
+                <span>Messages</span>
+            </a>
+            <a href="tasks.html" class="nav-item">
+                <i class="fas fa-tasks"></i>
+                <span>Tasks</span>
+            </a>
+            <a href="documents.html" class="nav-item">
+                <i class="fas fa-file-alt"></i>
+                <span>Documents</span>
+            </a>
+            <a href="receipts.html" class="nav-item">
+                <i class="fas fa-receipt"></i>
+                <span>Receipts</span>
+            </a>
+            <a href="templates.html" class="nav-item">
+                <i class="fas fa-file-invoice"></i>
+                <span>Templates</span>
+            </a>
+            <a href="rules.html" class="nav-item">
+                <i class="fas fa-cogs"></i>
+                <span>Automation Rules</span>
+            </a>
+            <a href="reports.html" class="nav-item">
+                <i class="fas fa-chart-bar"></i>
+                <span>Reports</span>
+            </a>
+            <a href="ai-features.html" class="nav-item">
+                <i class="fas fa-brain"></i>
+                <span>AI Uses</span>
+            </a>
+            <a href="settings.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ml-64 mt-16 flex h-[calc(100vh-64px)]">
+
+        <!-- Conversation List Panel -->
+        <div class="w-96 bg-white border-r border-gray-200 flex flex-col">
+            <!-- Panel Header -->
+            <div class="p-4 border-b border-gray-200">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-lg font-semibold text-gray-800">Conversations</h2>
+                    <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full" id="unresolvCount">8 Unresolved</span>
+                </div>
+                <!-- Filter Tabs -->
+                <div class="flex space-x-1 bg-gray-100 rounded-lg p-1">
+                    <button onclick="filterMessages('unresolved')" id="tab-unresolved"
+                        class="flex-1 text-xs py-1.5 px-2 rounded-md bg-white text-gray-700 font-medium shadow-sm">
+                        Unresolved
+                    </button>
+                    <button onclick="filterMessages('all')" id="tab-all"
+                        class="flex-1 text-xs py-1.5 px-2 rounded-md text-gray-500 font-medium">
+                        All
+                    </button>
+                    <button onclick="filterMessages('resolved')" id="tab-resolved"
+                        class="flex-1 text-xs py-1.5 px-2 rounded-md text-gray-500 font-medium">
+                        Resolved
+                    </button>
+                </div>
+            </div>
+
+            <!-- Conversation Items -->
+            <div class="flex-1 overflow-y-auto" id="conversationList">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Conversation Detail Panel -->
+        <div class="flex-1 flex flex-col bg-gray-50" id="conversationPanel">
+            <!-- Empty state -->
+            <div class="flex-1 flex items-center justify-center" id="emptyState">
+                <div class="text-center text-gray-400">
+                    <i class="fas fa-comments text-6xl mb-4"></i>
+                    <p class="text-lg font-medium">Select a conversation</p>
+                    <p class="text-sm">Choose from the list to view messages</p>
+                </div>
+            </div>
+
+            <!-- Active conversation (hidden by default) -->
+            <div class="flex flex-col h-full hidden" id="activeConversation">
+                <!-- Conversation Header -->
+                <div class="bg-white border-b border-gray-200 p-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold" id="convAvatar"></div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800" id="convName"></h3>
+                            <p class="text-sm text-gray-500" id="convContact"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs px-2 py-1 rounded-full font-medium" id="convStatus"></span>
+                        <button onclick="markResolved()" id="resolveBtn"
+                            class="text-sm px-3 py-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600">
+                            <i class="fas fa-check mr-1"></i> Resolve
+                        </button>
+                        <button class="p-2 text-gray-500 hover:bg-gray-100 rounded-lg">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Messages -->
+                <div class="flex-1 overflow-y-auto p-4 space-y-4" id="messageThread">
+                </div>
+
+                <!-- Reply Box -->
+                <div class="bg-white border-t border-gray-200 p-4">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <span class="text-xs text-gray-500">Reply via:</span>
+                        <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium" id="replyChannel"></span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <textarea id="replyText" rows="2"
+                            placeholder="Type your reply..."
+                            class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+                        <button onclick="sendReply()"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 self-end">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+    <script>
+        const conversations = [
+            {
+                id: 1, name: 'James Wilson', initials: 'JW', channel: 'SMS', contact: '+1 (555) 234-5678',
+                status: 'unresolved', lastMessage: 'I still haven\'t received the hotel voucher. Can you check?',
+                time: '10 min ago', unread: 3, color: 'bg-purple-500',
+                messages: [
+                    { from: 'James Wilson', text: 'Hi, I was told my hotel stay was arranged but I haven\'t received any confirmation.', time: '9:15 AM', out: false },
+                    { from: 'me', text: 'Hello James! Let me look into that for you right away.', time: '9:20 AM', out: true },
+                    { from: 'James Wilson', text: 'Its been 2 days and nothing. My check-in is tomorrow morning.', time: '9:45 AM', out: false },
+                    { from: 'James Wilson', text: 'I still haven\'t received the hotel voucher. Can you check?', time: '10:02 AM', out: false },
+                ]
+            },
+            {
+                id: 2, name: 'Maria Garcia', initials: 'MG', channel: 'Email', contact: 'maria.garcia@email.com',
+                status: 'unresolved', lastMessage: 'When will my claim be processed? It\'s been 3 weeks.',
+                time: '25 min ago', unread: 1, color: 'bg-pink-500',
+                messages: [
+                    { from: 'Maria Garcia', text: 'I submitted my claim on Feb 15th and haven\'t heard back. Case #2024-0892', time: 'Feb 28, 8:30 AM', out: false },
+                    { from: 'me', text: 'Hi Maria, I can confirm we received your claim. It\'s currently under review by our team.', time: 'Feb 28, 10:00 AM', out: true },
+                    { from: 'Maria Garcia', text: 'When will my claim be processed? It\'s been 3 weeks.', time: 'Today, 9:35 AM', out: false },
+                ]
+            },
+            {
+                id: 3, name: 'Robert Chen', initials: 'RC', channel: 'SMS', contact: '+1 (555) 876-5432',
+                status: 'unresolved', lastMessage: 'The address on my document is wrong. Please fix it.',
+                time: '1 hr ago', unread: 2, color: 'bg-orange-500',
+                messages: [
+                    { from: 'Robert Chen', text: 'I received the document you sent but the address is incorrect.', time: '8:00 AM', out: false },
+                    { from: 'Robert Chen', text: 'The address on my document is wrong. Please fix it.', time: '8:15 AM', out: false },
+                ]
+            },
+            {
+                id: 4, name: 'Sarah Thompson', initials: 'ST', channel: 'Email', contact: 'sarah.t@gmail.com',
+                status: 'unresolved', lastMessage: 'Can I get an update on my relocation timeline?',
+                time: '2 hrs ago', unread: 1, color: 'bg-teal-500',
+                messages: [
+                    { from: 'me', text: 'Hi Sarah, your relocation has been scheduled for March 15th. We\'ll send details shortly.', time: 'Yesterday, 2:00 PM', out: true },
+                    { from: 'Sarah Thompson', text: 'Thank you! Can I get an update on my relocation timeline?', time: 'Today, 8:00 AM', out: false },
+                    { from: 'Sarah Thompson', text: 'Can I get an update on my relocation timeline?', time: 'Today, 9:00 AM', out: false },
+                ]
+            },
+            {
+                id: 5, name: 'David Martinez', initials: 'DM', channel: 'SMS', contact: '+1 (555) 345-6789',
+                status: 'unresolved', lastMessage: 'My temporary housing expires tomorrow. Help!',
+                time: '3 hrs ago', unread: 4, color: 'bg-red-500',
+                messages: [
+                    { from: 'David Martinez', text: 'My temporary housing arrangement ends tomorrow and I have nowhere to go.', time: '7:00 AM', out: false },
+                    { from: 'David Martinez', text: 'Is anyone there? This is urgent!', time: '7:30 AM', out: false },
+                    { from: 'David Martinez', text: 'My temporary housing expires tomorrow. Help!', time: '8:00 AM', out: false },
+                ]
+            },
+            {
+                id: 6, name: 'Jennifer Lee', initials: 'JL', channel: 'Email', contact: 'jen.lee@work.com',
+                status: 'unresolved', lastMessage: 'I need receipts for my expenses from last month.',
+                time: '4 hrs ago', unread: 1, color: 'bg-indigo-500',
+                messages: [
+                    { from: 'Jennifer Lee', text: 'Could you send me receipts for all expenses related to my case last month?', time: '6:00 AM', out: false },
+                    { from: 'Jennifer Lee', text: 'I need receipts for my expenses from last month.', time: '6:30 AM', out: false },
+                ]
+            },
+            {
+                id: 7, name: 'Michael Brown', initials: 'MB', channel: 'SMS', contact: '+1 (555) 456-7890',
+                status: 'resolved', lastMessage: 'Got it, thank you so much for your help!',
+                time: 'Yesterday', unread: 0, color: 'bg-green-500',
+                messages: [
+                    { from: 'Michael Brown', text: 'Can you confirm my hotel booking for next week?', time: 'Yesterday, 10:00 AM', out: false },
+                    { from: 'me', text: 'Yes! Your booking at Marriott Downtown is confirmed for March 10-14. Confirmation #MR89234.', time: 'Yesterday, 10:30 AM', out: true },
+                    { from: 'Michael Brown', text: 'Got it, thank you so much for your help!', time: 'Yesterday, 10:45 AM', out: false },
+                ]
+            },
+            {
+                id: 8, name: 'Lisa Anderson', initials: 'LA', channel: 'Email', contact: 'l.anderson@email.com',
+                status: 'resolved', lastMessage: 'Perfect, I\'ll be there at 9am. Thanks!',
+                time: '2 days ago', unread: 0, color: 'bg-yellow-500',
+                messages: [
+                    { from: 'Lisa Anderson', text: 'What time should I arrive for the property inspection?', time: '2 days ago, 2:00 PM', out: false },
+                    { from: 'me', text: 'Please arrive at 9:00 AM sharp at 123 Main St. Bring your ID and claim documents.', time: '2 days ago, 3:00 PM', out: true },
+                    { from: 'Lisa Anderson', text: 'Perfect, I\'ll be there at 9am. Thanks!', time: '2 days ago, 3:15 PM', out: false },
+                ]
+            },
+        ];
+
+        let currentFilter = 'unresolved';
+        let activeConvId = null;
+
+        function filterMessages(filter) {
+            currentFilter = filter;
+            ['unresolved', 'all', 'resolved'].forEach(t => {
+                const btn = document.getElementById('tab-' + t);
+                if (t === filter) {
+                    btn.classList.add('bg-white', 'text-gray-700', 'shadow-sm');
+                    btn.classList.remove('text-gray-500');
+                } else {
+                    btn.classList.remove('bg-white', 'text-gray-700', 'shadow-sm');
+                    btn.classList.add('text-gray-500');
+                }
+            });
+            renderList();
+        }
+
+        function renderList() {
+            const list = document.getElementById('conversationList');
+            const filtered = conversations.filter(c => {
+                if (currentFilter === 'all') return true;
+                return c.status === currentFilter;
+            });
+
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const results = search ? filtered.filter(c =>
+                c.name.toLowerCase().includes(search) ||
+                c.lastMessage.toLowerCase().includes(search)
+            ) : filtered;
+
+            document.getElementById('unresolvCount').textContent =
+                conversations.filter(c => c.status === 'unresolved').length + ' Unresolved';
+
+            list.innerHTML = results.map(c => `
+                <div onclick="openConversation(${c.id})"
+                    class="p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors ${activeConvId === c.id ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''}">
+                    <div class="flex items-start space-x-3">
+                        <div class="relative">
+                            <div class="w-10 h-10 ${c.color} rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                                ${c.initials}
+                            </div>
+                            ${c.unread > 0 ? `<span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">${c.unread}</span>` : ''}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between">
+                                <span class="font-medium text-gray-800 text-sm">${c.name}</span>
+                                <span class="text-xs text-gray-400">${c.time}</span>
+                            </div>
+                            <div class="flex items-center space-x-1 mt-0.5">
+                                <span class="text-xs px-1.5 py-0.5 rounded ${c.channel === 'SMS' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}">${c.channel}</span>
+                                <span class="text-xs ${c.status === 'unresolved' ? 'text-red-500 font-medium' : 'text-gray-400'}">${c.status === 'unresolved' ? '● Unresolved' : '✓ Resolved'}</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1 truncate">${c.lastMessage}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openConversation(id) {
+            activeConvId = id;
+            const conv = conversations.find(c => c.id === id);
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('activeConversation').classList.remove('hidden');
+            document.getElementById('convAvatar').textContent = conv.initials;
+            document.getElementById('convAvatar').className = `w-10 h-10 rounded-full ${conv.color} flex items-center justify-center text-white font-bold`;
+            document.getElementById('convName').textContent = conv.name;
+            document.getElementById('convContact').textContent = conv.contact + ' · via ' + conv.channel;
+            document.getElementById('replyChannel').textContent = conv.channel;
+
+            const statusEl = document.getElementById('convStatus');
+            if (conv.status === 'unresolved') {
+                statusEl.textContent = 'Unresolved';
+                statusEl.className = 'text-xs px-2 py-1 rounded-full font-medium bg-red-100 text-red-700';
+                document.getElementById('resolveBtn').classList.remove('hidden');
+            } else {
+                statusEl.textContent = 'Resolved';
+                statusEl.className = 'text-xs px-2 py-1 rounded-full font-medium bg-green-100 text-green-700';
+                document.getElementById('resolveBtn').classList.add('hidden');
+            }
+
+            const thread = document.getElementById('messageThread');
+            thread.innerHTML = conv.messages.map(m => `
+                <div class="flex ${m.out ? 'justify-end' : 'justify-start'}">
+                    <div class="max-w-sm">
+                        ${!m.out ? `<p class="text-xs text-gray-500 mb-1 ml-1">${m.from}</p>` : ''}
+                        <div class="${m.out ? 'bg-blue-600 text-white' : 'bg-white text-gray-800 border border-gray-200'} rounded-2xl ${m.out ? 'rounded-tr-sm' : 'rounded-tl-sm'} px-4 py-2.5 shadow-sm">
+                            <p class="text-sm">${m.text}</p>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1 ${m.out ? 'text-right mr-1' : 'ml-1'}">${m.time}</p>
+                    </div>
+                </div>
+            `).join('');
+            thread.scrollTop = thread.scrollHeight;
+
+            // Mark as read
+            conv.unread = 0;
+            renderList();
+        }
+
+        function markResolved() {
+            const conv = conversations.find(c => c.id === activeConvId);
+            if (conv) {
+                conv.status = 'resolved';
+                openConversation(activeConvId);
+                renderList();
+            }
+        }
+
+        function sendReply() {
+            const text = document.getElementById('replyText').value.trim();
+            if (!text) return;
+            const conv = conversations.find(c => c.id === activeConvId);
+            if (conv) {
+                conv.messages.push({ from: 'me', text, time: 'Just now', out: true });
+                conv.lastMessage = text;
+                conv.time = 'Just now';
+                document.getElementById('replyText').value = '';
+                openConversation(activeConvId);
+            }
+        }
+
+        document.getElementById('replyText').addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendReply(); }
+        });
+
+        document.getElementById('searchInput').addEventListener('input', renderList);
+
+        renderList();
+    </script>
+</body>
+</html>

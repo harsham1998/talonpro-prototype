@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - TalonPro Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40 h-16">
+        <div class="flex items-center justify-between h-full px-6">
+            <h1 class="text-xl font-bold text-gray-800">TalonPro Portal</h1>
+            <div class="flex-1 max-w-2xl mx-8">
+                <div class="relative">
+                    <input type="text" placeholder="Search reports..."
+                           class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                <div class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 px-3 py-2 rounded-lg">
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="text-sm font-medium">Admin User</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="fixed left-0 top-16 bottom-0 w-64 bg-gray-900 text-white overflow-y-auto">
+        <nav class="p-4">
+            <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Dashboard</span></a>
+            <a href="guest-list-new.html" class="nav-item"><i class="fas fa-users"></i><span>Guests</span></a>
+            <a href="messages.html" class="nav-item"><i class="fas fa-comments"></i><span>Messages</span></a>
+            <a href="tasks.html" class="nav-item"><i class="fas fa-tasks"></i><span>Tasks</span></a>
+            <a href="documents.html" class="nav-item"><i class="fas fa-file-alt"></i><span>Documents</span></a>
+            <a href="receipts.html" class="nav-item"><i class="fas fa-receipt"></i><span>Receipts</span></a>
+            <a href="templates.html" class="nav-item"><i class="fas fa-file-invoice"></i><span>Templates</span></a>
+            <a href="rules.html" class="nav-item"><i class="fas fa-cogs"></i><span>Automation Rules</span></a>
+            <a href="reports.html" class="nav-item active"><i class="fas fa-chart-bar"></i><span>Reports</span></a>
+            <a href="ai-features.html" class="nav-item"><i class="fas fa-brain"></i><span>AI Uses</span></a>
+            <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ml-64 mt-16 p-6">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800">Reports</h2>
+                <p class="text-gray-600">Analytics and insights across all operations</p>
+            </div>
+            <div class="flex items-center space-x-3">
+                <select class="form-input w-auto text-sm">
+                    <option>This Month</option>
+                    <option>Last Month</option>
+                    <option>Last 3 Months</option>
+                    <option>This Year</option>
+                </select>
+                <button class="btn-primary text-sm"><i class="fas fa-download mr-2"></i>Export Report</button>
+            </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div class="card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">Total Guests</p>
+                        <p class="text-3xl font-bold text-gray-800 mt-1">248</p>
+                        <p class="text-xs text-green-600 mt-1"><i class="fas fa-arrow-up"></i> 12% vs last month</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-users text-blue-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">Avg Response Time</p>
+                        <p class="text-3xl font-bold text-gray-800 mt-1">2.4h</p>
+                        <p class="text-xs text-green-600 mt-1"><i class="fas fa-arrow-down"></i> 18% faster</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-clock text-green-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">Resolution Rate</p>
+                        <p class="text-3xl font-bold text-gray-800 mt-1">87%</p>
+                        <p class="text-xs text-green-600 mt-1"><i class="fas fa-arrow-up"></i> 5% vs last month</p>
+                    </div>
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-check-circle text-purple-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">Total Expenses</p>
+                        <p class="text-3xl font-bold text-gray-800 mt-1">$94K</p>
+                        <p class="text-xs text-red-500 mt-1"><i class="fas fa-arrow-up"></i> 8% vs last month</p>
+                    </div>
+                    <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-dollar-sign text-yellow-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Tabs -->
+        <div class="flex space-x-1 bg-gray-100 rounded-lg p-1 mb-6 w-fit">
+            <button onclick="showReport('messages')" id="tab-messages" class="px-4 py-2 text-sm rounded-md bg-white text-gray-700 font-medium shadow-sm">Message Reports</button>
+            <button onclick="showReport('guests')" id="tab-guests" class="px-4 py-2 text-sm rounded-md text-gray-500 font-medium">Guest Reports</button>
+            <button onclick="showReport('expenses')" id="tab-expenses" class="px-4 py-2 text-sm rounded-md text-gray-500 font-medium">Expense Reports</button>
+            <button onclick="showReport('tasks')" id="tab-tasks" class="px-4 py-2 text-sm rounded-md text-gray-500 font-medium">Task Reports</button>
+            <button onclick="showReport('coordinator')" id="tab-coordinator" class="px-4 py-2 text-sm rounded-md text-gray-500 font-medium">Coordinator Performance</button>
+        </div>
+
+        <!-- Message Reports -->
+        <div id="report-messages">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Message Volume by Channel</h3>
+                    <canvas id="channelChart" height="220"></canvas>
+                </div>
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Daily Message Volume</h3>
+                    <canvas id="volumeChart" height="220"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Message Status Summary</h3>
+                <div class="overflow-x-auto">
+                    <table class="data-table">
+                        <thead><tr><th>Channel</th><th>Sent</th><th>Delivered</th><th>Opened</th><th>Responded</th><th>Unresolved</th></tr></thead>
+                        <tbody>
+                            <tr><td><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs">Email</span></td><td>342</td><td>338</td><td>291</td><td>245</td><td class="text-red-500 font-medium">18</td></tr>
+                            <tr><td><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs">SMS</span></td><td>518</td><td>515</td><td>-</td><td>462</td><td class="text-red-500 font-medium">24</td></tr>
+                            <tr><td><span class="bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-xs">Portal</span></td><td>89</td><td>89</td><td>72</td><td>68</td><td class="text-red-500 font-medium">4</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Guest Reports (hidden) -->
+        <div id="report-guests" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Guest Intake by Month</h3>
+                    <canvas id="guestChart" height="220"></canvas>
+                </div>
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Guest Status Distribution</h3>
+                    <canvas id="guestStatusChart" height="220"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Guest Summary</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-blue-50 rounded-lg p-4 text-center"><p class="text-2xl font-bold text-blue-700">68</p><p class="text-sm text-gray-600 mt-1">Active</p></div>
+                    <div class="bg-yellow-50 rounded-lg p-4 text-center"><p class="text-2xl font-bold text-yellow-700">42</p><p class="text-sm text-gray-600 mt-1">Pending</p></div>
+                    <div class="bg-green-50 rounded-lg p-4 text-center"><p class="text-2xl font-bold text-green-700">124</p><p class="text-sm text-gray-600 mt-1">Resolved</p></div>
+                    <div class="bg-red-50 rounded-lg p-4 text-center"><p class="text-2xl font-bold text-red-700">14</p><p class="text-sm text-gray-600 mt-1">Escalated</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expense Reports (hidden) -->
+        <div id="report-expenses" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Expenses by Category</h3>
+                    <canvas id="expenseChart" height="220"></canvas>
+                </div>
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Monthly Expense Trend</h3>
+                    <canvas id="expenseTrendChart" height="220"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Expense Breakdown</h3>
+                <div class="overflow-x-auto">
+                    <table class="data-table">
+                        <thead><tr><th>Category</th><th>Total</th><th>% of Budget</th><th>Approved</th><th>Pending</th><th>Rejected</th></tr></thead>
+                        <tbody>
+                            <tr><td>Hotel</td><td class="font-semibold">$42,300</td><td><div class="flex items-center"><div class="w-24 bg-gray-200 rounded-full h-2 mr-2"><div class="bg-blue-500 h-2 rounded-full" style="width:65%"></div></div>65%</div></td><td class="text-green-600">$38,100</td><td class="text-yellow-600">$4,200</td><td class="text-red-500">$0</td></tr>
+                            <tr><td>Meals</td><td class="font-semibold">$18,750</td><td><div class="flex items-center"><div class="w-24 bg-gray-200 rounded-full h-2 mr-2"><div class="bg-green-500 h-2 rounded-full" style="width:28%"></div></div>28%</div></td><td class="text-green-600">$15,200</td><td class="text-yellow-600">$2,550</td><td class="text-red-500">$1,000</td></tr>
+                            <tr><td>Transportation</td><td class="font-semibold">$12,400</td><td><div class="flex items-center"><div class="w-24 bg-gray-200 rounded-full h-2 mr-2"><div class="bg-purple-500 h-2 rounded-full" style="width:19%"></div></div>19%</div></td><td class="text-green-600">$9,800</td><td class="text-yellow-600">$1,600</td><td class="text-red-500">$1,000</td></tr>
+                            <tr><td>Medical</td><td class="font-semibold">$8,900</td><td><div class="flex items-center"><div class="w-24 bg-gray-200 rounded-full h-2 mr-2"><div class="bg-red-500 h-2 rounded-full" style="width:14%"></div></div>14%</div></td><td class="text-green-600">$8,900</td><td class="text-yellow-600">$0</td><td class="text-red-500">$0</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task Reports (hidden) -->
+        <div id="report-tasks" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Tasks by Status</h3>
+                    <canvas id="taskStatusChart" height="220"></canvas>
+                </div>
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Tasks Completed per Week</h3>
+                    <canvas id="taskWeekChart" height="220"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-blue-50 rounded-lg p-4 text-center"><p class="text-2xl font-bold text-blue-700">156</p><p class="text-sm text-gray-600 mt-1">Total Tasks</p></div>
+                    <div class="bg-green-50 rounded-lg p-4 text-center"><p class="text-2xl font-bold text-green-700">98</p><p class="text-sm text-gray-600 mt-1">Completed</p></div>
+                    <div class="bg-yellow-50 rounded-lg p-4 text-center"><p class="text-2xl font-bold text-yellow-700">42</p><p class="text-sm text-gray-600 mt-1">In Progress</p></div>
+                    <div class="bg-red-50 rounded-lg p-4 text-center"><p class="text-2xl font-bold text-red-700">16</p><p class="text-sm text-gray-600 mt-1">Overdue</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coordinator Performance (hidden) -->
+        <div id="report-coordinator" class="hidden">
+            <div class="card mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Coordinator Performance Overview</h3>
+                <div class="overflow-x-auto">
+                    <table class="data-table">
+                        <thead><tr><th>Coordinator</th><th>Active Cases</th><th>Resolved</th><th>Avg Response Time</th><th>Resolution Rate</th><th>Satisfaction</th></tr></thead>
+                        <tbody>
+                            <tr>
+                                <td><div class="flex items-center space-x-2"><div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">JS</div><span>John Smith</span></div></td>
+                                <td>24</td><td>87</td><td>1.8h</td>
+                                <td><div class="flex items-center"><div class="w-24 bg-gray-200 rounded-full h-2 mr-2"><div class="bg-green-500 h-2 rounded-full" style="width:92%"></div></div>92%</div></td>
+                                <td><span class="text-yellow-500">★★★★★</span></td>
+                            </tr>
+                            <tr>
+                                <td><div class="flex items-center space-x-2"><div class="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white text-xs font-bold">SJ</div><span>Sarah Johnson</span></div></td>
+                                <td>18</td><td>72</td><td>2.2h</td>
+                                <td><div class="flex items-center"><div class="w-24 bg-gray-200 rounded-full h-2 mr-2"><div class="bg-green-500 h-2 rounded-full" style="width:88%"></div></div>88%</div></td>
+                                <td><span class="text-yellow-500">★★★★</span><span class="text-gray-300">★</span></td>
+                            </tr>
+                            <tr>
+                                <td><div class="flex items-center space-x-2"><div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold">MB</div><span>Mark Brown</span></div></td>
+                                <td>31</td><td>104</td><td>3.1h</td>
+                                <td><div class="flex items-center"><div class="w-24 bg-gray-200 rounded-full h-2 mr-2"><div class="bg-yellow-500 h-2 rounded-full" style="width:78%"></div></div>78%</div></td>
+                                <td><span class="text-yellow-500">★★★★</span><span class="text-gray-300">★</span></td>
+                            </tr>
+                            <tr>
+                                <td><div class="flex items-center space-x-2"><div class="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center text-white text-xs font-bold">EW</div><span>Emily Wilson</span></div></td>
+                                <td>15</td><td>58</td><td>1.5h</td>
+                                <td><div class="flex items-center"><div class="w-24 bg-gray-200 rounded-full h-2 mr-2"><div class="bg-green-500 h-2 rounded-full" style="width:95%"></div></div>95%</div></td>
+                                <td><span class="text-yellow-500">★★★★★</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+    <script>
+        function showReport(tab) {
+            ['messages','guests','expenses','tasks','coordinator'].forEach(t => {
+                document.getElementById('report-' + t).classList.add('hidden');
+                const btn = document.getElementById('tab-' + t);
+                btn.classList.remove('bg-white','text-gray-700','shadow-sm');
+                btn.classList.add('text-gray-500');
+            });
+            document.getElementById('report-' + tab).classList.remove('hidden');
+            const activeBtn = document.getElementById('tab-' + tab);
+            activeBtn.classList.add('bg-white','text-gray-700','shadow-sm');
+            activeBtn.classList.remove('text-gray-500');
+            renderCharts(tab);
+        }
+
+        function renderCharts(tab) {
+            if (tab === 'messages') {
+                new Chart(document.getElementById('channelChart'), {
+                    type: 'doughnut',
+                    data: { labels: ['Email', 'SMS', 'Portal'], datasets: [{ data: [342, 518, 89], backgroundColor: ['#3b82f6','#22c55e','#a855f7'] }] },
+                    options: { plugins: { legend: { position: 'bottom' } } }
+                });
+                new Chart(document.getElementById('volumeChart'), {
+                    type: 'line',
+                    data: { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+                        datasets: [
+                            { label: 'Email', data: [42,55,38,67,49,22,18], borderColor: '#3b82f6', tension: 0.3, fill: false },
+                            { label: 'SMS', data: [68,72,85,91,78,35,28], borderColor: '#22c55e', tension: 0.3, fill: false }
+                        ]},
+                    options: { plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } }
+                });
+            } else if (tab === 'guests') {
+                new Chart(document.getElementById('guestChart'), {
+                    type: 'bar',
+                    data: { labels: ['Oct','Nov','Dec','Jan','Feb','Mar'],
+                        datasets: [{ label: 'New Guests', data: [28,35,42,38,45,52], backgroundColor: '#3b82f6' }]},
+                    options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+                });
+                new Chart(document.getElementById('guestStatusChart'), {
+                    type: 'pie',
+                    data: { labels: ['Active','Pending','Resolved','Escalated'], datasets: [{ data: [68,42,124,14], backgroundColor: ['#3b82f6','#f59e0b','#22c55e','#ef4444'] }] },
+                    options: { plugins: { legend: { position: 'bottom' } } }
+                });
+            } else if (tab === 'expenses') {
+                new Chart(document.getElementById('expenseChart'), {
+                    type: 'doughnut',
+                    data: { labels: ['Hotel','Meals','Transport','Medical','Supplies'], datasets: [{ data: [42300,18750,12400,8900,4200], backgroundColor: ['#3b82f6','#22c55e','#a855f7','#ef4444','#f59e0b'] }] },
+                    options: { plugins: { legend: { position: 'bottom' } } }
+                });
+                new Chart(document.getElementById('expenseTrendChart'), {
+                    type: 'line',
+                    data: { labels: ['Oct','Nov','Dec','Jan','Feb','Mar'],
+                        datasets: [{ label: 'Total Expenses ($K)', data: [72,68,85,91,88,94], borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', tension: 0.3, fill: true }]},
+                    options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false } } }
+                });
+            } else if (tab === 'tasks') {
+                new Chart(document.getElementById('taskStatusChart'), {
+                    type: 'doughnut',
+                    data: { labels: ['Completed','In Progress','Overdue','Not Started'], datasets: [{ data: [98,42,16,0], backgroundColor: ['#22c55e','#3b82f6','#ef4444','#d1d5db'] }] },
+                    options: { plugins: { legend: { position: 'bottom' } } }
+                });
+                new Chart(document.getElementById('taskWeekChart'), {
+                    type: 'bar',
+                    data: { labels: ['Week 1','Week 2','Week 3','Week 4'],
+                        datasets: [{ label: 'Completed', data: [22,28,18,30], backgroundColor: '#22c55e' }]},
+                    options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+                });
+            }
+        }
+
+        renderCharts('messages');
+    </script>
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - TalonPro Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40 h-16">
+        <div class="flex items-center justify-between h-full px-6">
+            <h1 class="text-xl font-bold text-gray-800">TalonPro Portal</h1>
+            <div class="flex items-center space-x-4">
+                <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                <div class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 px-3 py-2 rounded-lg">
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="text-sm font-medium">Admin User</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="fixed left-0 top-16 bottom-0 w-64 bg-gray-900 text-white overflow-y-auto">
+        <nav class="p-4">
+            <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Dashboard</span></a>
+            <a href="guest-list-new.html" class="nav-item"><i class="fas fa-users"></i><span>Guests</span></a>
+            <a href="messages.html" class="nav-item"><i class="fas fa-comments"></i><span>Messages</span></a>
+            <a href="tasks.html" class="nav-item"><i class="fas fa-tasks"></i><span>Tasks</span></a>
+            <a href="documents.html" class="nav-item"><i class="fas fa-file-alt"></i><span>Documents</span></a>
+            <a href="receipts.html" class="nav-item"><i class="fas fa-receipt"></i><span>Receipts</span></a>
+            <a href="templates.html" class="nav-item"><i class="fas fa-file-invoice"></i><span>Templates</span></a>
+            <a href="rules.html" class="nav-item"><i class="fas fa-cogs"></i><span>Automation Rules</span></a>
+            <a href="reports.html" class="nav-item"><i class="fas fa-chart-bar"></i><span>Reports</span></a>
+            <a href="ai-features.html" class="nav-item"><i class="fas fa-brain"></i><span>AI Uses</span></a>
+            <a href="settings.html" class="nav-item active"><i class="fas fa-cog"></i><span>Settings</span></a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ml-64 mt-16 flex">
+        <!-- Settings Sidebar -->
+        <div class="w-64 bg-white border-r border-gray-200 min-h-screen p-4">
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Account</p>
+            <nav class="space-y-1 mb-6">
+                <button onclick="showSection('profile')" class="settings-tab active w-full text-left px-3 py-2 rounded-lg text-sm text-gray-700 flex items-center space-x-2">
+                    <i class="fas fa-user-circle w-4"></i><span>Profile</span>
+                </button>
+                <button onclick="showSection('team')" class="settings-tab w-full text-left px-3 py-2 rounded-lg text-sm text-gray-500 flex items-center space-x-2">
+                    <i class="fas fa-users w-4"></i><span>Team & Users</span>
+                </button>
+            </nav>
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Communication</p>
+            <nav class="space-y-1 mb-6">
+                <button onclick="showSection('channels')" class="settings-tab w-full text-left px-3 py-2 rounded-lg text-sm text-gray-500 flex items-center space-x-2">
+                    <i class="fas fa-plug w-4"></i><span>Channels</span>
+                </button>
+                <button onclick="showSection('templates')" class="settings-tab w-full text-left px-3 py-2 rounded-lg text-sm text-gray-500 flex items-center space-x-2">
+                    <i class="fas fa-file-alt w-4"></i><span>Message Templates</span>
+                </button>
+                <button onclick="showSection('notifications')" class="settings-tab w-full text-left px-3 py-2 rounded-lg text-sm text-gray-500 flex items-center space-x-2">
+                    <i class="fas fa-bell w-4"></i><span>Notifications</span>
+                </button>
+            </nav>
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">System</p>
+            <nav class="space-y-1">
+                <button onclick="showSection('integrations')" class="settings-tab w-full text-left px-3 py-2 rounded-lg text-sm text-gray-500 flex items-center space-x-2">
+                    <i class="fas fa-puzzle-piece w-4"></i><span>Integrations</span>
+                </button>
+                <button onclick="showSection('security')" class="settings-tab w-full text-left px-3 py-2 rounded-lg text-sm text-gray-500 flex items-center space-x-2">
+                    <i class="fas fa-shield-alt w-4"></i><span>Security</span>
+                </button>
+                <button onclick="showSection('billing')" class="settings-tab w-full text-left px-3 py-2 rounded-lg text-sm text-gray-500 flex items-center space-x-2">
+                    <i class="fas fa-credit-card w-4"></i><span>Billing</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Settings Content -->
+        <div class="flex-1 p-8">
+
+            <!-- Profile -->
+            <div id="section-profile">
+                <h2 class="text-xl font-bold text-gray-800 mb-1">Profile Settings</h2>
+                <p class="text-gray-500 text-sm mb-6">Manage your account details and preferences</p>
+                <div class="card mb-6">
+                    <div class="flex items-center space-x-6 mb-6">
+                        <div class="relative">
+                            <div class="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">AU</div>
+                            <button class="absolute bottom-0 right-0 w-6 h-6 bg-gray-700 rounded-full flex items-center justify-center text-white text-xs">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800">Admin User</h3>
+                            <p class="text-sm text-gray-500">admin@talonpro.com</p>
+                            <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full mt-1 inline-block">Administrator</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="form-label">First Name</label><input type="text" class="form-input" value="Admin"></div>
+                        <div><label class="form-label">Last Name</label><input type="text" class="form-input" value="User"></div>
+                        <div><label class="form-label">Email</label><input type="email" class="form-input" value="admin@talonpro.com"></div>
+                        <div><label class="form-label">Phone</label><input type="tel" class="form-input" value="+1 (555) 000-0000"></div>
+                        <div class="col-span-2"><label class="form-label">Timezone</label>
+                            <select class="form-input"><option>Eastern Time (ET) - UTC-5</option><option>Central Time (CT)</option><option>Pacific Time (PT)</option></select>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex justify-end"><button class="btn-primary">Save Changes</button></div>
+                </div>
+                <div class="card">
+                    <h3 class="font-semibold text-gray-800 mb-4">Change Password</h3>
+                    <div class="space-y-4 max-w-md">
+                        <div><label class="form-label">Current Password</label><input type="password" class="form-input" placeholder="••••••••"></div>
+                        <div><label class="form-label">New Password</label><input type="password" class="form-input" placeholder="••••••••"></div>
+                        <div><label class="form-label">Confirm New Password</label><input type="password" class="form-input" placeholder="••••••••"></div>
+                        <button class="btn-secondary">Update Password</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team -->
+            <div id="section-team" class="hidden">
+                <h2 class="text-xl font-bold text-gray-800 mb-1">Team & Users</h2>
+                <p class="text-gray-500 text-sm mb-6">Manage coordinators, roles and permissions</p>
+                <div class="card mb-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold text-gray-800">Team Members (4)</h3>
+                        <button class="btn-primary text-sm"><i class="fas fa-user-plus mr-1"></i> Invite User</button>
+                    </div>
+                    <div class="space-y-3">
+                        ${[
+                            {name:'John Smith', email:'j.smith@talonpro.com', role:'Coordinator', color:'bg-blue-500', initials:'JS', status:'Active'},
+                            {name:'Sarah Johnson', email:'s.johnson@talonpro.com', role:'Coordinator', color:'bg-pink-500', initials:'SJ', status:'Active'},
+                            {name:'Mark Brown', email:'m.brown@talonpro.com', role:'Supervisor', color:'bg-purple-500', initials:'MB', status:'Active'},
+                            {name:'Emily Wilson', email:'e.wilson@talonpro.com', role:'Coordinator', color:'bg-teal-500', initials:'EW', status:'Away'},
+                        ].map(u => `
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-9 h-9 ${u.color} rounded-full flex items-center justify-center text-white text-sm font-bold">${u.initials}</div>
+                                <div>
+                                    <p class="font-medium text-gray-800 text-sm">${u.name}</p>
+                                    <p class="text-xs text-gray-500">${u.email}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full">${u.role}</span>
+                                <span class="text-xs ${u.status === 'Active' ? 'text-green-600' : 'text-yellow-600'} font-medium">● ${u.status}</span>
+                                <button class="text-gray-400 hover:text-gray-600"><i class="fas fa-ellipsis-v"></i></button>
+                            </div>
+                        </div>`).join('')}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Channels -->
+            <div id="section-channels" class="hidden">
+                <h2 class="text-xl font-bold text-gray-800 mb-1">Communication Channels</h2>
+                <p class="text-gray-500 text-sm mb-6">Configure email, SMS, and portal settings</p>
+                <div class="space-y-4">
+                    <div class="card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center"><i class="fas fa-envelope text-blue-600"></i></div>
+                                <div><h3 class="font-semibold text-gray-800">Email (Microsoft Graph)</h3><p class="text-xs text-gray-500">tpsupport@talonprosolutions.com</p></div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div class="w-11 h-6 bg-blue-600 rounded-full peer peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+                            </label>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="form-label">Sender Email</label><input type="text" class="form-input" value="tpsupport@talonprosolutions.com"></div>
+                            <div><label class="form-label">Client ID</label><input type="text" class="form-input" value="251bc5a1-****-****"></div>
+                            <div><label class="form-label">Tenant ID</label><input type="text" class="form-input" value="ae5d506e-****-****"></div>
+                            <div><label class="form-label">Client Secret</label><input type="password" class="form-input" value="••••••••••••••"></div>
+                        </div>
+                        <div class="mt-3 flex space-x-2">
+                            <button class="btn-secondary text-sm"><i class="fas fa-vial mr-1"></i> Test Connection</button>
+                            <button class="btn-primary text-sm">Save</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center"><i class="fas fa-sms text-green-600"></i></div>
+                                <div><h3 class="font-semibold text-gray-800">SMS (Twilio)</h3><p class="text-xs text-gray-500">+1 (989) 768-9037</p></div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div class="w-11 h-6 bg-blue-600 rounded-full peer peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+                            </label>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="form-label">Account SID</label><input type="text" class="form-input" value="ACc2c849cc****"></div>
+                            <div><label class="form-label">Auth Token</label><input type="password" class="form-input" value="••••••••••••••"></div>
+                            <div><label class="form-label">Phone Number</label><input type="text" class="form-input" value="+19897689037"></div>
+                            <div><label class="form-label">Webhook URL</label><input type="text" class="form-input" value="https://your-domain.com/webhooks/sms"></div>
+                        </div>
+                        <div class="mt-3 flex space-x-2">
+                            <button class="btn-secondary text-sm"><i class="fas fa-vial mr-1"></i> Send Test SMS</button>
+                            <button class="btn-primary text-sm">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications -->
+            <div id="section-notifications" class="hidden">
+                <h2 class="text-xl font-bold text-gray-800 mb-1">Notification Settings</h2>
+                <p class="text-gray-500 text-sm mb-6">Configure how and when you receive alerts</p>
+                <div class="card">
+                    <h3 class="font-semibold text-gray-800 mb-4">In-App Notifications</h3>
+                    <div class="space-y-4">
+                        ${[
+                            {label: 'New inbound message', desc: 'Alert when a guest sends a new message', on: true},
+                            {label: 'Unresponded message (>2 hours)', desc: 'Escalation alert for delayed responses', on: true},
+                            {label: 'Task assigned to me', desc: 'When a new task is assigned', on: true},
+                            {label: 'Task overdue', desc: 'When a task passes its due date', on: true},
+                            {label: 'Receipt requires approval', desc: 'New receipt waiting for review', on: false},
+                            {label: 'Guest escalation', desc: 'When a case is escalated', on: true},
+                            {label: 'Daily digest', desc: 'Summary of daily activity', on: false},
+                        ].map(n => `
+                        <div class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">${n.label}</p>
+                                <p class="text-xs text-gray-500 mt-0.5">${n.desc}</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" ${n.on ? 'checked' : ''} class="sr-only peer">
+                                <div class="w-10 h-5 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-5"></div>
+                            </label>
+                        </div>`).join('')}
+                    </div>
+                    <div class="mt-4"><button class="btn-primary">Save Preferences</button></div>
+                </div>
+            </div>
+
+            <!-- Integrations -->
+            <div id="section-integrations" class="hidden">
+                <h2 class="text-xl font-bold text-gray-800 mb-1">Integrations</h2>
+                <p class="text-gray-500 text-sm mb-6">Connect third-party tools and services</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    ${[
+                        {name:'Microsoft 365', desc:'Email, calendar and document sync', icon:'fa-microsoft', color:'bg-blue-100 text-blue-600', connected:true},
+                        {name:'Twilio', desc:'SMS and voice messaging', icon:'fa-phone', color:'bg-red-100 text-red-600', connected:true},
+                        {name:'DocuSign', desc:'Electronic signatures for documents', icon:'fa-file-signature', color:'bg-yellow-100 text-yellow-600', connected:false},
+                        {name:'Stripe', desc:'Payment processing for receipts', icon:'fa-credit-card', color:'bg-purple-100 text-purple-600', connected:false},
+                        {name:'Google Maps', desc:'Location services for guests', icon:'fa-map-marker-alt', color:'bg-green-100 text-green-600', connected:true},
+                        {name:'Zapier', desc:'Workflow automation connector', icon:'fa-bolt', color:'bg-orange-100 text-orange-600', connected:false},
+                        {name:'Slack', desc:'Team notifications via Slack', icon:'fa-slack', color:'bg-pink-100 text-pink-600', connected:false},
+                        {name:'QuickBooks', desc:'Accounting and expense sync', icon:'fa-calculator', color:'bg-teal-100 text-teal-600', connected:false},
+                    ].map(i => `
+                    <div class="card flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 ${i.color} rounded-lg flex items-center justify-center">
+                                <i class="fab ${i.icon} text-lg" onerror="this.className='fas ${i.icon} text-lg'"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-800 text-sm">${i.name}</p>
+                                <p class="text-xs text-gray-500">${i.desc}</p>
+                            </div>
+                        </div>
+                        <button class="text-sm px-3 py-1 rounded-lg ${i.connected ? 'bg-green-100 text-green-700' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'}">
+                            ${i.connected ? '<i class="fas fa-check mr-1"></i>Connected' : 'Connect'}
+                        </button>
+                    </div>`).join('')}
+                </div>
+            </div>
+
+            <!-- Security -->
+            <div id="section-security" class="hidden">
+                <h2 class="text-xl font-bold text-gray-800 mb-1">Security Settings</h2>
+                <p class="text-gray-500 text-sm mb-6">Manage authentication and access control</p>
+                <div class="space-y-4">
+                    <div class="card">
+                        <h3 class="font-semibold text-gray-800 mb-4">Two-Factor Authentication</h3>
+                        <div class="flex items-center justify-between p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-shield-alt text-yellow-600 text-xl"></i>
+                                <div>
+                                    <p class="font-medium text-gray-800">2FA is disabled</p>
+                                    <p class="text-sm text-gray-500">Enable 2FA to add an extra layer of security</p>
+                                </div>
+                            </div>
+                            <button class="btn-primary text-sm">Enable 2FA</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 class="font-semibold text-gray-800 mb-4">Session Management</h3>
+                        <div class="space-y-3">
+                            ${[
+                                {device:'Chrome on MacOS', location:'New York, US', time:'Active now', current:true},
+                                {device:'Safari on iPhone', location:'New York, US', time:'2 hours ago', current:false},
+                                {device:'Chrome on Windows', location:'Chicago, US', time:'Yesterday', current:false},
+                            ].map(s => `
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-laptop text-gray-400 text-lg"></i>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-800">${s.device}</p>
+                                        <p class="text-xs text-gray-500">${s.location} · ${s.time}</p>
+                                    </div>
+                                </div>
+                                ${s.current ? '<span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Current</span>' :
+                                '<button class="text-xs text-red-500 hover:text-red-700">Revoke</button>'}
+                            </div>`).join('')}
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 class="font-semibold text-gray-800 mb-4">Access Log</h3>
+                        <div class="space-y-2">
+                            ${[
+                                {action:'Login', ip:'192.168.1.1', time:'Today, 9:00 AM', success:true},
+                                {action:'Password changed', ip:'192.168.1.1', time:'Yesterday, 3:00 PM', success:true},
+                                {action:'Failed login attempt', ip:'203.0.113.0', time:'Mar 7, 11:30 PM', success:false},
+                            ].map(l => `
+                            <div class="flex items-center justify-between text-sm py-2 border-b border-gray-100 last:border-0">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-circle text-xs ${l.success ? 'text-green-400' : 'text-red-400'}"></i>
+                                    <span class="text-gray-700">${l.action}</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-gray-500 text-xs">${l.ip}</span>
+                                    <span class="text-gray-400 text-xs ml-3">${l.time}</span>
+                                </div>
+                            </div>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Billing -->
+            <div id="section-billing" class="hidden">
+                <h2 class="text-xl font-bold text-gray-800 mb-1">Billing & Subscription</h2>
+                <p class="text-gray-500 text-sm mb-6">Manage your plan and payment details</p>
+                <div class="card mb-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="font-semibold text-gray-800">Professional Plan</h3>
+                            <p class="text-sm text-gray-500">Up to 10 users · Unlimited cases · All features</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-gray-800">$299<span class="text-sm text-gray-500">/mo</span></p>
+                            <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Active</span>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-4 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-700">Next billing date</p>
+                            <p class="text-sm text-gray-500">April 1, 2026 · Visa ending in 4242</p>
+                        </div>
+                        <button class="btn-secondary text-sm">Manage Plan</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="font-semibold text-gray-800 mb-4">Billing History</h3>
+                    <div class="overflow-x-auto">
+                        <table class="data-table">
+                            <thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Status</th><th>Invoice</th></tr></thead>
+                            <tbody>
+                                ${[
+                                    {date:'Mar 1, 2026', desc:'Professional Plan - March', amount:'$299.00', status:'Paid'},
+                                    {date:'Feb 1, 2026', desc:'Professional Plan - February', amount:'$299.00', status:'Paid'},
+                                    {date:'Jan 1, 2026', desc:'Professional Plan - January', amount:'$299.00', status:'Paid'},
+                                ].map(b => `
+                                <tr>
+                                    <td>${b.date}</td><td>${b.desc}</td>
+                                    <td class="font-medium">${b.amount}</td>
+                                    <td><span class="badge badge-green">${b.status}</span></td>
+                                    <td><button class="text-blue-500 hover:text-blue-700 text-sm"><i class="fas fa-download mr-1"></i>PDF</button></td>
+                                </tr>`).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+    <script>
+        function showSection(section) {
+            ['profile','team','channels','notifications','integrations','security','billing'].forEach(s => {
+                document.getElementById('section-' + s).classList.add('hidden');
+            });
+            document.querySelectorAll('.settings-tab').forEach(btn => {
+                btn.classList.remove('active', 'bg-blue-50', 'text-blue-700');
+                btn.classList.add('text-gray-500');
+            });
+            document.getElementById('section-' + section).classList.remove('hidden');
+            event.currentTarget.classList.add('active', 'bg-blue-50', 'text-blue-700');
+            event.currentTarget.classList.remove('text-gray-500');
+        }
+
+        // Style active tab
+        document.querySelectorAll('.settings-tab.active').forEach(btn => {
+            btn.classList.add('bg-blue-50', 'text-blue-700');
+        });
+    </script>
+    <style>
+        .settings-tab.active { background-color: #eff6ff; color: #1d4ed8; }
+    </style>
+</body>
+</html>
