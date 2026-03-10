@@ -7,339 +7,547 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .tpl-row { cursor: pointer; transition: background 0.12s; }
+        .tpl-row:hover { background: #eff6ff; }
+        .tpl-row.selected { background: #dbeafe; border-left: 3px solid #2563eb; }
+        .tag { display: inline-block; background: #e0e7ff; color: #3730a3; border-radius: 999px; padding: 2px 9px; font-size: 0.7rem; font-weight: 600; margin: 2px 2px 2px 0; }
+        .cat-badge { border-radius: 999px; padding: 2px 10px; font-size: 0.7rem; font-weight: 600; }
+        .cat-Hotel         { background:#dbeafe; color:#1e40af; }
+        .cat-Payment       { background:#dcfce7; color:#14532d; }
+        .cat-ALE           { background:#fef9c3; color:#713f12; }
+        .cat-Welcome       { background:#f3e8ff; color:#581c87; }
+        .cat-Lease         { background:#ffedd5; color:#7c2d12; }
+        .cat-Furniture     { background:#cffafe; color:#164e63; }
+        .cat-Move-In       { background:#fce7f3; color:#831843; }
+        .cat-Extension     { background:#d1fae5; color:#065f46; }
+        .cat-Check-Out     { background:#fee2e2; color:#7f1d1d; }
+        .cat-Survey        { background:#e0e7ff; color:#3730a3; }
+        .cat-Maintenance   { background:#fef3c7; color:#78350f; }
+        .cat-General       { background:#f3f4f6; color:#374151; }
+        .ph-chip { background:#ede9fe; color:#4c1d95; border-radius:6px; padding:3px 8px; font-size:0.72rem; font-family:monospace; display:inline-block; margin:2px; }
+        .highlight-ph { background: #fef08a; border-radius: 3px; padding: 0 2px; font-weight: 600; color: #713f12; }
+        .detail-panel { display:none; }
+        .detail-panel.show { display:flex; flex-direction:column; }
+        textarea.tpl-edit { font-family: monospace; font-size: 0.85rem; line-height: 1.6; }
+        .tab-btn2 { padding: 7px 16px; border-radius: 8px; font-size:0.85rem; font-weight:500; cursor:pointer; }
+        .tab-btn2.active { background:#2563eb; color:white; }
+        .tab-btn2:not(.active) { background:#f3f4f6; color:#374151; }
+        .tab-btn2:not(.active):hover { background:#e5e7eb; }
+    </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Header -->
-    <header class="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40 h-16">
-        <div class="flex items-center justify-between h-full px-6">
-            <div class="flex items-center space-x-4">
-                <h1 class="text-xl font-bold text-gray-800">TalonPro Portal</h1>
-            </div>
-            <div class="flex-1 max-w-2xl mx-8">
-                <div class="relative">
-                    <input type="text" placeholder="Search guests, cases, tasks..."
-                           class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                </div>
-            </div>
-            <div class="flex items-center space-x-4">
-                <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-                    <i class="fas fa-bell text-xl"></i>
-                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                </button>
-                <div class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 px-3 py-2 rounded-lg">
-                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <span class="text-sm font-medium">Admin User</span>
-                </div>
+
+<!-- HEADER -->
+<header class="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40 h-16">
+    <div class="flex items-center justify-between h-full px-6">
+        <h1 class="text-xl font-bold text-gray-800">TalonPro Portal</h1>
+        <div class="flex-1 max-w-2xl mx-8">
+            <div class="relative">
+                <input type="text" id="globalSearch" placeholder="Search guests, cases, tasks..."
+                       class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
             </div>
         </div>
-    </header>
-
-    <!-- Sidebar -->
-    <aside class="fixed left-0 top-16 bottom-0 w-64 bg-gray-900 text-white overflow-y-auto">
-        <nav class="p-4">
-            <a href="index.html" class="nav-item">
-                <i class="fas fa-home"></i>
-                <span>Dashboard</span>
-            </a>
-            <a href="guest-list-new.html" class="nav-item">
-                <i class="fas fa-users"></i>
-                <span>Guests</span>
-            </a>
-            <a href="messages.html" class="nav-item">
-                <i class="fas fa-comments"></i>
-                <span>Messages</span>
-            </a>
-            <a href="tasks.html" class="nav-item">
-                <i class="fas fa-tasks"></i>
-                <span>Tasks</span>
-            </a>
-            <a href="documents.html" class="nav-item">
-                <i class="fas fa-file-alt"></i>
-                <span>Documents</span>
-            </a>
-            <a href="surveys.html" class="nav-item"><i class="fas fa-clipboard-list"></i><span>Surveys</span></a>
-            <a href="receipts.html" class="nav-item">
-                <i class="fas fa-receipt"></i>
-                <span>Receipts</span>
-            </a>
-            <a href="templates.html" class="nav-item active">
-                <i class="fas fa-file-invoice"></i>
-                <span>Templates</span>
-            </a>
-            <a href="rules.html" class="nav-item">
-                <i class="fas fa-cogs"></i>
-                <span>Automation Rules</span>
-            </a>
-            <a href="reports.html" class="nav-item">
-                <i class="fas fa-chart-bar"></i>
-                <span>Reports</span>
-            </a>
-            <a href="ai-features.html" class="nav-item">
-                <i class="fas fa-brain"></i>
-                <span>AI Uses</span>
-            </a>
-            <a href="guest-mobile.html" class="nav-item">
-                <i class="fas fa-mobile-alt"></i>
-                <span>Guest Mobile</span>
-            </a>
-            <a href="settings.html" class="nav-item">
-                <i class="fas fa-cog"></i>
-                <span>Settings</span>
-            </a>
-        </nav>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="ml-64 mt-16 p-6">
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h2 class="text-2xl font-bold text-gray-800">Message Templates</h2>
-                <p class="text-gray-600">Create and manage reusable message templates</p>
-            </div>
-            <div class="flex space-x-3">
-                <button onclick="generateAITemplate()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
-                    <i class="fas fa-magic mr-2"></i>
-                    AI Generate Template
-                </button>
-                <button onclick="showModal('createTemplateModal')" class="btn-primary">
-                    <i class="fas fa-plus mr-2"></i>
-                    Create Template
-                </button>
+        <div class="flex items-center space-x-4">
+            <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fas fa-bell text-xl"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 px-3 py-2 rounded-lg">
+                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">TW</div>
+                <span class="text-sm font-medium">Toni Westfall</span>
             </div>
         </div>
+    </div>
+</header>
 
-        <!-- Templates Table -->
-        <div class="card">
-            <div class="overflow-x-auto">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Template Name</th>
-                            <th>Category</th>
-                            <th>Subject</th>
-                            <th>Last Updated</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="templatesTable">
-                        <!-- Templates will be loaded here -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </main>
+<!-- SIDEBAR -->
+<aside class="fixed left-0 top-16 bottom-0 w-64 bg-gray-900 text-white overflow-y-auto z-30">
+    <nav class="p-4">
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Dashboard</span></a>
+        <a href="guest-list-new.html" class="nav-item"><i class="fas fa-users"></i><span>Guests</span></a>
+        <a href="messages.html" class="nav-item"><i class="fas fa-comments"></i><span>Messages</span></a>
+        <a href="tasks.html" class="nav-item"><i class="fas fa-tasks"></i><span>Tasks</span></a>
+        <a href="documents.html" class="nav-item"><i class="fas fa-file-alt"></i><span>Documents</span></a>
+        <a href="surveys.html" class="nav-item"><i class="fas fa-clipboard-list"></i><span>Surveys</span></a>
+        <a href="receipts.html" class="nav-item"><i class="fas fa-receipt"></i><span>Receipts</span></a>
+        <a href="templates.html" class="nav-item active"><i class="fas fa-file-invoice"></i><span>Templates</span></a>
+        <a href="rules.html" class="nav-item"><i class="fas fa-cogs"></i><span>Automation Rules</span></a>
+        <a href="reports.html" class="nav-item"><i class="fas fa-chart-bar"></i><span>Reports</span></a>
+        <a href="ai-features.html" class="nav-item"><i class="fas fa-brain"></i><span>AI Uses</span></a>
+        <a href="guest-mobile.html" class="nav-item"><i class="fas fa-mobile-alt"></i><span>Guest Mobile</span></a>
+        <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+    </nav>
+</aside>
 
-    <!-- Create Template Modal -->
-    <div id="createTemplateModal" class="modal">
-        <div class="modal-content max-w-3xl">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-semibold">Create Template</h3>
-                <button onclick="hideModal('createTemplateModal')" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <form class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="form-label">Template Name</label>
-                        <input type="text" class="form-input">
-                    </div>
-                    <div>
-                        <label class="form-label">Category</label>
-                        <select class="form-input">
-                            <option>Welcome Message</option>
-                            <option>Check-in Instructions</option>
-                            <option>Check-out Reminder</option>
-                            <option>Document Request</option>
-                            <option>General</option>
-                        </select>
-                    </div>
-                </div>
+<!-- MAIN LAYOUT: list panel + detail panel -->
+<main class="ml-64 mt-16 flex h-[calc(100vh-4rem)]">
+
+    <!-- ── LEFT: Template List ── -->
+    <div class="flex flex-col w-[480px] flex-shrink-0 bg-white border-r border-gray-200 overflow-hidden">
+        <!-- Toolbar -->
+        <div class="p-4 border-b border-gray-100">
+            <div class="flex items-center justify-between mb-3">
                 <div>
-                    <label class="form-label">Subject</label>
-                    <input type="text" class="form-input">
+                    <h2 class="text-lg font-bold text-gray-800">Message Templates</h2>
+                    <p class="text-xs text-gray-400" id="tplCount">Loading…</p>
                 </div>
-                <div>
-                    <div class="flex items-center justify-between mb-2">
-                        <label class="form-label mb-0">Message Body</label>
-                        <button type="button" onclick="improveWithAI()" class="text-sm bg-purple-100 text-purple-700 px-3 py-1 rounded hover:bg-purple-200">
-                            <i class="fas fa-magic mr-1"></i>
-                            Improve with AI
+                <button onclick="openCreateModal()" class="flex items-center gap-2 bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
+                    <i class="fas fa-plus"></i> New
+                </button>
+            </div>
+            <div class="relative mb-2">
+                <input id="tplSearch" type="text" placeholder="Search templates…" oninput="filterTemplates()"
+                    class="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+            </div>
+            <div class="flex gap-2 flex-wrap" id="catFilters"></div>
+        </div>
+        <!-- Template Rows -->
+        <div class="flex-1 overflow-y-auto" id="tplList"></div>
+    </div>
+
+    <!-- ── RIGHT: Detail / Editor Panel ── -->
+    <div class="flex-1 overflow-hidden flex flex-col">
+
+        <!-- Empty state -->
+        <div id="emptyState" class="flex-1 flex flex-col items-center justify-center text-center p-12">
+            <div class="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center mb-4">
+                <i class="fas fa-file-invoice text-blue-400 text-3xl"></i>
+            </div>
+            <h3 class="font-semibold text-gray-700 text-lg mb-1">Select a template</h3>
+            <p class="text-gray-400 text-sm">Click any template on the left to view and edit it</p>
+        </div>
+
+        <!-- Detail panel -->
+        <div id="detailPanel" class="detail-panel flex-1 overflow-hidden">
+
+            <!-- Detail Header -->
+            <div class="bg-white border-b border-gray-200 px-6 py-4 flex-shrink-0">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-3 mb-1">
+                            <span id="detailCatBadge" class="cat-badge"></span>
+                            <span class="text-xs text-gray-400" id="detailId"></span>
+                        </div>
+                        <h3 id="detailName" class="text-lg font-bold text-gray-900 leading-tight"></h3>
+                    </div>
+                    <div class="flex gap-2 flex-shrink-0">
+                        <button id="editBtn" onclick="toggleEdit()" class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            <i class="fas fa-pen mr-1"></i> Edit
+                        </button>
+                        <button onclick="sendFromTemplate()" class="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
+                            <i class="fas fa-paper-plane mr-1"></i> Use Template
                         </button>
                     </div>
-                    <textarea id="templateBody" class="form-input" rows="8" placeholder="Use variables like {guest_name}, {check_in_date}, {unit_number}"></textarea>
                 </div>
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <p class="text-sm text-blue-800">
-                        <strong>Available Variables:</strong> {guest_name}, {case_id}, {check_in_date}, {check_out_date}, {unit_number}, {coordinator_name}, {coordinator_phone}
-                    </p>
+            </div>
+
+            <!-- Tab bar -->
+            <div class="bg-white border-b border-gray-100 px-6 py-3 flex items-center gap-2 flex-shrink-0">
+                <button class="tab-btn2 active" id="tab-sms" onclick="switchDetailTab('sms')">SMS / Text</button>
+                <button class="tab-btn2" id="tab-email" onclick="switchDetailTab('email')">Email Subject</button>
+                <button class="tab-btn2" id="tab-vars" onclick="switchDetailTab('vars')">Variables</button>
+            </div>
+
+            <!-- Detail Content -->
+            <div class="flex-1 overflow-y-auto p-6 bg-gray-50">
+
+                <!-- SMS Tab -->
+                <div id="content-sms">
+                    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                        <div class="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
+                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">SMS / Text Body</span>
+                            <span class="text-xs text-gray-400" id="smsCharCount"></span>
+                        </div>
+                        <!-- View mode -->
+                        <div id="smsView" class="px-5 py-4 text-sm text-gray-800 leading-relaxed whitespace-pre-wrap font-mono"></div>
+                        <!-- Edit mode -->
+                        <div id="smsEdit" class="hidden">
+                            <textarea id="smsTextarea" class="tpl-edit w-full px-5 py-4 border-0 focus:outline-none resize-none" rows="14"></textarea>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex justify-end space-x-3 mt-6">
-                    <button type="button" onclick="hideModal('createTemplateModal')" class="btn-secondary">Cancel</button>
-                    <button type="submit" class="btn-primary">Save Template</button>
+
+                <!-- Email Tab -->
+                <div id="content-email" class="hidden">
+                    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mb-4">
+                        <div class="px-4 py-3 bg-gray-50 border-b border-gray-100">
+                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Email Subject Line</span>
+                        </div>
+                        <div id="subjectView" class="px-5 py-4 text-sm text-gray-800 leading-relaxed"></div>
+                        <div id="subjectEdit" class="hidden">
+                            <input id="subjectInput" type="text" class="w-full px-5 py-4 border-0 focus:outline-none text-sm">
+                        </div>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-800">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Full email HTML body is available in the Zenya system. Subject line shown here for reference and editing.
+                    </div>
                 </div>
-            </form>
+
+                <!-- Variables Tab -->
+                <div id="content-vars" class="hidden">
+                    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mb-4">
+                        <div class="px-4 py-3 bg-gray-50 border-b border-gray-100">
+                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Dynamic Variables in this Template</span>
+                        </div>
+                        <div id="varsContent" class="p-5">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="border-b border-gray-100">
+                                        <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-2">Placeholder</th>
+                                        <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-2">Maps To (TalonPro Field)</th>
+                                        <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-2">Example Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="varTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <a href="settings.html#field-mappings" class="text-sm text-blue-600 hover:underline">
+                        <i class="fas fa-cog mr-1"></i> Manage all field mappings in Settings →
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Edit footer -->
+            <div id="editFooter" class="hidden bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-between flex-shrink-0">
+                <p class="text-sm text-gray-500"><i class="fas fa-info-circle mr-1 text-blue-400"></i>Use <code class="bg-gray-100 px-1 rounded">[guest.fieldname]</code> syntax for dynamic values</p>
+                <div class="flex gap-2">
+                    <button onclick="cancelEdit()" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">Cancel</button>
+                    <button onclick="saveEdit()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">Save Changes</button>
+                </div>
+            </div>
         </div>
     </div>
+</main>
 
-    <!-- AI Template Generator Modal -->
-    <div id="aiTemplateModal" class="modal">
-        <div class="modal-content max-w-3xl">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-semibold">
-                    <i class="fas fa-magic text-purple-600 mr-2"></i>
-                    AI Template Generator
-                </h3>
-                <button onclick="hideModal('aiTemplateModal')" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <div class="space-y-4">
+<!-- ── CREATE MODAL ── -->
+<div id="createModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-2xl w-full max-w-2xl shadow-xl flex flex-col max-h-[90vh]">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+            <h3 class="font-semibold text-gray-900 text-lg">Create New Template</h3>
+            <button onclick="closeCreateModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-lg"></i></button>
+        </div>
+        <div class="p-6 overflow-y-auto space-y-4">
+            <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="form-label">What kind of template do you need?</label>
-                    <textarea class="form-input" rows="3" id="aiPrompt" placeholder="E.g., Create a friendly welcome message for new guests checking in, including their unit details and check-in instructions"></textarea>
+                    <label class="form-label">Template Name</label>
+                    <input type="text" class="form-input" placeholder="e.g. Hotel Confirmation">
                 </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="form-label">Tone</label>
-                        <select class="form-input" id="aiTone">
-                            <option>Professional</option>
-                            <option>Friendly</option>
-                            <option>Formal</option>
-                            <option>Casual</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="form-label">Length</label>
-                        <select class="form-input" id="aiLength">
-                            <option>Short</option>
-                            <option>Medium</option>
-                            <option>Long</option>
-                        </select>
-                    </div>
+                <div>
+                    <label class="form-label">Category</label>
+                    <select class="form-input">
+                        <option>Hotel</option><option>Payment</option><option>ALE & Receipts</option>
+                        <option>Welcome & Intro</option><option>Lease</option><option>Furniture</option>
+                        <option>Move-In</option><option>Extension</option><option>Check-Out</option>
+                        <option>Survey</option><option>Maintenance</option><option>General</option>
+                    </select>
                 </div>
-                <button onclick="generateTemplate()" class="btn-primary w-full">
-                    <i class="fas fa-robot mr-2"></i>
-                    Generate Template
-                </button>
+            </div>
+            <div>
+                <label class="form-label">Email Subject</label>
+                <input type="text" class="form-input" placeholder="[guest.firstname] [guest.lastname] - Case [guest.master_claimnumber]">
+            </div>
+            <div>
+                <div class="flex items-center justify-between mb-1">
+                    <label class="form-label mb-0">SMS / Text Body</label>
+                    <span class="text-xs text-gray-400">Use <code class="bg-gray-100 px-1 rounded">[guest.fieldname]</code> for variables</span>
+                </div>
+                <textarea class="form-input tpl-edit" rows="8" placeholder="Hi [guest.firstname],&#10;&#10;Your message here…&#10;&#10;Thanks,&#10;Your Coordinator"></textarea>
+            </div>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800">
+                <strong>Common variables:</strong>
+                <span class="ph-chip">[guest.firstname]</span>
+                <span class="ph-chip">[guest.lastname]</span>
+                <span class="ph-chip">[guest.bldgname]</span>
+                <span class="ph-chip">[guest.confnumber]</span>
+                <span class="ph-chip">[guest.master_claimnumber]</span>
+                <span class="ph-chip">[guest.departureDate]</span>
+                <span class="ph-chip">[guest.houcarename]</span>
+                <span class="ph-chip">[guest.houcarephone]</span>
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-100 flex justify-end gap-2">
+            <button onclick="closeCreateModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700">Cancel</button>
+            <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">Save Template</button>
+        </div>
+    </div>
+</div>
 
-                <div id="aiGeneratedContent" class="hidden">
-                    <div class="border-t border-gray-200 pt-4 mt-4">
-                        <h4 class="font-semibold mb-3">Generated Template:</h4>
-                        <div class="bg-gray-50 rounded-lg p-4 mb-4">
-                            <p id="aiGeneratedText" class="text-gray-700 whitespace-pre-wrap"></p>
-                        </div>
-                        <div class="flex justify-end space-x-3">
-                            <button onclick="regenerateTemplate()" class="btn-secondary">
-                                <i class="fas fa-sync mr-2"></i>
-                                Regenerate
-                            </button>
-                            <button onclick="useAITemplate()" class="btn-primary">
-                                <i class="fas fa-check mr-2"></i>
-                                Use This Template
-                            </button>
-                        </div>
-                    </div>
-                </div>
+<!-- ── USE TEMPLATE MODAL ── -->
+<div id="useModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-2xl w-full max-w-lg shadow-xl p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-semibold text-gray-900 text-lg">Send Template</h3>
+            <button onclick="closeUseModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-lg"></i></button>
+        </div>
+        <div class="space-y-4">
+            <div><label class="form-label">Guest</label>
+                <select class="form-input text-sm">
+                    <option>Sarah Alves — Case #2024-0891</option>
+                    <option>Maria Garcia — Case #2024-0892</option>
+                    <option>James Wilson — Case #2024-0888</option>
+                </select>
+            </div>
+            <div class="flex gap-2">
+                <button class="flex-1 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium">SMS</button>
+                <button class="flex-1 py--2 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50 py-2">Email</button>
+            </div>
+            <div>
+                <label class="form-label">Preview (variables auto-filled)</label>
+                <div id="usePreview" class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-800 whitespace-pre-wrap font-mono max-h-48 overflow-y-auto"></div>
+            </div>
+            <div class="flex gap-2 justify-end">
+                <button onclick="closeUseModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700">Cancel</button>
+                <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"><i class="fas fa-paper-plane mr-1"></i>Send</button>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="data.js"></script>
-    <script src="app.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            loadTemplates();
-        });
+<script src="templates-data.js"></script>
+<script>
+// TEMPLATES array loaded from templates-data.js (all 795 from Zenya API)
+// ── STUB for when data file not yet loaded ──────────────────────────────────
+if (typeof TEMPLATES === 'undefined') { console.error('templates-data.js not loaded'); }
 
-        function generateAITemplate() {
-            showModal('aiTemplateModal');
-        }
+// ── FIELD MAPPING TABLE ────────────────────────────────────────────────────
+const FIELD_MAP = {
+  'guest.firstname':            { label: 'First Name',              example: 'Sarah' },
+  'guest.lastname':             { label: 'Last Name',               example: 'Alves' },
+  'guest.mobile':               { label: 'Mobile Phone',            example: '+1 (425) 208-1527' },
+  'guest.email':                { label: 'Email Address',           example: 'sarahalves928@gmail.com' },
+  'guest.master_claimnumber':   { label: 'Claim Number',            example: '058940084-442569' },
+  'guest.master_inscompname':   { label: 'Insurance Company',       example: 'State Farm' },
+  'guest.master_alelimit':      { label: 'ALE Monthly Limit',       example: '$4,200.00' },
+  'guest.master_alespent':      { label: 'ALE Spent',               example: '$3,420.00' },
+  'guest.master_aleavailable':  { label: 'ALE Available',           example: '$780.00' },
+  'guest.master_aleterm':       { label: 'ALE Term End Date',       example: 'Mar 15, 2026' },
+  'guest.bldgname':             { label: 'Lodging Property Name',   example: 'Marriott Downtown' },
+  'guest.bldgadr':              { label: 'Lodging Address',         example: '123 Main St, Seattle WA' },
+  'guest.bldgadr1':             { label: 'Lodging Street 1',        example: '123 Main St' },
+  'guest.bldgcity':             { label: 'Lodging City',            example: 'Seattle' },
+  'guest.bldgstate':            { label: 'Lodging State',           example: 'WA' },
+  'guest.bldgzip':              { label: 'Lodging ZIP',             example: '98101' },
+  'guest.confnumber':           { label: 'Confirmation Number',     example: 'CONF-372401' },
+  'guest.arrivalDate':          { label: 'Arrival / Check-In Date', example: 'Mar 17, 2025' },
+  'guest.departureDate':        { label: 'Departure / Check-Out Date', example: 'Mar 15, 2026' },
+  'guest.checkouttime':         { label: 'Checkout Time',           example: '11:00 AM' },
+  'guest.monthlyrate':          { label: 'Monthly Rate',            example: '$4,170.00' },
+  'guest.rentamount':           { label: 'Fair Rental Value',       example: '$3,800.00' },
+  'guest.secdeposit':           { label: 'Security Deposit',        example: '$500.00' },
+  'guest.houcarename':          { label: 'Housing Coordinator Name',  example: 'Toni Westfall' },
+  'guest.houcarephone':         { label: 'Housing Coordinator Phone', example: '+1 (800) 555-0100' },
+  'guest.houcareemail':         { label: 'Housing Coordinator Email', example: 'twestfall@alacrity.com' },
+  'guest.adjustername':         { label: 'Adjuster Name',          example: 'John Adjuster' },
+  'guest.adjustermobile':       { label: 'Adjuster Phone',         example: '+1 (800) 555-0200' },
+  'guest.furnvendorname':       { label: 'Furniture Vendor',       example: 'CORT Furniture' },
+  'guest.furndeldate':          { label: 'Furniture Delivery Date', example: 'Mar 10, 2025' },
+  'guest.furnpickupdate':       { label: 'Furniture Pickup Date',  example: 'Mar 6, 2026' },
+  'guest.noofpets':             { label: 'Number of Pets',         example: '1' },
+  'guest.dateloss':             { label: 'Date of Loss',           example: 'Mar 1, 2025' },
+  'guest.aptid':                { label: 'Apartment / Unit ID',    example: '372401' },
+  'guest.eoadate':              { label: 'EOA / Extension Date',   example: 'Mar 15, 2026' },
+};
 
-        function generateTemplate() {
-            const prompt = document.getElementById('aiPrompt').value;
-            const tone = document.getElementById('aiTone').value;
-            const length = document.getElementById('aiLength').value;
+// ── STATE ──────────────────────────────────────────────────────────────────
+let selectedId = null;
+let editMode = false;
+let activeCat = 'All';
+let activeDetailTab = 'sms';
+let localEdits = {}; // { id: { sms, subject } }
 
-            // Simulate AI generation
-            setTimeout(() => {
-                const templates = {
-                    welcome: `Dear {guest_name},
+const CATEGORIES = ['All', ...new Set(TEMPLATES.map(t => t.category))].sort((a,b) => a === 'All' ? -1 : a.localeCompare(b));
 
-Welcome to your temporary accommodation! We're pleased to have you stay with us.
+// ── INIT ───────────────────────────────────────────────────────────────────
+function init() {
+    renderCatFilters();
+    filterTemplates();
+}
 
-Your check-in details:
-• Unit Number: {unit_number}
-• Check-in Date: {check_in_date}
-• Check-out Date: {check_out_date}
+function renderCatFilters() {
+    const container = document.getElementById('catFilters');
+    container.innerHTML = CATEGORIES.map(c => `
+        <button onclick="setCat('${c}')" id="cf-${c.replace(/[^a-z]/gi,'')}"
+            class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${c === activeCat ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-600 border-gray-300 hover:border-blue-400'}"
+        >${c}</button>
+    `).join('');
+}
 
-If you have any questions or need assistance, please don't hesitate to contact your coordinator {coordinator_name} at {coordinator_phone}.
+function setCat(cat) {
+    activeCat = cat;
+    renderCatFilters();
+    filterTemplates();
+}
 
-We hope you have a comfortable stay!
+function filterTemplates() {
+    const q = document.getElementById('tplSearch').value.toLowerCase();
+    let list = TEMPLATES;
+    if (activeCat !== 'All') list = list.filter(t => t.category === activeCat);
+    if (q) list = list.filter(t => t.name.toLowerCase().includes(q) || t.sms.toLowerCase().includes(q));
 
-Best regards,
-TalonPro Team`,
-                    checkin: `Hello {guest_name},
+    document.getElementById('tplCount').textContent = `${list.length} template${list.length !== 1 ? 's' : ''}`;
+    const container = document.getElementById('tplList');
 
-Your check-in is scheduled for {check_in_date}. Here are the details you'll need:
+    container.innerHTML = list.map(t => `
+        <div class="tpl-row px-4 py-3.5 border-b border-gray-100 ${t.id === selectedId ? 'selected' : ''}"
+             onclick="selectTemplate(${t.id})">
+            <div class="flex items-start justify-between gap-2">
+                <div class="flex-1 min-w-0">
+                    <p class="font-medium text-gray-900 text-sm leading-snug truncate">${t.name}</p>
+                    <p class="text-xs text-gray-400 mt-1 line-clamp-2 leading-relaxed">${t.sms.replace(/\n/g,' ').substring(0,100)}…</p>
+                </div>
+                <span class="cat-badge cat-${t.category.split(' ')[0].replace('&','')} flex-shrink-0">${t.category}</span>
+            </div>
+            ${t.placeholders.length ? `<div class="mt-2 flex flex-wrap gap-1">${t.placeholders.slice(0,4).map(p=>`<span class="ph-chip">${p.replace('guest.','')}</span>`).join('')}${t.placeholders.length > 4 ? `<span class="ph-chip">+${t.placeholders.length-4}</span>` : ''}</div>` : ''}
+        </div>
+    `).join('') || '<p class="text-center text-gray-400 text-sm py-12">No templates match your search</p>';
+}
 
-Unit Number: {unit_number}
-Check-in Time: 3:00 PM
-Parking: Available on-site
+function selectTemplate(id) {
+    selectedId = id;
+    editMode = false;
+    filterTemplates();
+    const t = TEMPLATES.find(t => t.id === id);
+    if (!t) return;
 
-Please ensure you have your ID and any required documentation ready.
+    document.getElementById('emptyState').style.display = 'none';
+    const dp = document.getElementById('detailPanel');
+    dp.classList.add('show');
 
-Looking forward to welcoming you!
+    document.getElementById('detailName').textContent = t.name;
+    document.getElementById('detailId').textContent = `ID: ${t.id}`;
+    const badge = document.getElementById('detailCatBadge');
+    badge.textContent = t.category;
+    badge.className = `cat-badge cat-${t.category.split(' ')[0].replace('&','')}`;
 
-{coordinator_name}`,
-                    checkout: `Dear {guest_name},
+    // Populate SMS
+    const smsText = localEdits[id]?.sms ?? t.sms;
+    document.getElementById('smsView').innerHTML = highlightPH(escHtml(smsText));
+    document.getElementById('smsTextarea').value = smsText;
+    document.getElementById('smsCharCount').textContent = smsText.length + ' chars';
 
-This is a friendly reminder that your check-out date is approaching on {check_out_date}.
+    // Populate Email
+    const subj = localEdits[id]?.subject ?? t.subject;
+    document.getElementById('subjectView').innerHTML = highlightPH(escHtml(subj));
+    document.getElementById('subjectInput').value = subj;
 
-Please ensure:
-✓ All personal belongings are packed
-✓ Keys are returned to the office
-✓ Unit is left in good condition
+    // Variables
+    renderVars(t);
 
-Thank you for staying with us. Safe travels!
+    // Reset tab
+    switchDetailTab('sms');
+    document.getElementById('smsEdit').classList.add('hidden');
+    document.getElementById('smsView').classList.remove('hidden');
+    document.getElementById('subjectEdit').classList.add('hidden');
+    document.getElementById('subjectView').classList.remove('hidden');
+    document.getElementById('editBtn').innerHTML = '<i class="fas fa-pen mr-1"></i> Edit';
+    document.getElementById('editFooter').classList.add('hidden');
+}
 
-{coordinator_name}
-TalonPro Team`
-                };
+function highlightPH(text) {
+    return text.replace(/\[guest\.[a-z0-9_.]+\]/gi, m => `<span class="highlight-ph">${m}</span>`);
+}
 
-                const generated = templates.welcome; // Default to welcome for demo
-                document.getElementById('aiGeneratedText').textContent = generated;
-                document.getElementById('aiGeneratedContent').classList.remove('hidden');
-            }, 1500);
-        }
+function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
 
-        function regenerateTemplate() {
-            // Simulate regeneration
-            generateTemplate();
-        }
+function renderVars(t) {
+    const tbody = document.getElementById('varTable');
+    if (!t.placeholders.length) {
+        tbody.innerHTML = '<tr><td colspan="3" class="text-gray-400 text-sm py-4 text-center">No dynamic variables in this template</td></tr>';
+        return;
+    }
+    tbody.innerHTML = t.placeholders.map(p => {
+        const map = FIELD_MAP[p] || { label: p, example: '—' };
+        return `<tr class="border-b border-gray-50">
+            <td class="py-2.5 pr-4"><span class="ph-chip">[${p}]</span></td>
+            <td class="py-2.5 pr-4 text-gray-700">${map.label}</td>
+            <td class="py-2.5 text-gray-400 italic">${map.example}</td>
+        </tr>`;
+    }).join('');
+}
 
-        function useAITemplate() {
-            const generatedText = document.getElementById('aiGeneratedText').textContent;
-            hideModal('aiTemplateModal');
-            showModal('createTemplateModal');
-            document.getElementById('templateBody').value = generatedText;
-        }
+function switchDetailTab(tab) {
+    activeDetailTab = tab;
+    ['sms','email','vars'].forEach(t => {
+        document.getElementById('content-' + t).classList.toggle('hidden', t !== tab);
+        document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+    });
+}
 
-        function improveWithAI() {
-            const currentText = document.getElementById('templateBody').value;
-            if (!currentText) {
-                alert('Please enter some text first');
-                return;
-            }
+function toggleEdit() {
+    editMode = !editMode;
+    document.getElementById('smsView').classList.toggle('hidden', editMode);
+    document.getElementById('smsEdit').classList.toggle('hidden', !editMode);
+    document.getElementById('subjectView').classList.toggle('hidden', editMode);
+    document.getElementById('subjectEdit').classList.toggle('hidden', !editMode);
+    document.getElementById('editBtn').innerHTML = editMode
+        ? '<i class="fas fa-eye mr-1"></i> Preview'
+        : '<i class="fas fa-pen mr-1"></i> Edit';
+    document.getElementById('editFooter').classList.toggle('hidden', !editMode);
+}
 
-            // Simulate AI improvement
-            setTimeout(() => {
-                alert('Template improved with AI! (Demo only)');
-            }, 1000);
-        }
-    </script>
+function cancelEdit() {
+    editMode = false;
+    const t = TEMPLATES.find(t => t.id === selectedId);
+    document.getElementById('smsTextarea').value = localEdits[selectedId]?.sms ?? t.sms;
+    document.getElementById('subjectInput').value = localEdits[selectedId]?.subject ?? t.subject;
+    toggleEdit();
+    toggleEdit(); // reset
+    editMode = false;
+    document.getElementById('smsView').classList.remove('hidden');
+    document.getElementById('smsEdit').classList.add('hidden');
+    document.getElementById('subjectView').classList.remove('hidden');
+    document.getElementById('subjectEdit').classList.add('hidden');
+    document.getElementById('editBtn').innerHTML = '<i class="fas fa-pen mr-1"></i> Edit';
+    document.getElementById('editFooter').classList.add('hidden');
+}
+
+function saveEdit() {
+    const newSms = document.getElementById('smsTextarea').value;
+    const newSubj = document.getElementById('subjectInput').value;
+    localEdits[selectedId] = { sms: newSms, subject: newSubj };
+    document.getElementById('smsView').innerHTML = highlightPH(escHtml(newSms));
+    document.getElementById('subjectView').innerHTML = highlightPH(escHtml(newSubj));
+    document.getElementById('smsCharCount').textContent = newSms.length + ' chars';
+    cancelEdit();
+
+    // Flash saved indicator
+    const btn = document.getElementById('editBtn');
+    btn.innerHTML = '<i class="fas fa-check mr-1 text-green-400"></i> Saved';
+    setTimeout(() => { btn.innerHTML = '<i class="fas fa-pen mr-1"></i> Edit'; }, 2000);
+}
+
+function sendFromTemplate() {
+    const t = TEMPLATES.find(t => t.id === selectedId);
+    if (!t) return;
+    const preview = (localEdits[selectedId]?.sms ?? t.sms)
+        .replace('[guest.firstname]', 'Sarah')
+        .replace('[guest.lastname]', 'Alves')
+        .replace('[guest.bldgname]', 'Marriott Downtown')
+        .replace('[guest.confnumber]', 'CONF-372401')
+        .replace('[guest.master_claimnumber]', '058940084-442569')
+        .replace('[guest.master_inscompname]', 'State Farm')
+        .replace('[guest.houcarename]', 'Toni Westfall')
+        .replace('[guest.houcarephone]', '+1 (800) 555-0100');
+    document.getElementById('usePreview').textContent = preview;
+    document.getElementById('useModal').classList.remove('hidden');
+}
+
+function closeUseModal() { document.getElementById('useModal').classList.add('hidden'); }
+function openCreateModal() { document.getElementById('createModal').classList.remove('hidden'); }
+function closeCreateModal() { document.getElementById('createModal').classList.add('hidden'); }
+
+document.getElementById('createModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeCreateModal(); });
+document.getElementById('useModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeUseModal(); });
+
+init();
+</script>
 </body>
 </html>

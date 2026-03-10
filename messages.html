@@ -166,13 +166,18 @@
 
                 <!-- Reply Box -->
                 <div class="bg-white border-t border-gray-200 p-4">
-                    <div class="flex items-center space-x-2 mb-2">
-                        <span class="text-xs text-gray-500">Reply via:</span>
-                        <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium" id="replyChannel"></span>
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs text-gray-500">Reply via:</span>
+                            <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium" id="replyChannel"></span>
+                        </div>
+                        <button onclick="openTemplatePickerModal()" class="flex items-center gap-1.5 text-xs text-purple-700 bg-purple-50 border border-purple-200 px-3 py-1.5 rounded-lg hover:bg-purple-100 transition-colors">
+                            <i class="fas fa-file-invoice"></i> Load Template
+                        </button>
                     </div>
                     <div class="flex space-x-3">
                         <textarea id="replyText" rows="2"
-                            placeholder="Type your reply..."
+                            placeholder="Type your reply or load a template…"
                             class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
                         <button onclick="sendReply()"
                             class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 self-end">
@@ -403,5 +408,121 @@
 
         renderList();
     </script>
+
+<!-- ── TEMPLATE PICKER MODAL ───────────────────────────────────── -->
+<div id="templatePickerModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-2xl w-full max-w-2xl shadow-xl flex flex-col" style="max-height:85vh">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
+            <div>
+                <h3 class="font-semibold text-gray-900 text-lg">Load Template</h3>
+                <p class="text-xs text-gray-400 mt-0.5" id="tpCount"></p>
+            </div>
+            <button onclick="closeTemplatePickerModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-lg"></i></button>
+        </div>
+        <!-- Search + filter -->
+        <div class="px-5 py-3 border-b border-gray-100 flex-shrink-0">
+            <div class="relative mb-2">
+                <input id="tpSearch" type="text" placeholder="Search by name or keyword…" oninput="filterTPL()"
+                    class="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+            </div>
+            <div class="flex gap-2 flex-wrap" id="tpCatFilters"></div>
+        </div>
+        <!-- Template list -->
+        <div class="flex-1 overflow-y-auto" id="tpList"></div>
+        <!-- Preview -->
+        <div id="tpPreview" class="hidden border-t border-gray-100 flex-shrink-0 p-5 bg-gray-50">
+            <div class="flex items-center justify-between mb-2">
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Preview</p>
+                <button onclick="insertTemplate()" class="bg-blue-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-blue-700">
+                    <i class="fas fa-check mr-1"></i> Use This Template
+                </button>
+            </div>
+            <div id="tpPreviewText" class="text-sm text-gray-800 whitespace-pre-wrap font-mono bg-white border border-gray-200 rounded-lg px-4 py-3 max-h-32 overflow-y-auto"></div>
+        </div>
+    </div>
+</div>
+
+<script src="templates-data.js"></script>
+<script>
+    let tpActiveCat = 'All';
+    let tpSelectedId = null;
+
+    const TP_CATS = ['All', ...new Set((typeof TEMPLATES !== 'undefined' ? TEMPLATES : []).map(t => t.category))].sort((a,b) => a==='All'?-1:a.localeCompare(b));
+
+    function openTemplatePickerModal() {
+        document.getElementById('templatePickerModal').classList.remove('hidden');
+        renderTPCats();
+        filterTPL();
+    }
+
+    function closeTemplatePickerModal() {
+        document.getElementById('templatePickerModal').classList.add('hidden');
+        tpSelectedId = null;
+        document.getElementById('tpPreview').classList.add('hidden');
+    }
+
+    function renderTPCats() {
+        document.getElementById('tpCatFilters').innerHTML = TP_CATS.map(c =>
+            `<button onclick="setTPCat('${c}')" class="px-2.5 py-1 rounded-full text-xs font-semibold border transition-colors ${c === tpActiveCat ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-600 border-gray-300 hover:border-blue-400'}">${c}</button>`
+        ).join('');
+    }
+
+    function setTPCat(cat) {
+        tpActiveCat = cat;
+        renderTPCats();
+        filterTPL();
+    }
+
+    function filterTPL() {
+        const templates = typeof TEMPLATES !== 'undefined' ? TEMPLATES : [];
+        const q = (document.getElementById('tpSearch')?.value || '').toLowerCase();
+        let list = templates;
+        if (tpActiveCat !== 'All') list = list.filter(t => t.category === tpActiveCat);
+        if (q) list = list.filter(t => t.name.toLowerCase().includes(q) || t.sms.toLowerCase().includes(q) || t.subject.toLowerCase().includes(q));
+
+        document.getElementById('tpCount').textContent = `${list.length} template${list.length !== 1 ? 's' : ''}`;
+
+        document.getElementById('tpList').innerHTML = list.length === 0
+            ? '<p class="text-center text-gray-400 text-sm py-10">No templates match</p>'
+            : list.map(t => `
+            <div onclick="selectTPL(${t.id})" class="px-5 py-3 border-b border-gray-100 cursor-pointer hover:bg-blue-50 transition-colors ${t.id === tpSelectedId ? 'bg-blue-50 border-l-2 border-l-blue-500' : ''}">
+                <div class="flex items-start justify-between gap-2">
+                    <p class="font-medium text-gray-900 text-sm">${t.name}</p>
+                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full flex-shrink-0">${t.category}</span>
+                </div>
+                <p class="text-xs text-gray-400 mt-0.5 line-clamp-1">${t.sms.replace(/\n/g,' ').substring(0,100)}…</p>
+            </div>`).join('');
+    }
+
+    function selectTPL(id) {
+        const templates = typeof TEMPLATES !== 'undefined' ? TEMPLATES : [];
+        const t = templates.find(t => t.id === id);
+        if (!t) return;
+        tpSelectedId = id;
+        filterTPL();
+        const preview = t.sms
+            .replace(/\[guest\.firstname\]/g, 'Sarah')
+            .replace(/\[guest\.lastname\]/g, 'Alves')
+            .replace(/\[guest\.houcarename\]/g, 'Toni Westfall')
+            .replace(/\[guest\.houcarephone\]/g, '+1 (800) 555-0100')
+            .replace(/\[guest\.master_claimnumber\]/g, '058940084-442569');
+        document.getElementById('tpPreviewText').textContent = preview;
+        document.getElementById('tpPreview').classList.remove('hidden');
+    }
+
+    function insertTemplate() {
+        const templates = typeof TEMPLATES !== 'undefined' ? TEMPLATES : [];
+        const t = templates.find(t => t.id === tpSelectedId);
+        if (!t) return;
+        document.getElementById('replyText').value = t.sms;
+        closeTemplatePickerModal();
+        document.getElementById('replyText').focus();
+    }
+
+    document.getElementById('templatePickerModal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeTemplatePickerModal();
+    });
+</script>
 </body>
 </html>

@@ -71,6 +71,10 @@
                     <i class="fas fa-bell w-4"></i><span>Notifications</span>
                 </button>
             </nav>
+            <button onclick="showSection('fieldmappings')" class="settings-tab w-full text-left px-3 py-2 rounded-lg text-sm text-gray-500 flex items-center space-x-2">
+                    <i class="fas fa-exchange-alt w-4"></i><span>Field Mappings</span>
+                </button>
+            </nav>
             <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">System</p>
             <nav class="space-y-1">
                 <button onclick="showSection('integrations')" class="settings-tab w-full text-left px-3 py-2 rounded-lg text-sm text-gray-500 flex items-center space-x-2">
@@ -385,14 +389,191 @@
                 </div>
             </div>
 
+            <!-- Field Mappings -->
+            <div id="section-fieldmappings" class="hidden">
+                <h2 class="text-xl font-bold text-gray-800 mb-1">Field Mappings</h2>
+                <p class="text-gray-500 text-sm mb-6">Maps Zenya template placeholders <code class="bg-gray-100 px-1 rounded text-xs">[guest.xxx]</code> to TalonPro system fields. Used when sending templates to auto-fill guest data.</p>
+
+                <div class="card mb-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold text-gray-800">Guest & Claim Fields</h3>
+                        <div class="relative">
+                            <input type="text" id="fieldMapSearch" placeholder="Search fields…" oninput="filterFieldMap()"
+                                class="pl-8 pr-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <i class="fas fa-search absolute left-2.5 top-2 text-gray-400 text-xs"></i>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm" id="fieldMapTable">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Zenya Placeholder</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">TalonPro Field Label</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Group</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Example Value</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fieldMapBody" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="font-semibold text-gray-800 mb-3">Other Placeholder Types</h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-lg">
+                            <i class="fas fa-link text-blue-500 mt-0.5"></i>
+                            <div>
+                                <p class="font-medium text-gray-800"><code class="bg-white px-1 rounded border">[link."type":"Concierge Link"|…]</code></p>
+                                <p class="text-gray-500 mt-0.5">Dynamic deep links to the guest portal (documents, surveys, check-in, etc.). Generated automatically by Zenya when sending.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg">
+                            <i class="fas fa-pen text-yellow-500 mt-0.5"></i>
+                            <div>
+                                <p class="font-medium text-gray-800"><code class="bg-white px-1 rounded border">[MANUAL]</code></p>
+                                <p class="text-gray-500 mt-0.5">Free-text field that the coordinator fills in manually before sending. Shown as an editable input in the send flow.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                            <i class="fas fa-calendar text-gray-500 mt-0.5"></i>
+                            <div>
+                                <p class="font-medium text-gray-800"><code class="bg-white px-1 rounded border">[date.today]</code></p>
+                                <p class="text-gray-500 mt-0.5">Automatically replaced with today's date when the message is sent.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 bg-purple-50 rounded-lg">
+                            <i class="fas fa-user text-purple-500 mt-0.5"></i>
+                            <div>
+                                <p class="font-medium text-gray-800"><code class="bg-white px-1 rounded border">[sender.mobile]</code> · <code class="bg-white px-1 rounded border">[user.creds]</code></p>
+                                <p class="text-gray-500 mt-0.5">Coordinator / sender information, filled from the logged-in user's profile.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 
     <script src="data.js"></script>
     <script src="app.js"></script>
     <script>
+        const FIELD_MAPPINGS = [
+            // Guest identity
+            { ph: 'guest.firstname',           label: 'First Name',                    group: 'Guest Identity',    example: 'Sarah',              status: 'Mapped' },
+            { ph: 'guest.lastname',            label: 'Last Name',                     group: 'Guest Identity',    example: 'Alves',              status: 'Mapped' },
+            { ph: 'guest.mobile',              label: 'Mobile Phone',                  group: 'Guest Identity',    example: '+1 (425) 208-1527',  status: 'Mapped' },
+            { ph: 'guest.mobilephone',         label: 'Mobile Phone (alt)',            group: 'Guest Identity',    example: '+1 (425) 208-1527',  status: 'Mapped' },
+            { ph: 'guest.email',               label: 'Email Address',                 group: 'Guest Identity',    example: 'sarahalves928@gmail.com', status: 'Mapped' },
+            { ph: 'guest.email2',              label: 'Email Address 2',               group: 'Guest Identity',    example: '—',                  status: 'Optional' },
+            { ph: 'guest.mobile2',             label: 'Secondary Mobile',              group: 'Guest Identity',    example: '—',                  status: 'Optional' },
+            { ph: 'guest.customername',        label: 'Full Name (display)',           group: 'Guest Identity',    example: 'Sarah Alves',        status: 'Mapped' },
+            // Claim & Insurance
+            { ph: 'guest.master_claimnumber',  label: 'Claim Number',                  group: 'Claim & Insurance', example: '058940084-442569',    status: 'Mapped' },
+            { ph: 'guest.claimnumber',         label: 'Claim Number (local)',          group: 'Claim & Insurance', example: '058940084-442569',    status: 'Mapped' },
+            { ph: 'guest.master_inscompname',  label: 'Insurance Company Name',        group: 'Claim & Insurance', example: 'State Farm',          status: 'Mapped' },
+            { ph: 'guest.inscompname',         label: 'Insurance Company (local)',     group: 'Claim & Insurance', example: 'State Farm',          status: 'Mapped' },
+            { ph: 'guest.master_dateloss',     label: 'Date of Loss',                  group: 'Claim & Insurance', example: 'Mar 1, 2025',         status: 'Mapped' },
+            { ph: 'guest.dateloss',            label: 'Date of Loss (local)',          group: 'Claim & Insurance', example: 'Mar 1, 2025',         status: 'Mapped' },
+            { ph: 'guest.master_division',     label: 'Division / Region',             group: 'Claim & Insurance', example: 'Pacific NW',          status: 'Mapped' },
+            { ph: 'guest.master_adjustername', label: 'Adjuster Full Name',            group: 'Claim & Insurance', example: 'John Adjuster',       status: 'Mapped' },
+            { ph: 'guest.adjustername',        label: 'Adjuster Name (local)',         group: 'Claim & Insurance', example: 'John Adjuster',       status: 'Mapped' },
+            { ph: 'guest.adjustermobile',      label: 'Adjuster Phone',                group: 'Claim & Insurance', example: '+1 (800) 555-0200',   status: 'Mapped' },
+            // ALE / Financial
+            { ph: 'guest.master_alelimit',     label: 'ALE Monthly Limit',             group: 'ALE / Financial',   example: '$4,200.00',           status: 'Mapped' },
+            { ph: 'guest.master_alespent',     label: 'ALE Spent to Date',             group: 'ALE / Financial',   example: '$3,420.00',           status: 'Mapped' },
+            { ph: 'guest.master_aleavailable', label: 'ALE Remaining Balance',         group: 'ALE / Financial',   example: '$780.00',             status: 'Mapped' },
+            { ph: 'guest.master_aleterm',      label: 'ALE Term End Date',             group: 'ALE / Financial',   example: 'Mar 15, 2026',        status: 'Mapped' },
+            { ph: 'guest.monthlyrate',         label: 'Monthly Rate',                  group: 'ALE / Financial',   example: '$4,170.00',           status: 'Mapped' },
+            { ph: 'guest.rentamount',          label: 'Fair Rental Value',             group: 'ALE / Financial',   example: '$3,800.00',           status: 'Mapped' },
+            { ph: 'guest.secdeposit',          label: 'Security Deposit',              group: 'ALE / Financial',   example: '$500.00',             status: 'Mapped' },
+            { ph: 'guest.extamount',           label: 'Extension Amount',              group: 'ALE / Financial',   example: '$1,200.00',           status: 'Mapped' },
+            { ph: 'guest.amtdueihs',           label: 'Amount Due (IHS)',              group: 'ALE / Financial',   example: '$2,400.00',           status: 'Review' },
+            { ph: 'guest.amtinvoiced',         label: 'Amount Invoiced',               group: 'ALE / Financial',   example: '$2,400.00',           status: 'Review' },
+            // Lodging / Property
+            { ph: 'guest.bldgname',            label: 'Lodging Property Name',         group: 'Lodging',           example: 'Marriott Downtown',   status: 'Mapped' },
+            { ph: 'guest.bldgadr',             label: 'Lodging Full Address',          group: 'Lodging',           example: '123 Main St, Seattle WA 98101', status: 'Mapped' },
+            { ph: 'guest.bldgadr1',            label: 'Lodging Street 1',              group: 'Lodging',           example: '123 Main St',         status: 'Mapped' },
+            { ph: 'guest.bldgadr2',            label: 'Lodging Street 2',              group: 'Lodging',           example: 'Apt 4B',              status: 'Optional' },
+            { ph: 'guest.bldgcity',            label: 'Lodging City',                  group: 'Lodging',           example: 'Seattle',             status: 'Mapped' },
+            { ph: 'guest.bldgstate',           label: 'Lodging State',                 group: 'Lodging',           example: 'WA',                  status: 'Mapped' },
+            { ph: 'guest.bldgzip',             label: 'Lodging ZIP Code',              group: 'Lodging',           example: '98101',               status: 'Mapped' },
+            { ph: 'guest.bldgcountry',         label: 'Lodging Country',               group: 'Lodging',           example: 'USA',                 status: 'Mapped' },
+            { ph: 'guest.aptid',               label: 'Unit / Room ID',                group: 'Lodging',           example: '372401',              status: 'Mapped' },
+            { ph: 'guest.roomType',            label: 'Room Type',                     group: 'Lodging',           example: 'King Suite',          status: 'Mapped' },
+            { ph: 'guest.landlord',            label: 'Landlord Name',                 group: 'Lodging',           example: 'Pacific Properties',  status: 'Mapped' },
+            { ph: 'guest.landemail',           label: 'Landlord Email',                group: 'Lodging',           example: 'landlord@example.com',status: 'Mapped' },
+            { ph: 'guest.propmgtphone',        label: 'Property Mgmt Phone',           group: 'Lodging',           example: '+1 (206) 555-0300',   status: 'Mapped' },
+            { ph: 'guest.propmgtemail',        label: 'Property Mgmt Email',           group: 'Lodging',           example: 'mgmt@example.com',    status: 'Mapped' },
+            // Stay Dates
+            { ph: 'guest.confnumber',          label: 'Confirmation Number',           group: 'Stay Dates',        example: 'CONF-372401',         status: 'Mapped' },
+            { ph: 'guest.confirmationNumber',  label: 'Confirmation Number (alt)',     group: 'Stay Dates',        example: 'CONF-372401',         status: 'Mapped' },
+            { ph: 'guest.arrivalDate',         label: 'Arrival / Check-In Date',       group: 'Stay Dates',        example: 'Mar 17, 2025',        status: 'Mapped' },
+            { ph: 'guest.departureDate',       label: 'Departure / Check-Out Date',    group: 'Stay Dates',        example: 'Mar 15, 2026',        status: 'Mapped' },
+            { ph: 'guest.checkouttime',        label: 'Checkout Time',                 group: 'Stay Dates',        example: '11:00 AM',            status: 'Mapped' },
+            { ph: 'guest.eoadate',             label: 'End of Authorization Date',     group: 'Stay Dates',        example: 'Mar 15, 2026',        status: 'Mapped' },
+            { ph: 'guest.numNights',           label: 'Number of Nights',              group: 'Stay Dates',        example: '363',                 status: 'Mapped' },
+            { ph: 'guest.modate',              label: 'Move-Out Date',                 group: 'Stay Dates',        example: 'Mar 15, 2026',        status: 'Mapped' },
+            // Coordinator
+            { ph: 'guest.houcarename',         label: 'Housing Coordinator Name',      group: 'Coordinator',       example: 'Toni Westfall',       status: 'Mapped' },
+            { ph: 'guest.houcarephone',        label: 'Housing Coordinator Phone',     group: 'Coordinator',       example: '+1 (800) 555-0100',   status: 'Mapped' },
+            { ph: 'guest.houcareemail',        label: 'Housing Coordinator Email',     group: 'Coordinator',       example: 'twestfall@alacrity.com', status: 'Mapped' },
+            { ph: 'guest.altcoorname',         label: 'Alt Coordinator Name',          group: 'Coordinator',       example: 'Andra Elk',           status: 'Mapped' },
+            { ph: 'guest.altcoorphone',        label: 'Alt Coordinator Phone',         group: 'Coordinator',       example: '+1 (800) 555-0101',   status: 'Optional' },
+            { ph: 'guest.altcooremail',        label: 'Alt Coordinator Email',         group: 'Coordinator',       example: 'aelk@alacrity.com',   status: 'Optional' },
+            { ph: 'guest.acctmgtname',         label: 'Account Manager Name',          group: 'Coordinator',       example: 'Manager Name',        status: 'Review' },
+            // Furniture
+            { ph: 'guest.furnvendorname',      label: 'Furniture Vendor',              group: 'Furniture',         example: 'CORT Furniture',      status: 'Mapped' },
+            { ph: 'guest.furndeldate',         label: 'Furniture Delivery Date',       group: 'Furniture',         example: 'Mar 10, 2025',        status: 'Mapped' },
+            { ph: 'guest.furnpickupdate',      label: 'Furniture Pickup Date',         group: 'Furniture',         example: 'Mar 6, 2026',         status: 'Mapped' },
+            { ph: 'guest.furnnotes',           label: 'Furniture Notes',               group: 'Furniture',         example: 'No stairs required',  status: 'Optional' },
+            { ph: 'guest.furntermpaydate',     label: 'Furniture Payment Due Date',    group: 'Furniture',         example: 'Mar 15, 2026',        status: 'Review' },
+            // Extension
+            { ph: 'guest.extreqdate',          label: 'Extension Request Date',        group: 'Extension',         example: 'Feb 27, 2026',        status: 'Mapped' },
+            { ph: 'guest.extstartdate',        label: 'Extension Start Date',          group: 'Extension',         example: 'Mar 8, 2026',         status: 'Mapped' },
+            { ph: 'guest.lastextdate',         label: 'Last Extension Date',           group: 'Extension',         example: 'Feb 28, 2026',        status: 'Mapped' },
+            { ph: 'guest.lastextappdate',      label: 'Last Extension Approved Date',  group: 'Extension',         example: 'Feb 28, 2026',        status: 'Mapped' },
+            { ph: 'guest.lastextappcomment',   label: 'Last Extension Comment',        group: 'Extension',         example: 'Approved 3 days',     status: 'Mapped' },
+            { ph: 'guest.lastextreason',       label: 'Last Extension Reason',         group: 'Extension',         example: 'Repair delay',        status: 'Mapped' },
+            // Guest Home Address
+            { ph: 'guest.address1_home',       label: 'Home Address Street',           group: 'Home Address',      example: '456 Oak Ave',         status: 'Mapped' },
+            { ph: 'guest.city_home',           label: 'Home City',                     group: 'Home Address',      example: 'Bellevue',            status: 'Mapped' },
+            { ph: 'guest.state_home',          label: 'Home State',                    group: 'Home Address',      example: 'WA',                  status: 'Mapped' },
+            { ph: 'guest.postal_home',         label: 'Home ZIP',                      group: 'Home Address',      example: '98004',               status: 'Mapped' },
+            // Other
+            { ph: 'guest.noofpets',            label: 'Number of Pets',                group: 'Other',             example: '1',                   status: 'Mapped' },
+            { ph: 'guest.staytype',            label: 'Stay Type',                     group: 'Other',             example: 'Hotel',               status: 'Mapped' },
+            { ph: 'guest.thdstatus',           label: 'THD Status',                    group: 'Other',             example: 'Active',              status: 'Review' },
+            { ph: 'guest.notdays',             label: 'Notice Days',                   group: 'Other',             example: '30',                  status: 'Review' },
+            { ph: 'guest.hotelconame',         label: 'Hotel Contact Name',            group: 'Other',             example: 'Front Desk Manager',  status: 'Mapped' },
+            { ph: 'guest.hotelcophone',        label: 'Hotel Contact Phone',           group: 'Other',             example: '+1 (206) 555-0400',   status: 'Mapped' },
+        ];
+
+        function renderFieldMap(data) {
+            const statusColor = { Mapped: 'bg-green-100 text-green-700', Optional: 'bg-blue-100 text-blue-700', Review: 'bg-yellow-100 text-yellow-700' };
+            document.getElementById('fieldMapBody').innerHTML = data.map(f => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-2.5"><code class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded text-xs font-mono">[${f.ph}]</code></td>
+                    <td class="px-4 py-2.5 text-sm text-gray-800">${f.label}</td>
+                    <td class="px-4 py-2.5"><span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">${f.group}</span></td>
+                    <td class="px-4 py-2.5 text-sm text-gray-500 italic">${f.example}</td>
+                    <td class="px-4 py-2.5"><span class="text-xs font-semibold px-2.5 py-1 rounded-full ${statusColor[f.status] || 'bg-gray-100 text-gray-600'}">${f.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function filterFieldMap() {
+            const q = document.getElementById('fieldMapSearch').value.toLowerCase();
+            const filtered = q ? FIELD_MAPPINGS.filter(f => f.ph.includes(q) || f.label.toLowerCase().includes(q) || f.group.toLowerCase().includes(q)) : FIELD_MAPPINGS;
+            renderFieldMap(filtered);
+        }
+
+        renderFieldMap(FIELD_MAPPINGS);
+
         function showSection(section) {
-            ['profile','team','channels','notifications','integrations','security','billing'].forEach(s => {
+            ['profile','team','channels','notifications','fieldmappings','integrations','security','billing'].forEach(s => {
                 document.getElementById('section-' + s).classList.add('hidden');
             });
             document.querySelectorAll('.settings-tab').forEach(btn => {
