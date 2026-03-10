@@ -7,633 +7,1007 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .tab-btn { padding: 10px 18px; font-size: 0.875rem; font-weight: 500; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+        .tab-btn:hover { color: #1d4ed8; }
+        .tab-btn.active { color: #1d4ed8; border-bottom-color: #1d4ed8; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+        .thread-header { cursor: pointer; }
+        .thread-body { display: none; }
+        .thread-body.open { display: block; }
+        .msg-out { background: #2563eb; color: white; border-radius: 16px 16px 4px 16px; }
+        .msg-in  { background: white; color: #1f2937; border-radius: 16px 16px 16px 4px; border: 1px solid #e5e7eb; }
+        .timeline-item::before { content: ''; position: absolute; left: -25px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: #2563eb; border: 2px solid white; box-shadow: 0 0 0 2px #2563eb; }
+        .stat-card { background: white; border-radius: 12px; padding: 16px 20px; border: 1px solid #e5e7eb; }
+        .badge-active   { background: #d1fae5; color: #065f46; }
+        .badge-pending  { background: #fef3c7; color: #92400e; }
+        .badge-done     { background: #dbeafe; color: #1e40af; }
+        .badge-overdue  { background: #fee2e2; color: #991b1b; }
+        .section-card   { background: white; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden; margin-bottom: 20px; }
+        .section-header { padding: 16px 20px; border-bottom: 1px solid #f3f4f6; display: flex; align-items: center; justify-content: space-between; }
+        .doc-card { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; }
+        .priority-high   { background: #fee2e2; color: #b91c1c; }
+        .priority-medium { background: #fef3c7; color: #92400e; }
+        .priority-low    { background: #f0fdf4; color: #166534; }
+        .ai-glow { background: linear-gradient(135deg, #f5f3ff 0%, #eff6ff 100%); border: 1px solid #c4b5fd; }
+    </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Header -->
-    <header class="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40 h-16">
-        <div class="flex items-center justify-between h-full px-6">
-            <div class="flex items-center space-x-4">
-                <h1 class="text-xl font-bold text-gray-800">TalonPro Portal</h1>
+
+<!-- ── TOP HEADER ───────────────────────────────────────────────── -->
+<header class="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40 h-16">
+    <div class="flex items-center justify-between h-full px-6">
+        <h1 class="text-xl font-bold text-gray-800">TalonPro Portal</h1>
+        <div class="flex-1 max-w-2xl mx-8">
+            <div class="relative">
+                <input type="text" placeholder="Search guests, cases, tasks..."
+                       class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
             </div>
-            <div class="flex-1 max-w-2xl mx-8">
-                <div class="relative">
-                    <input type="text" placeholder="Search guests, tasks..."
-                           class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+        </div>
+        <div class="flex items-center space-x-3">
+            <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fas fa-bell text-xl"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 px-3 py-2 rounded-lg">
+                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">T</div>
+                <span class="text-sm font-medium">Toni Westfall</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ── SIDEBAR ──────────────────────────────────────────────────── -->
+<aside class="fixed left-0 top-16 bottom-0 w-64 bg-gray-900 text-white overflow-y-auto z-30">
+    <nav class="p-4">
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Dashboard</span></a>
+        <a href="guest-list-new.html" class="nav-item active"><i class="fas fa-users"></i><span>Guests</span></a>
+        <a href="messages.html" class="nav-item"><i class="fas fa-comments"></i><span>Messages</span></a>
+        <a href="tasks.html" class="nav-item"><i class="fas fa-tasks"></i><span>Tasks</span></a>
+        <a href="documents.html" class="nav-item"><i class="fas fa-file-alt"></i><span>Documents</span></a>
+        <a href="surveys.html" class="nav-item"><i class="fas fa-clipboard-list"></i><span>Surveys</span></a>
+        <a href="receipts.html" class="nav-item"><i class="fas fa-receipt"></i><span>Receipts</span></a>
+        <a href="templates.html" class="nav-item"><i class="fas fa-file-invoice"></i><span>Templates</span></a>
+        <a href="rules.html" class="nav-item"><i class="fas fa-cogs"></i><span>Automation Rules</span></a>
+        <a href="reports.html" class="nav-item"><i class="fas fa-chart-bar"></i><span>Reports</span></a>
+        <a href="ai-features.html" class="nav-item"><i class="fas fa-robot"></i><span>AI Features</span></a>
+        <a href="guest-mobile.html" class="nav-item"><i class="fas fa-mobile-alt"></i><span>Guest Mobile</span></a>
+        <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+    </nav>
+</aside>
+
+<!-- ── MAIN CONTENT ─────────────────────────────────────────────── -->
+<main class="ml-64 mt-16 min-h-screen">
+
+    <!-- ── GUEST PROFILE HEADER ──────────────────────────────────── -->
+    <div class="bg-white border-b border-gray-200 px-8 py-5">
+        <div class="flex items-start justify-between">
+            <div class="flex items-center gap-5">
+                <!-- Back -->
+                <a href="guest-list-new.html" class="text-gray-400 hover:text-gray-600 mt-1">
+                    <i class="fas fa-arrow-left text-lg"></i>
+                </a>
+                <!-- Avatar -->
+                <div class="w-16 h-16 rounded-2xl bg-blue-600 flex items-center justify-center text-white text-2xl font-bold shadow-md flex-shrink-0">SA</div>
+                <!-- Info -->
+                <div>
+                    <div class="flex items-center gap-3">
+                        <h2 class="text-2xl font-bold text-gray-900">Sarah Alves</h2>
+                        <span class="px-3 py-1 rounded-full text-sm font-semibold badge-active">Active</span>
+                    </div>
+                    <div class="flex items-center gap-4 mt-1 text-sm text-gray-500">
+                        <span><i class="fas fa-hashtag mr-1"></i>Case #2024-0891</span>
+                        <span><i class="fas fa-envelope mr-1"></i>sarahalves928@gmail.com</span>
+                        <span><i class="fas fa-phone mr-1"></i>+1 (425) 208-1527</span>
+                        <span><i class="fas fa-user-tie mr-1"></i>Coordinator: Toni Westfall</span>
+                    </div>
                 </div>
             </div>
-            <div class="flex items-center space-x-4">
-                <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-                    <i class="fas fa-bell text-xl"></i>
-                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            <!-- Quick actions -->
+            <div class="flex items-center gap-2 flex-shrink-0">
+                <button onclick="openComposeModal()" class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-comment-dots"></i> Message
                 </button>
-                <div class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 px-3 py-2 rounded-lg">
-                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <span class="text-sm font-medium">Admin User</span>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content (No Sidebar Navigation - Alacrity style) -->
-    <main class="mt-16 flex h-[calc(100vh-4rem)]">
-        <!-- Left Sidebar - Guest Info -->
-        <div class="w-80 bg-white border-r border-gray-200 overflow-y-auto">
-            <div class="p-4">
-                <!-- Guest Header -->
-                <div class="mb-4 pb-4 border-b">
-                    <h2 class="text-xl font-bold text-gray-800 mb-2">Sarah Alves</h2>
-                    <div class="flex items-center text-sm text-gray-600 space-x-2 mb-2">
-                        <i class="fas fa-envelope"></i>
-                        <span>Sarahalves928@gmail.com</span>
-                    </div>
-                    <div class="flex items-center text-sm text-gray-600 space-x-2 mb-2">
-                        <i class="fas fa-phone"></i>
-                        <span>+14252081527</span>
-                    </div>
-                    <div class="flex items-center text-sm text-gray-600 space-x-2">
-                        <i class="fas fa-home"></i>
-                        <span>372401 (3rd Room)</span>
-                    </div>
-                </div>
-
-                <!-- Guest Status -->
-                <div class="mb-4 pb-4 border-b">
-                    <label class="form-label">Guest Status</label>
-                    <select class="form-input">
-                        <option>Arrival</option>
-                        <option>Active</option>
-                        <option>Checked Out</option>
-                    </select>
-                </div>
-
-                <!-- Record Type -->
-                <div class="mb-4 pb-4 border-b">
-                    <label class="form-label">Record Type</label>
-                    <select class="form-input">
-                        <option>Parent</option>
-                        <option>Child</option>
-                    </select>
-                </div>
-
-                <!-- Send Message Toggle -->
-                <div class="mb-4 pb-4 border-b">
-                    <label class="form-label flex items-center cursor-pointer">
-                        <input type="checkbox" class="mr-2">
-                        <span>Send Messages</span>
-                    </label>
-                    <button class="btn-primary w-full mt-2 text-sm">
-                        <i class="fas fa-comment mr-2"></i>
-                        Message Guest
-                    </button>
-                </div>
-
-                <!-- Search Messages -->
-                <div class="mb-4">
-                    <input type="text" placeholder="Search messages" class="form-input text-sm">
-                </div>
-
-                <!-- Send Message Dropdown -->
-                <div class="mb-4">
-                    <div class="relative">
-                        <select class="form-input text-sm" id="customMessageSelect">
-                            <option>Send a Message*</option>
-                            <option>Custom Message</option>
-                            <option>HOTELS- Hilton Hotel Perks For Insureds</option>
-                            <option>Assurance Services New Form: Direct Pay Authorization</option>
-                            <option>New Form : Direct Pay Authorization</option>
-                            <option>Regional Relations New Form: Direct Pay Authorization</option>
-                            <option>French Canada - Direct Payment Authorization</option>
-                        </select>
-                        <button class="absolute right-8 top-2 text-gray-600">
-                            <i class="fas fa-caret-down"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Collapsible Sections -->
-                <div class="space-y-2">
-                    <div class="collapsible-section-sidebar">
-                        <div class="collapsible-header-sidebar" onclick="toggleSidebarSection(this)">
-                            <span>Documents</span>
-                            <div class="flex items-center space-x-2">
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-sort"></i></button>
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-chevron-up"></i></button>
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-expand"></i></button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="collapsible-section-sidebar">
-                        <div class="collapsible-header-sidebar" onclick="toggleSidebarSection(this)">
-                            <span>Details</span>
-                            <div class="flex items-center space-x-2">
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-sort"></i></button>
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-chevron-up"></i></button>
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-expand"></i></button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="collapsible-section-sidebar">
-                        <div class="collapsible-header-sidebar" onclick="toggleSidebarSection(this)">
-                            <span>Tasks</span>
-                            <div class="flex items-center space-x-2">
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-sort"></i></button>
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-chevron-up"></i></button>
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-expand"></i></button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="collapsible-section-sidebar">
-                        <div class="collapsible-header-sidebar" onclick="toggleSidebarSection(this)">
-                            <span>Options</span>
-                            <div class="flex items-center space-x-2">
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-sort"></i></button>
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-chevron-up"></i></button>
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-expand"></i></button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="collapsible-section-sidebar">
-                        <div class="collapsible-header-sidebar" onclick="toggleSidebarSection(this)">
-                            <span>Expenses</span>
-                            <div class="flex items-center space-x-2">
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-sort"></i></button>
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-chevron-down"></i></button>
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-expand"></i></button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="collapsible-section-sidebar">
-                        <div class="collapsible-header-sidebar" onclick="toggleSidebarSection(this)">
-                            <span>Financials</span>
-                            <div class="flex items-center space-x-2">
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-sort"></i></button>
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-chevron-down"></i></button>
-                                <button class="hover:bg-gray-200 p-1 rounded"><i class="fas fa-expand"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <button class="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors">
+                    <i class="fas fa-clipboard-list"></i> Send Survey
+                </button>
+                <button class="flex items-center gap-2 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-ellipsis-h"></i>
+                </button>
             </div>
         </div>
 
-        <!-- Main Detail Panel -->
-        <div class="flex-1 overflow-y-auto">
-            <!-- Top Action Bar -->
-            <div class="bg-white border-b border-gray-200 p-4 flex items-center justify-between">
-                <div class="flex items-center space-x-2">
-                    <button class="p-2 hover:bg-gray-100 rounded" title="Check"><i class="fas fa-check text-green-600"></i></button>
-                    <button class="p-2 hover:bg-gray-100 rounded" title="Bell"><i class="fas fa-bell"></i></button>
-                    <button class="p-2 hover:bg-gray-100 rounded" title="Email"><i class="fas fa-envelope"></i></button>
-                    <button class="p-2 hover:bg-gray-100 rounded" title="Store"><i class="fas fa-store"></i></button>
-                    <button class="p-2 hover:bg-gray-100 rounded" title="User"><i class="fas fa-user"></i></button>
-                    <button class="p-2 hover:bg-gray-100 rounded" title="Archive"><i class="fas fa-archive"></i></button>
-                    <button class="p-2 hover:bg-gray-100 rounded" title="Copy"><i class="fas fa-copy"></i></button>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <button class="btn-primary">
-                        <i class="fas fa-envelope mr-2"></i>
-                        Message
-                    </button>
-                    <button class="btn-secondary">
-                        <i class="fas fa-eye mr-2"></i>
-                        View
-                    </button>
-                    <button class="btn-secondary">
-                        <i class="fas fa-file-alt mr-2"></i>
-                        Documents
-                    </button>
-                    <button class="btn-secondary">
-                        <i class="fas fa-print mr-2"></i>
-                        Print
-                    </button>
-                    <button class="btn-secondary">
-                        <i class="fas fa-upload mr-2"></i>
-                        Upload
-                    </button>
-                </div>
+        <!-- Stats Row -->
+        <div class="flex items-center gap-6 mt-5 pt-4 border-t border-gray-100">
+            <div class="text-center">
+                <p class="text-xs text-gray-500 mb-0.5">Check-In</p>
+                <p class="font-semibold text-gray-800 text-sm">Mar 17, 2025</p>
             </div>
+            <div class="w-px h-8 bg-gray-200"></div>
+            <div class="text-center">
+                <p class="text-xs text-gray-500 mb-0.5">Check-Out</p>
+                <p class="font-semibold text-gray-800 text-sm">Mar 15, 2026</p>
+            </div>
+            <div class="w-px h-8 bg-gray-200"></div>
+            <div class="text-center">
+                <p class="text-xs text-gray-500 mb-0.5">Nights</p>
+                <p class="font-semibold text-gray-800 text-sm">363</p>
+            </div>
+            <div class="w-px h-8 bg-gray-200"></div>
+            <div class="text-center">
+                <p class="text-xs text-gray-500 mb-0.5">ALE Limit</p>
+                <p class="font-semibold text-gray-800 text-sm">$4,200 / mo</p>
+            </div>
+            <div class="w-px h-8 bg-gray-200"></div>
+            <div class="text-center">
+                <p class="text-xs text-gray-500 mb-0.5">Total Receipts</p>
+                <p class="font-semibold text-gray-800 text-sm">$2,478</p>
+            </div>
+            <div class="w-px h-8 bg-gray-200"></div>
+            <div class="text-center">
+                <p class="text-xs text-gray-500 mb-0.5">Open Tasks</p>
+                <p class="font-semibold text-orange-600 text-sm">3</p>
+            </div>
+            <div class="w-px h-8 bg-gray-200"></div>
+            <div class="text-center">
+                <p class="text-xs text-gray-500 mb-0.5">Lodging</p>
+                <p class="font-semibold text-gray-800 text-sm">Marriott Downtown</p>
+            </div>
+        </div>
+    </div>
 
-            <!-- Main Content Area -->
-            <div class="p-6">
-                <!-- Contact Details Section -->
-                <div class="card mb-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Contact Details</h3>
-                    <div class="grid grid-cols-4 gap-4">
-                        <div>
-                            <label class="form-label">Lead Requirements</label>
-                            <input type="text" class="form-input" value="">
-                        </div>
-                        <div>
-                            <label class="form-label">First Name</label>
-                            <input type="text" class="form-input" value="Sarah">
-                        </div>
-                        <div>
-                            <label class="form-label">Middle Name</label>
-                            <input type="text" class="form-input" value="Alves">
-                        </div>
-                        <div>
-                            <label class="form-label">Last Name</label>
-                            <input type="text" class="form-input" value="">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-4 gap-4 mt-4">
-                        <div>
-                            <label class="form-label">Title</label>
-                            <input type="text" class="form-input">
-                        </div>
-                        <div>
-                            <label class="form-label">Mobile Phone</label>
-                            <input type="tel" class="form-input" value="+14252081527">
-                        </div>
-                        <div>
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-input" value="Sarahalves928@gmail.com">
-                        </div>
-                        <div>
-                            <label class="form-label">Mobile Phone 2</label>
-                            <input type="tel" class="form-input">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-3 gap-4 mt-4">
-                        <div>
-                            <label class="form-label">Message Channel</label>
-                            <select class="form-input">
-                                <option>SMS</option>
-                                <option>Email</option>
-                                <option>Portal</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="form-label">Company</label>
-                            <input type="text" class="form-input">
-                        </div>
-                        <div>
-                            <label class="form-label">Company Contact</label>
-                            <input type="text" class="form-input">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mt-4">
-                        <div>
-                            <label class="flex items-center cursor-pointer mt-6">
-                                <input type="checkbox" class="mr-2" checked>
-                                <span class="text-sm">Send Message</span>
-                            </label>
-                        </div>
-                        <div>
-                            <label class="form-label">Contact Type</label>
-                            <select class="form-input">
-                                <option>Primary</option>
-                                <option>Secondary</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button class="btn-primary mt-4">Update</button>
-                </div>
+    <!-- ── TAB BAR ────────────────────────────────────────────────── -->
+    <div class="bg-white border-b border-gray-200 px-8">
+        <div class="flex overflow-x-auto">
+            <button class="tab-btn active" onclick="switchTab('overview', this)"><i class="fas fa-th-large mr-1.5"></i>Overview</button>
+            <button class="tab-btn" onclick="switchTab('messages', this)"><i class="fas fa-comments mr-1.5"></i>Messages <span class="ml-1 bg-blue-100 text-blue-700 text-xs px-1.5 py-0.5 rounded-full">3</span></button>
+            <button class="tab-btn" onclick="switchTab('documents', this)"><i class="fas fa-file-alt mr-1.5"></i>Documents <span class="ml-1 bg-gray-100 text-gray-600 text-xs px-1.5 py-0.5 rounded-full">6</span></button>
+            <button class="tab-btn" onclick="switchTab('tasks', this)"><i class="fas fa-tasks mr-1.5"></i>Tasks <span class="ml-1 bg-orange-100 text-orange-700 text-xs px-1.5 py-0.5 rounded-full">3</span></button>
+            <button class="tab-btn" onclick="switchTab('receipts', this)"><i class="fas fa-receipt mr-1.5"></i>Receipts</button>
+            <button class="tab-btn" onclick="switchTab('surveys', this)"><i class="fas fa-clipboard-list mr-1.5"></i>Surveys</button>
+            <button class="tab-btn" onclick="switchTab('timeline', this)"><i class="fas fa-history mr-1.5"></i>Timeline</button>
+        </div>
+    </div>
 
-                <!-- Guest Details Section -->
-                <div class="card mb-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Guest Details</h3>
-                    <div class="grid grid-cols-5 gap-4">
-                        <div>
-                            <label class="form-label">Room *</label>
-                            <input type="text" class="form-input" value="0">
-                        </div>
-                        <div>
-                            <label class="form-label">Arrived On</label>
-                            <input type="date" class="form-input" value="2025-03-17">
-                        </div>
-                        <div>
-                            <label class="form-label">Number Of Nights</label>
-                            <input type="number" class="form-input" value="356">
-                        </div>
-                        <div>
-                            <label class="form-label">Departing On</label>
-                            <input type="date" class="form-input" value="2026-03-08">
-                        </div>
-                        <div>
-                            <label class="form-label">Checkout Time</label>
-                            <input type="time" class="form-input" value="11:00">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mt-4">
-                        <div>
-                            <label class="form-label">ID</label>
-                            <input type="text" class="form-input" value="058940084-442569">
-                        </div>
-                        <div>
-                            <label class="form-label">Type</label>
-                            <select class="form-input">
-                                <option>Standard</option>
-                                <option>Extended</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button class="btn-primary mt-4">Update</button>
-                </div>
+    <!-- ── TAB PANELS ─────────────────────────────────────────────── -->
+    <div class="p-8">
 
-                <!-- Extension Section -->
-                <div class="card mb-6">
-                    <button class="collapsible-header w-full" onclick="toggleExtSection(this)">
-                        <h3 class="text-lg font-semibold text-gray-800">Extension</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="collapsible-content-ext hidden mt-4">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="form-label">THD Contact Type</label>
-                                <select class="form-input">
-                                    <option>Primary</option>
-                                    <option>Secondary</option>
-                                </select>
+        <!-- ════════════════ OVERVIEW TAB ═════════════════ -->
+        <div id="tab-overview" class="tab-panel active">
+            <div class="grid grid-cols-3 gap-6">
+
+                <!-- Left col: Contact + Claim + Lodging -->
+                <div class="col-span-2 space-y-5">
+
+                    <!-- AI Summary -->
+                    <div class="rounded-xl p-5 ai-glow">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-semibold text-gray-800 flex items-center gap-2">
+                                <span class="bg-purple-600 text-white text-xs px-2 py-0.5 rounded font-bold">AI</span>
+                                Case Summary
+                            </h3>
+                            <button class="text-purple-600 text-sm hover:underline"><i class="fas fa-sync mr-1 text-xs"></i>Regenerate</button>
+                        </div>
+                        <ul class="space-y-1.5 text-sm text-gray-700">
+                            <li class="flex items-start gap-2"><i class="fas fa-circle text-purple-400 text-xs mt-1.5"></i>Guest reported heater malfunction on Oct 12 — technician dispatched Oct 13.</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-circle text-purple-400 text-xs mt-1.5"></i>Stay extended 3 days due to repair delay; new checkout set for Mar 15, 2026.</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-circle text-purple-400 text-xs mt-1.5"></i>Furniture pickup by CORT confirmed for Mar 6 between 1–4 PM.</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-circle text-green-500 text-xs mt-1.5"></i>Overall sentiment: <strong>Positive</strong> — guest satisfied with coordinator responsiveness.</li>
+                        </ul>
+                        <div class="mt-3 flex gap-2">
+                            <span class="bg-yellow-100 text-yellow-800 text-xs px-2.5 py-1 rounded-full"><i class="fas fa-exclamation-triangle mr-1"></i>Extension due soon</span>
+                            <span class="bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded-full"><i class="fas fa-check-circle mr-1"></i>All receipts submitted</span>
+                        </div>
+                    </div>
+
+                    <!-- Contact Details -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3 class="font-semibold text-gray-800">Contact Details</h3>
+                            <button class="text-sm text-blue-600 hover:underline">Edit</button>
+                        </div>
+                        <div class="p-5 grid grid-cols-3 gap-4 text-sm">
+                            <div><p class="text-gray-500 mb-1">First Name</p><p class="font-medium text-gray-900">Sarah</p></div>
+                            <div><p class="text-gray-500 mb-1">Last Name</p><p class="font-medium text-gray-900">Alves</p></div>
+                            <div><p class="text-gray-500 mb-1">Contact Type</p><p class="font-medium text-gray-900">Primary</p></div>
+                            <div><p class="text-gray-500 mb-1">Mobile Phone</p><p class="font-medium text-gray-900">+1 (425) 208-1527</p></div>
+                            <div><p class="text-gray-500 mb-1">Email</p><p class="font-medium text-gray-900">sarahalves928@gmail.com</p></div>
+                            <div><p class="text-gray-500 mb-1">Message Channel</p>
+                                <span class="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full font-medium">SMS</span>
+                            </div>
+                            <div><p class="text-gray-500 mb-1">Number of Adults</p><p class="font-medium text-gray-900">2</p></div>
+                            <div><p class="text-gray-500 mb-1">Number of Children</p><p class="font-medium text-gray-900">1</p></div>
+                            <div><p class="text-gray-500 mb-1">Pets</p><p class="font-medium text-gray-900">1 Dog</p></div>
+                        </div>
+                    </div>
+
+                    <!-- Claim / Stay Details -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3 class="font-semibold text-gray-800">Claim & Stay Details</h3>
+                            <button class="text-sm text-blue-600 hover:underline">Edit</button>
+                        </div>
+                        <div class="p-5 grid grid-cols-3 gap-4 text-sm">
+                            <div><p class="text-gray-500 mb-1">Claim Number</p><p class="font-medium text-gray-900">058940084-442569</p></div>
+                            <div><p class="text-gray-500 mb-1">Insurer</p><p class="font-medium text-gray-900">State Farm</p></div>
+                            <div><p class="text-gray-500 mb-1">Policy Number</p><p class="font-medium text-gray-900">SF-2024-88291</p></div>
+                            <div><p class="text-gray-500 mb-1">Arrived On</p><p class="font-medium text-gray-900">Mar 17, 2025</p></div>
+                            <div><p class="text-gray-500 mb-1">Departing On</p><p class="font-medium text-gray-900">Mar 15, 2026</p></div>
+                            <div><p class="text-gray-500 mb-1">Number of Nights</p><p class="font-medium text-gray-900">363</p></div>
+                            <div><p class="text-gray-500 mb-1">ALE Limit (Monthly)</p><p class="font-medium text-gray-900">$4,200</p></div>
+                            <div><p class="text-gray-500 mb-1">Loss Type</p><p class="font-medium text-gray-900">Fire / Smoke Damage</p></div>
+                            <div><p class="text-gray-500 mb-1">Record Type</p><p class="font-medium text-gray-900">Parent</p></div>
+                        </div>
+                    </div>
+
+                    <!-- Current Lodging -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3 class="font-semibold text-gray-800">Current Lodging</h3>
+                            <button class="text-sm text-blue-600 hover:underline">Change</button>
+                        </div>
+                        <div class="p-5 flex items-start gap-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-hotel text-blue-600 text-lg"></i>
+                            </div>
+                            <div class="flex-1 grid grid-cols-3 gap-4 text-sm">
+                                <div><p class="text-gray-500 mb-1">Property</p><p class="font-medium text-gray-900">Marriott Downtown</p></div>
+                                <div><p class="text-gray-500 mb-1">Room</p><p class="font-medium text-gray-900">372401 (3rd Floor)</p></div>
+                                <div><p class="text-gray-500 mb-1">Nightly Rate</p><p class="font-medium text-gray-900">$139.00</p></div>
+                                <div><p class="text-gray-500 mb-1">Check-In</p><p class="font-medium text-gray-900">Mar 17, 2025</p></div>
+                                <div><p class="text-gray-500 mb-1">Check-Out</p><p class="font-medium text-gray-900">Mar 15, 2026</p></div>
+                                <div><p class="text-gray-500 mb-1">Checkout Time</p><p class="font-medium text-gray-900">11:00 AM</p></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- AI Case Summary -->
-                <div class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-sm p-6 mb-6 border-2 border-purple-200">
-                    <div class="collapsible-header bg-transparent p-0" onclick="toggleSection(this)">
-                        <h3 class="text-lg font-semibold text-gray-800">
-                            <span class="ai-badge mr-2">AI</span>
-                            AI Guest Summary
-                        </h3>
-                        <i class="fas fa-chevron-down text-purple-600"></i>
-                    </div>
-                    <div class="collapsible-content p-0 mt-4">
-                        <div id="aiSummaryText" class="text-gray-700 whitespace-pre-line">
-• Guest reported heater issue on Oct 12
-• Technician scheduled for Oct 13
-• Stay extended 3 days due to repair delay
-• Lease agreement provided to guest
-• Overall sentiment: Satisfied with coordinator response
+                <!-- Right col: Sidebar widgets -->
+                <div class="space-y-5">
+
+                    <!-- AI Suggestions -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3 class="font-semibold text-gray-800 flex items-center gap-2">
+                                <span class="bg-purple-600 text-white text-xs px-2 py-0.5 rounded font-bold">AI</span>
+                                Suggestions
+                            </h3>
                         </div>
-                        <button onclick="regenerateAISummary()" class="mt-4 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm">
-                            <i class="fas fa-sync mr-2"></i>
-                            Regenerate Summary
-                        </button>
-                    </div>
-                </div>
-
-                <!-- AI Suggestions Widget -->
-                <div class="card mb-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                        <span class="ai-badge mr-2">AI</span>
-                        AI Suggestions
-                    </h3>
-                    <div id="aiRecommendations" class="space-y-2">
-                        <!-- AI recommendations will be loaded here -->
-                    </div>
-                </div>
-
-                <!-- Message Threads -->
-                <div class="card">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Messages</h3>
-                        <button onclick="generateAIReply()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm">
-                            <i class="fas fa-magic mr-2"></i>
-                            Generate AI Reply
-                        </button>
-                    </div>
-
-                    <div id="aiReplySuggestions" class="hidden mb-4"></div>
-
-                    <!-- Message Threads -->
-                    <div class="space-y-4" id="messageThreads">
-                        <!-- Message threads will be loaded here -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <script src="data.js"></script>
-    <script src="app.js"></script>
-    <script>
-        // Message threads data structure with 2-way conversations
-        const messageThreads = [
-            {
-                id: 1,
-                title: "Heater Repair Request",
-                lastMessage: "The heater is fixed now, thank you!",
-                sentBy: "Guest",
-                timestamp: "Today @ 02:30pm",
-                status: "Resolved",
-                unread: false,
-                messages: [
-                    {
-                        type: "guest",
-                        sender: "Sarah Alves",
-                        content: "Hi, the heater in my unit is not working properly. It's getting very cold.",
-                        timestamp: "Today @ 10:30am",
-                        channel: "SMS",
-                        category: "Maintenance",
-                        sentiment: "negative"
-                    },
-                    {
-                        type: "coordinator",
-                        sender: "Toni Westfall",
-                        content: "Thank you for letting us know. I've contacted maintenance and they will visit your unit today between 2-4 PM.",
-                        timestamp: "Today @ 10:45am",
-                        channel: "SMS"
-                    },
-                    {
-                        type: "guest",
-                        sender: "Sarah Alves",
-                        content: "Great, thank you! Also, can I get a copy of my lease agreement?",
-                        timestamp: "Today @ 11:00am",
-                        channel: "SMS",
-                        category: "Document Request",
-                        sentiment: "positive"
-                    },
-                    {
-                        type: "coordinator",
-                        sender: "Toni Westfall",
-                        content: "Of course! I'll email you a copy within the next hour.",
-                        timestamp: "Today @ 11:10am",
-                        channel: "Email"
-                    },
-                    {
-                        type: "guest",
-                        sender: "Sarah Alves",
-                        content: "The heater is fixed now, thank you!",
-                        timestamp: "Today @ 02:30pm",
-                        channel: "SMS",
-                        category: "Maintenance",
-                        sentiment: "positive"
-                    }
-                ]
-            },
-            {
-                id: 2,
-                title: "Stay Extension Request",
-                lastMessage: "Your extension has been approved through March 15",
-                sentBy: "Coordinator",
-                timestamp: "Yesterday @ 03:20pm",
-                status: "Completed",
-                unread: false,
-                messages: [
-                    {
-                        type: "guest",
-                        sender: "Sarah Alves",
-                        content: "Due to the repair delays, I might need to extend my stay by 3 days. Is that possible?",
-                        timestamp: "Yesterday @ 09:15am",
-                        channel: "Email",
-                        category: "Extension",
-                        sentiment: "neutral"
-                    },
-                    {
-                        type: "coordinator",
-                        sender: "Toni Westfall",
-                        content: "Let me check availability and get back to you within the hour.",
-                        timestamp: "Yesterday @ 09:30am",
-                        channel: "Email"
-                    },
-                    {
-                        type: "coordinator",
-                        sender: "Toni Westfall",
-                        content: "Good news! Your extension has been approved. Your new checkout date is March 15. I'll send updated paperwork shortly.",
-                        timestamp: "Yesterday @ 03:20pm",
-                        channel: "Email"
-                    },
-                    {
-                        type: "guest",
-                        sender: "Sarah Alves",
-                        content: "Perfect, thank you so much for your help!",
-                        timestamp: "Yesterday @ 03:35pm",
-                        channel: "Email",
-                        category: "Extension",
-                        sentiment: "positive"
-                    }
-                ]
-            },
-            {
-                id: 3,
-                title: "Furniture Pickup Coordination",
-                lastMessage: "Received copy, thanks",
-                sentBy: "Guest",
-                timestamp: "2/23/2026 @ 04:45pm",
-                status: "Opened",
-                unread: false,
-                messages: [
-                    {
-                        type: "coordinator",
-                        sender: "Andra Elk",
-                        content: "Hi Sarah, This is Alacrity Solutions confirming the pick up of the rental items scheduled for 03/6/2026, between 1-4pm. Our vendor, Cort Furniture, will give you a 1-hour pre-call to let you know they are on their way.",
-                        timestamp: "2/23/2026 @ 04:17pm",
-                        channel: "SMS"
-                    },
-                    {
-                        type: "guest",
-                        sender: "Sarah Alves",
-                        content: "Received copy, thanks",
-                        timestamp: "2/23/2026 @ 04:45pm",
-                        channel: "SMS",
-                        sentiment: "positive"
-                    }
-                ]
-            }
-        ];
-
-        document.addEventListener('DOMContentLoaded', function() {
-            loadMessageThreads();
-            loadAIRecommendations();
-        });
-
-        function loadMessageThreads() {
-            const container = document.getElementById('messageThreads');
-            if (!container) return;
-
-            const statusColors = {
-                'Resolved': 'bg-green-100 text-green-700',
-                'Completed': 'bg-blue-100 text-blue-700',
-                'Opened': 'bg-gray-100 text-gray-700',
-                'Pending': 'bg-yellow-100 text-yellow-700'
-            };
-
-            container.innerHTML = messageThreads.map(thread => `
-                <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                    <div class="bg-gray-50 p-4 cursor-pointer hover:bg-gray-100" onclick="toggleThread(${thread.id})">
-                        <div class="flex items-center justify-between mb-2">
-                            <h4 class="font-semibold text-gray-900">${thread.title}</h4>
-                            <span class="px-2 py-1 rounded text-xs font-semibold ${statusColors[thread.status] || 'bg-gray-100 text-gray-700'}">
-                                ${thread.status}
-                            </span>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-2 truncate">${thread.lastMessage}</p>
-                        <div class="flex items-center justify-between text-xs text-gray-500">
-                            <span>${thread.sentBy} • ${thread.timestamp}</span>
-                            <span class="text-blue-600 font-medium">
-                                <i class="fas fa-comment-dots mr-1"></i>
-                                ${thread.messages.length} messages
-                            </span>
-                        </div>
-                    </div>
-                    <div id="thread-${thread.id}" class="hidden bg-white p-4 border-t border-gray-200">
-                        <div class="space-y-4">
-                            ${thread.messages.map(msg => `
-                                <div class="message-bubble ${msg.type}">
-                                    ${msg.category ? `
-                                        <div class="flex items-center space-x-2 mb-2 ${msg.type === 'coordinator' ? 'justify-end' : ''}">
-                                            <span class="badge badge-purple text-xs">${msg.category}</span>
-                                            ${msg.sentiment ? `
-                                                <span class="sentiment-indicator sentiment-${msg.sentiment}">
-                                                    ${msg.sentiment}
-                                                </span>
-                                            ` : ''}
-                                        </div>
-                                    ` : ''}
-                                    <div class="message-content">
-                                        <p>${msg.content}</p>
-                                    </div>
-                                    <div class="message-meta ${msg.type === 'coordinator' ? 'text-right' : ''}">
-                                        ${msg.sender} • ${msg.timestamp} • ${msg.channel}
-                                    </div>
+                        <div class="p-4 space-y-3">
+                            <div class="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                                <i class="fas fa-calendar-alt text-yellow-500 mt-0.5"></i>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">Extension Due in 5 Days</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">Guest checkout is Mar 15. Send extension survey now.</p>
+                                    <button class="mt-2 text-xs text-blue-600 font-medium hover:underline">Send Survey →</button>
                                 </div>
-                            `).join('')}
+                            </div>
+                            <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                                <i class="fas fa-receipt text-blue-500 mt-0.5"></i>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">$640 Pending Approval</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">2 receipts awaiting review from last week.</p>
+                                    <button class="mt-2 text-xs text-blue-600 font-medium hover:underline">Review Receipts →</button>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                <i class="fas fa-star text-green-500 mt-0.5"></i>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">Guest Survey Pending</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">Guest Experience Survey hasn't been sent this month.</p>
+                                    <button class="mt-2 text-xs text-blue-600 font-medium hover:underline">Send Now →</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="mt-4 pt-4 border-t border-gray-200">
-                            <button class="btn-primary w-full">
-                                <i class="fas fa-reply mr-2"></i>
-                                Reply to Thread
-                            </button>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="section-card">
+                        <div class="section-header"><h3 class="font-semibold text-gray-800">Financials</h3></div>
+                        <div class="p-4 space-y-3 text-sm">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-500">ALE Limit (Monthly)</span>
+                                <span class="font-semibold text-gray-900">$4,200.00</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-500">Used This Month</span>
+                                <span class="font-semibold text-gray-900">$3,420.00</span>
+                            </div>
+                            <div class="w-full bg-gray-100 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width:81%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-400">
+                                <span>81% used</span><span>$780 remaining</span>
+                            </div>
+                            <div class="pt-2 border-t border-gray-100">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-500">Total Receipts Submitted</span>
+                                    <span class="font-semibold text-gray-900">$2,478.00</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-500">Approved</span>
+                                <span class="font-semibold text-green-600">$1,838.00</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-500">Pending</span>
+                                <span class="font-semibold text-yellow-600">$640.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3 class="font-semibold text-gray-800">Internal Notes</h3>
+                            <button class="text-sm text-blue-600 hover:underline">Add Note</button>
+                        </div>
+                        <div class="p-4 space-y-3">
+                            <div class="text-sm">
+                                <p class="text-xs text-gray-400 mb-1">Toni Westfall · Mar 6, 2026</p>
+                                <p class="text-gray-700">CORT furniture pickup confirmed. Guest notified via SMS.</p>
+                            </div>
+                            <div class="text-sm border-t border-gray-100 pt-3">
+                                <p class="text-xs text-gray-400 mb-1">Toni Westfall · Feb 28, 2026</p>
+                                <p class="text-gray-700">Extension approved through Mar 15. Paperwork sent via email.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            `).join('');
-        }
+            </div>
+        </div>
 
-        function toggleThread(threadId) {
-            const threadContent = document.getElementById(`thread-${threadId}`);
-            threadContent.classList.toggle('hidden');
-        }
+        <!-- ════════════════ MESSAGES TAB ═════════════════ -->
+        <div id="tab-messages" class="tab-panel">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg font-semibold text-gray-800">Conversation Threads</h3>
+                <button onclick="openComposeModal()" class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
+                    <i class="fas fa-plus"></i> New Message
+                </button>
+            </div>
+            <div class="space-y-4" id="messageThreadsContainer"></div>
+        </div>
 
-        function toggleSidebarSection(header) {
-            // Toggle sidebar section (placeholder)
-        }
+        <!-- ════════════════ DOCUMENTS TAB ════════════════ -->
+        <div id="tab-documents" class="tab-panel">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg font-semibold text-gray-800">Documents</h3>
+                <button class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
+                    <i class="fas fa-upload"></i> Upload Document
+                </button>
+            </div>
 
-        function toggleExtSection(header) {
-            const content = header.nextElementSibling;
-            content.classList.toggle('hidden');
-            const icon = header.querySelector('i');
-            icon.classList.toggle('fa-chevron-down');
-            icon.classList.toggle('fa-chevron-up');
-        }
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">From Coordinator</p>
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <div class="doc-card hover:shadow-md transition-shadow cursor-pointer">
+                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-file-pdf text-red-500"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-gray-900 text-sm truncate">Lease Agreement 2025.pdf</p>
+                        <p class="text-xs text-gray-400 mt-0.5">Uploaded Mar 17, 2025 · 1.2 MB</p>
+                    </div>
+                    <button class="text-gray-400 hover:text-blue-600 ml-2"><i class="fas fa-download"></i></button>
+                </div>
+                <div class="doc-card hover:shadow-md transition-shadow cursor-pointer">
+                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-file-pdf text-red-500"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-gray-900 text-sm truncate">Extension Authorization Letter.pdf</p>
+                        <p class="text-xs text-gray-400 mt-0.5">Uploaded Feb 28, 2026 · 0.8 MB</p>
+                    </div>
+                    <button class="text-gray-400 hover:text-blue-600 ml-2"><i class="fas fa-download"></i></button>
+                </div>
+                <div class="doc-card hover:shadow-md transition-shadow cursor-pointer">
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-file-word text-blue-500"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-gray-900 text-sm truncate">Direct Pay Authorization Form.docx</p>
+                        <p class="text-xs text-gray-400 mt-0.5">Uploaded Mar 20, 2025 · 0.3 MB</p>
+                    </div>
+                    <button class="text-gray-400 hover:text-blue-600 ml-2"><i class="fas fa-download"></i></button>
+                </div>
+                <div class="doc-card hover:shadow-md transition-shadow cursor-pointer">
+                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-file-excel text-green-500"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-gray-900 text-sm truncate">Expense Tracker Mar 2026.xlsx</p>
+                        <p class="text-xs text-gray-400 mt-0.5">Uploaded Mar 1, 2026 · 0.5 MB</p>
+                    </div>
+                    <button class="text-gray-400 hover:text-blue-600 ml-2"><i class="fas fa-download"></i></button>
+                </div>
+            </div>
 
-        function toggleSection(header) {
-            const content = header.nextElementSibling;
-            content.classList.toggle('collapsed');
-            const icon = header.querySelector('i');
-            icon.classList.toggle('fa-chevron-down');
-            icon.classList.toggle('fa-chevron-up');
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">From Guest</p>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="doc-card hover:shadow-md transition-shadow cursor-pointer">
+                    <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-image text-yellow-500"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-gray-900 text-sm truncate">Hotel Receipt_Mar1.jpg</p>
+                        <p class="text-xs text-gray-400 mt-0.5">Uploaded Mar 2, 2026 · 2.1 MB</p>
+                    </div>
+                    <button class="text-gray-400 hover:text-blue-600 ml-2"><i class="fas fa-download"></i></button>
+                </div>
+                <div class="doc-card hover:shadow-md transition-shadow cursor-pointer">
+                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-file-pdf text-red-500"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-gray-900 text-sm truncate">ID Verification.pdf</p>
+                        <p class="text-xs text-gray-400 mt-0.5">Uploaded Mar 17, 2025 · 0.6 MB</p>
+                    </div>
+                    <button class="text-gray-400 hover:text-blue-600 ml-2"><i class="fas fa-download"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════════ TASKS TAB ════════════════════ -->
+        <div id="tab-tasks" class="tab-panel">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg font-semibold text-gray-800">Tasks</h3>
+                <button class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
+                    <i class="fas fa-plus"></i> Add Task
+                </button>
+            </div>
+            <div class="section-card overflow-visible">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Task</th>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Priority</th>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Due Date</th>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Assignee</th>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
+                            <th class="px-5 py-3"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-5 py-4">
+                                <p class="font-medium text-gray-900">Process Extension Request</p>
+                                <p class="text-xs text-gray-400 mt-0.5">Review and approve guest's stay extension</p>
+                            </td>
+                            <td class="px-5 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold priority-high">High</span></td>
+                            <td class="px-5 py-4 text-gray-600">Mar 12, 2026</td>
+                            <td class="px-5 py-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">TW</div>
+                                    <span class="text-gray-700">Toni Westfall</span>
+                                </div>
+                            </td>
+                            <td class="px-5 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold badge-pending">In Progress</span></td>
+                            <td class="px-5 py-4 text-right"><button class="text-gray-400 hover:text-gray-600"><i class="fas fa-ellipsis-h"></i></button></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-5 py-4">
+                                <p class="font-medium text-gray-900">Approve Pending Receipts</p>
+                                <p class="text-xs text-gray-400 mt-0.5">$640 in receipts awaiting approval</p>
+                            </td>
+                            <td class="px-5 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold priority-high">High</span></td>
+                            <td class="px-5 py-4 text-gray-600">Mar 10, 2026</td>
+                            <td class="px-5 py-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold">AE</div>
+                                    <span class="text-gray-700">Andra Elk</span>
+                                </div>
+                            </td>
+                            <td class="px-5 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold badge-overdue">Overdue</span></td>
+                            <td class="px-5 py-4 text-right"><button class="text-gray-400 hover:text-gray-600"><i class="fas fa-ellipsis-h"></i></button></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-5 py-4">
+                                <p class="font-medium text-gray-900">Send Guest Experience Survey</p>
+                                <p class="text-xs text-gray-400 mt-0.5">Monthly satisfaction survey not yet sent</p>
+                            </td>
+                            <td class="px-5 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold priority-medium">Medium</span></td>
+                            <td class="px-5 py-4 text-gray-600">Mar 15, 2026</td>
+                            <td class="px-5 py-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">TW</div>
+                                    <span class="text-gray-700">Toni Westfall</span>
+                                </div>
+                            </td>
+                            <td class="px-5 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold badge-pending">Open</span></td>
+                            <td class="px-5 py-4 text-right"><button class="text-gray-400 hover:text-gray-600"><i class="fas fa-ellipsis-h"></i></button></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-5 py-4">
+                                <p class="font-medium text-gray-900">Confirm CORT Furniture Pickup</p>
+                                <p class="text-xs text-gray-400 mt-0.5">Verify pickup completed on Mar 6</p>
+                            </td>
+                            <td class="px-5 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold priority-low">Low</span></td>
+                            <td class="px-5 py-4 text-gray-600">Mar 7, 2026</td>
+                            <td class="px-5 py-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold">AE</div>
+                                    <span class="text-gray-700">Andra Elk</span>
+                                </div>
+                            </td>
+                            <td class="px-5 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold badge-done">Completed</span></td>
+                            <td class="px-5 py-4 text-right"><button class="text-gray-400 hover:text-gray-600"><i class="fas fa-ellipsis-h"></i></button></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-5 py-4">
+                                <p class="font-medium text-gray-900">Send Lease Agreement Copy</p>
+                                <p class="text-xs text-gray-400 mt-0.5">Guest requested lease copy via SMS</p>
+                            </td>
+                            <td class="px-5 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold priority-low">Low</span></td>
+                            <td class="px-5 py-4 text-gray-600">Feb 15, 2026</td>
+                            <td class="px-5 py-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">TW</div>
+                                    <span class="text-gray-700">Toni Westfall</span>
+                                </div>
+                            </td>
+                            <td class="px-5 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold badge-done">Completed</span></td>
+                            <td class="px-5 py-4 text-right"><button class="text-gray-400 hover:text-gray-600"><i class="fas fa-ellipsis-h"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ════════════════ RECEIPTS TAB ════════════════ -->
+        <div id="tab-receipts" class="tab-panel">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg font-semibold text-gray-800">Receipts</h3>
+                <button class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
+                    <i class="fas fa-plus"></i> Upload Receipt
+                </button>
+            </div>
+
+            <!-- KPI cards -->
+            <div class="grid grid-cols-4 gap-4 mb-6">
+                <div class="stat-card">
+                    <p class="text-xs text-gray-500 mb-1">Total Submitted</p>
+                    <p class="text-2xl font-bold text-gray-900">$2,478</p>
+                    <p class="text-xs text-gray-400 mt-1">5 receipts</p>
+                </div>
+                <div class="stat-card">
+                    <p class="text-xs text-gray-500 mb-1">Approved</p>
+                    <p class="text-2xl font-bold text-green-600">$1,838</p>
+                    <p class="text-xs text-gray-400 mt-1">3 receipts</p>
+                </div>
+                <div class="stat-card">
+                    <p class="text-xs text-gray-500 mb-1">Pending</p>
+                    <p class="text-2xl font-bold text-yellow-500">$640</p>
+                    <p class="text-xs text-gray-400 mt-1">2 receipts</p>
+                </div>
+                <div class="stat-card">
+                    <p class="text-xs text-gray-500 mb-1">ALE Remaining</p>
+                    <p class="text-2xl font-bold text-blue-600">$780</p>
+                    <p class="text-xs text-gray-400 mt-1">This month</p>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Description</th>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Category</th>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Date</th>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Amount</th>
+                            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
+                            <th class="px-5 py-3"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-5 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center"><i class="fas fa-hotel text-blue-600 text-xs"></i></div>
+                                    <div><p class="font-medium text-gray-900">Marriott Downtown</p><p class="text-xs text-gray-400">Hotel · Mar 2026</p></div>
+                                </div>
+                            </td>
+                            <td class="px-5 py-4 text-gray-600">Lodging</td>
+                            <td class="px-5 py-4 text-gray-600">Mar 1, 2026</td>
+                            <td class="px-5 py-4 font-semibold text-gray-900">$1,250.00</td>
+                            <td class="px-5 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold badge-active">Approved</span></td>
+                            <td class="px-5 py-4 text-right"><button class="text-gray-400 hover:text-blue-600"><i class="fas fa-eye"></i></button></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-5 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center"><i class="fas fa-utensils text-orange-600 text-xs"></i></div>
+                                    <div><p class="font-medium text-gray-900">Whole Foods Grocery</p><p class="text-xs text-gray-400">Food · Feb 2026</p></div>
+                                </div>
+                            </td>
+                            <td class="px-5 py-4 text-gray-600">Meals</td>
+                            <td class="px-5 py-4 text-gray-600">Feb 22, 2026</td>
+                            <td class="px-5 py-4 font-semibold text-gray-900">$318.50</td>
+                            <td class="px-5 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold badge-active">Approved</span></td>
+                            <td class="px-5 py-4 text-right"><button class="text-gray-400 hover:text-blue-600"><i class="fas fa-eye"></i></button></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-5 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center"><i class="fas fa-couch text-purple-600 text-xs"></i></div>
+                                    <div><p class="font-medium text-gray-900">CORT Furniture Rental</p><p class="text-xs text-gray-400">Furniture · Feb 2026</p></div>
+                                </div>
+                            </td>
+                            <td class="px-5 py-4 text-gray-600">Furniture</td>
+                            <td class="px-5 py-4 text-gray-600">Feb 10, 2026</td>
+                            <td class="px-5 py-4 font-semibold text-gray-900">$269.50</td>
+                            <td class="px-5 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold badge-active">Approved</span></td>
+                            <td class="px-5 py-4 text-right"><button class="text-gray-400 hover:text-blue-600"><i class="fas fa-eye"></i></button></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-5 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center"><i class="fas fa-gas-pump text-green-600 text-xs"></i></div>
+                                    <div><p class="font-medium text-gray-900">Shell Gas Station</p><p class="text-xs text-gray-400">Transportation · Mar 2026</p></div>
+                                </div>
+                            </td>
+                            <td class="px-5 py-4 text-gray-600">Transport</td>
+                            <td class="px-5 py-4 text-gray-600">Mar 3, 2026</td>
+                            <td class="px-5 py-4 font-semibold text-gray-900">$420.00</td>
+                            <td class="px-5 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold badge-pending">Pending</span></td>
+                            <td class="px-5 py-4 text-right"><button class="text-gray-400 hover:text-blue-600"><i class="fas fa-eye"></i></button></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-5 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center"><i class="fas fa-shopping-bag text-yellow-600 text-xs"></i></div>
+                                    <div><p class="font-medium text-gray-900">Target — Essentials</p><p class="text-xs text-gray-400">Misc · Mar 2026</p></div>
+                                </div>
+                            </td>
+                            <td class="px-5 py-4 text-gray-600">Misc</td>
+                            <td class="px-5 py-4 text-gray-600">Mar 5, 2026</td>
+                            <td class="px-5 py-4 font-semibold text-gray-900">$220.00</td>
+                            <td class="px-5 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold badge-pending">Pending</span></td>
+                            <td class="px-5 py-4 text-right"><button class="text-gray-400 hover:text-blue-600"><i class="fas fa-eye"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ════════════════ SURVEYS TAB ═════════════════ -->
+        <div id="tab-surveys" class="tab-panel">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg font-semibold text-gray-800">Surveys</h3>
+                <button class="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-700">
+                    <i class="fas fa-paper-plane"></i> Send Survey
+                </button>
+            </div>
+            <div class="space-y-3">
+                <!-- Sent surveys -->
+                <div class="section-card">
+                    <div class="p-5 flex items-start justify-between">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900">Check-In Confirmation</p>
+                                <p class="text-sm text-gray-500 mt-0.5">Sent via SMS · Mar 17, 2025</p>
+                                <div class="flex items-center gap-3 mt-2">
+                                    <span class="text-xs text-gray-500"><i class="fas fa-star text-yellow-400 mr-1"></i>Rating: <strong>4/5</strong></span>
+                                    <span class="text-xs text-gray-500">Responded Mar 18, 2025</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold badge-active">Completed</span>
+                    </div>
+                </div>
+                <div class="section-card">
+                    <div class="p-5 flex items-start justify-between">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900">Extension Request Survey</p>
+                                <p class="text-sm text-gray-500 mt-0.5">Sent via Email · Mar 1, 2026</p>
+                                <div class="flex items-center gap-3 mt-2">
+                                    <span class="text-xs text-gray-500"><i class="fas fa-star text-yellow-400 mr-1"></i>Rating: <strong>5/5</strong></span>
+                                    <span class="text-xs text-gray-500">Responded Mar 2, 2026</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold badge-active">Completed</span>
+                    </div>
+                </div>
+                <div class="section-card">
+                    <div class="p-5 flex items-start justify-between">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-clock text-yellow-500"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900">Guest Experience Survey</p>
+                                <p class="text-sm text-gray-500 mt-0.5">Sent via SMS · Mar 8, 2026</p>
+                                <p class="text-xs text-yellow-600 mt-2"><i class="fas fa-exclamation-circle mr-1"></i>Awaiting response · Due Mar 12, 2026</p>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold badge-pending">Pending</span>
+                    </div>
+                </div>
+                <div class="section-card">
+                    <div class="p-5 flex items-start justify-between">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-paper-plane text-gray-400"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900">Property Condition Check</p>
+                                <p class="text-sm text-gray-500 mt-0.5">Not yet sent</p>
+                            </div>
+                        </div>
+                        <button class="text-sm text-blue-600 font-medium hover:underline">Send Now →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════════ TIMELINE TAB ════════════════ -->
+        <div id="tab-timeline" class="tab-panel">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg font-semibold text-gray-800">Activity Timeline</h3>
+                <div class="flex items-center gap-2 text-sm text-gray-500">
+                    <i class="fas fa-filter"></i> Filter
+                </div>
+            </div>
+            <div class="max-w-2xl">
+                <div class="relative pl-8 border-l-2 border-gray-200 space-y-8">
+
+                    <div class="timeline-item relative">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-semibold text-gray-900">CORT Furniture Pickup Confirmed</p>
+                                    <span class="text-xs text-gray-400">Mar 6, 2026</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">Vendor confirmed pickup between 1–4 PM. Guest notified via SMS by Andra Elk.</p>
+                                <span class="mt-2 inline-block bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full">Message</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item relative">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-semibold text-gray-900">Extension Approved — New Checkout Mar 15</p>
+                                    <span class="text-xs text-gray-400">Feb 28, 2026</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">Toni Westfall approved a 3-day extension. Updated paperwork sent via email.</p>
+                                <span class="mt-2 inline-block bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full">Extension</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item relative">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-semibold text-gray-900">Extension Request Submitted</p>
+                                    <span class="text-xs text-gray-400">Feb 27, 2026</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">Sarah Alves requested a stay extension via email due to ongoing repair delays.</p>
+                                <span class="mt-2 inline-block bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded-full">Guest Action</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item relative">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-semibold text-gray-900">Extension Request Survey Completed</p>
+                                    <span class="text-xs text-gray-400">Mar 2, 2026</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">Guest submitted Extension Request Survey with rating 5/5.</p>
+                                <span class="mt-2 inline-block bg-purple-100 text-purple-700 text-xs px-2 py-0.5 rounded-full">Survey</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item relative">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-semibold text-gray-900">Receipt Uploaded — Whole Foods ($318.50)</p>
+                                    <span class="text-xs text-gray-400">Feb 22, 2026</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">Guest uploaded grocery receipt. Approved by coordinator.</p>
+                                <span class="mt-2 inline-block bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-full">Receipt</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item relative">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-semibold text-gray-900">Heater Issue Reported & Resolved</p>
+                                    <span class="text-xs text-gray-400">Oct 12–13, 2025</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">Guest reported heater malfunction. Technician dispatched next day; issue resolved.</p>
+                                <span class="mt-2 inline-block bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded-full">Maintenance</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item relative">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-semibold text-gray-900">Check-In Confirmation Survey Completed</p>
+                                    <span class="text-xs text-gray-400">Mar 18, 2025</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">Guest submitted Check-In survey with rating 4/5.</p>
+                                <span class="mt-2 inline-block bg-purple-100 text-purple-700 text-xs px-2 py-0.5 rounded-full">Survey</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item relative">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-semibold text-gray-900 flex items-center gap-2">
+                                        Guest Checked In
+                                        <span class="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full">Case Opened</span>
+                                    </p>
+                                    <span class="text-xs text-gray-400">Mar 17, 2025</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">Sarah Alves checked in at Marriott Downtown, Room 372401. Case #2024-0891 opened.</p>
+                                <span class="mt-2 inline-block bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full">Check-In</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<!-- ── COMPOSE MESSAGE MODAL ────────────────────────────────────── -->
+<div id="composeModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-2xl w-full max-w-lg shadow-xl p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-semibold text-gray-900 text-lg">Send Message to Sarah Alves</h3>
+            <button onclick="closeComposeModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-lg"></i></button>
+        </div>
+        <div class="space-y-4">
+            <div class="flex gap-2">
+                <button class="flex-1 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium">SMS</button>
+                <button class="flex-1 py-2 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50">Email</button>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">To</label>
+                <input type="text" value="+1 (425) 208-1527" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                <textarea rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Type your message..."></textarea>
+            </div>
+            <div class="flex gap-2 justify-end">
+                <button onclick="closeComposeModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">Cancel</button>
+                <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">Send Message</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ── TAB SWITCHING ──────────────────────────────────────────────
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('tab-' + tabId).classList.add('active');
+        if (btn) btn.classList.add('active');
+    }
+
+    // ── MESSAGE THREADS ────────────────────────────────────────────
+    const threads = [
+        {
+            id: 1, title: 'Heater Repair Request', status: 'Resolved', channel: 'SMS',
+            last: 'The heater is fixed now, thank you!', time: 'Today · 2:30 PM',
+            messages: [
+                { out: false, from: 'Sarah Alves', text: 'Hi, the heater in my unit is not working properly. It\'s getting very cold.', time: 'Today 10:30 AM', ch: 'SMS' },
+                { out: true, from: 'Toni Westfall', text: 'Thank you for letting us know. I\'ve contacted maintenance and they will visit today between 2–4 PM.', time: 'Today 10:45 AM', ch: 'SMS' },
+                { out: false, from: 'Sarah Alves', text: 'Great, thank you! Also, can I get a copy of my lease agreement?', time: 'Today 11:00 AM', ch: 'SMS' },
+                { out: true, from: 'Toni Westfall', text: 'Of course! I\'ll email you a copy within the next hour.', time: 'Today 11:10 AM', ch: 'Email' },
+                { out: false, from: 'Sarah Alves', text: 'The heater is fixed now, thank you!', time: 'Today 2:30 PM', ch: 'SMS' },
+            ]
+        },
+        {
+            id: 2, title: 'Stay Extension Request', status: 'Completed', channel: 'Email',
+            last: 'Perfect, thank you so much for your help!', time: 'Yesterday · 3:35 PM',
+            messages: [
+                { out: false, from: 'Sarah Alves', text: 'Due to the repair delays, I might need to extend my stay by 3 days. Is that possible?', time: 'Yesterday 9:15 AM', ch: 'Email', subject: 'Extension Request - Case #2024-0891' },
+                { out: true, from: 'Toni Westfall', text: 'Let me check availability and get back to you within the hour.', time: 'Yesterday 9:30 AM', ch: 'Email', subject: 'Re: Extension Request - Case #2024-0891' },
+                { out: true, from: 'Toni Westfall', text: 'Good news! Your extension has been approved. New checkout: March 15. I\'ll send updated paperwork shortly.', time: 'Yesterday 3:20 PM', ch: 'Email', subject: 'Re: Extension Request - Case #2024-0891' },
+                { out: false, from: 'Sarah Alves', text: 'Perfect, thank you so much for your help!', time: 'Yesterday 3:35 PM', ch: 'Email', subject: 'Re: Extension Request - Case #2024-0891' },
+            ]
+        },
+        {
+            id: 3, title: 'Furniture Pickup Coordination', status: 'Opened', channel: 'SMS',
+            last: 'Received copy, thanks', time: 'Feb 23, 2026 · 4:45 PM',
+            messages: [
+                { out: true, from: 'Andra Elk', text: 'Hi Sarah, confirming the pickup of rental items on 03/6/2026, between 1–4 PM. CORT Furniture will give you a 1-hour pre-call.', time: 'Feb 23, 2026 4:17 PM', ch: 'SMS' },
+                { out: false, from: 'Sarah Alves', text: 'Received copy, thanks', time: 'Feb 23, 2026 4:45 PM', ch: 'SMS' },
+            ]
         }
-    </script>
+    ];
+
+    const statusColors = {
+        Resolved: 'badge-active', Completed: 'badge-done', Opened: 'bg-gray-100 text-gray-700', Pending: 'badge-pending'
+    };
+    const channelColor = { SMS: 'bg-green-100 text-green-700', Email: 'bg-blue-100 text-blue-700' };
+
+    function buildThreads() {
+        const container = document.getElementById('messageThreadsContainer');
+        container.innerHTML = threads.map(t => `
+            <div class="section-card overflow-visible">
+                <div class="thread-header section-header hover:bg-gray-50 transition-colors" onclick="toggleThread(${t.id})">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-${t.channel === 'Email' ? 'envelope' : 'comment-dots'} text-gray-500 text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-900">${t.title}</p>
+                            <p class="text-xs text-gray-400 mt-0.5 truncate max-w-sm">${t.last} · ${t.time}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${statusColors[t.status] || 'bg-gray-100 text-gray-700'}">${t.status}</span>
+                        <span class="px-2 py-0.5 rounded-full text-xs font-medium ${channelColor[t.channel] || ''}">${t.channel}</span>
+                        <i class="fas fa-chevron-down text-gray-400 text-xs ml-2 transition-transform" id="chevron-${t.id}"></i>
+                    </div>
+                </div>
+                <div class="thread-body" id="thread-body-${t.id}">
+                    <div class="px-5 py-4 space-y-4 bg-gray-50 max-h-96 overflow-y-auto">
+                        ${t.messages.map(m => `
+                            <div class="flex ${m.out ? 'justify-end' : 'justify-start'}">
+                                <div class="max-w-sm">
+                                    ${!m.out ? `<p class="text-xs text-gray-500 mb-1 ml-1">${m.from}</p>` : ''}
+                                    <div class="${m.out ? 'msg-out' : 'msg-in'} px-4 py-2.5 shadow-sm">
+                                        ${m.subject ? `<p class="text-xs font-semibold mb-2 pb-2 border-b ${m.out ? 'border-blue-400 text-blue-200' : 'border-gray-200 text-gray-400'}"><i class="fas fa-envelope mr-1"></i>${m.subject}</p>` : ''}
+                                        <p class="text-sm">${m.text}</p>
+                                    </div>
+                                    <p class="text-xs text-gray-400 mt-1 ${m.out ? 'text-right mr-1' : 'ml-1'}">${m.time} · ${m.ch}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="px-5 py-4 border-t border-gray-100 flex gap-2">
+                        <input type="text" placeholder="Reply…" class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function toggleThread(id) {
+        const body = document.getElementById('thread-body-' + id);
+        const chevron = document.getElementById('chevron-' + id);
+        body.classList.toggle('open');
+        chevron.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+    }
+
+    function openComposeModal()  { document.getElementById('composeModal').classList.remove('hidden'); }
+    function closeComposeModal() { document.getElementById('composeModal').classList.add('hidden'); }
+
+    // Click outside modal to close
+    document.getElementById('composeModal').addEventListener('click', function(e) {
+        if (e.target === this) closeComposeModal();
+    });
+
+    buildThreads();
+</script>
 </body>
 </html>
