@@ -112,8 +112,6 @@
                 <tr>
                     <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Template Name</th>
                     <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Category</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Email Subject</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Variables</th>
                     <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Actions</th>
                 </tr>
             </thead>
@@ -390,7 +388,7 @@ function filterTemplates() {
     const tbody = document.getElementById('tplList');
 
     if (!list.length) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-400 text-sm py-12">No templates match your search</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400 text-sm py-12">No templates match your search</td></tr>';
         return;
     }
 
@@ -402,13 +400,11 @@ function filterTemplates() {
         return `<tr class="hover:bg-gray-50 cursor-pointer transition-colors" onclick="selectTemplate(${t.id})">
             <td class="px-5 py-3.5">
                 <p class="font-medium text-gray-900 text-sm leading-snug">${escHtml(t.name)}</p>
-                <p class="text-xs text-gray-400 mt-0.5 truncate max-w-xs">${escHtml(preview)}…</p>
+                <p class="text-xs text-gray-400 mt-0.5 truncate max-w-xl">${escHtml(preview)}…</p>
             </td>
             <td class="px-5 py-3.5 whitespace-nowrap">
                 <span class="cat-badge cat-${catKey}">${t.category}</span>
             </td>
-            <td class="px-5 py-3.5 text-sm text-gray-600 max-w-xs truncate">${escHtml(t.subject || '—')}</td>
-            <td class="px-5 py-3.5">${phChips}${phMore}</td>
             <td class="px-5 py-3.5 whitespace-nowrap">
                 <button onclick="event.stopPropagation();selectTemplate(${t.id})" class="text-xs text-blue-600 hover:text-blue-800 font-medium px-3 py-1 border border-blue-200 rounded-lg hover:bg-blue-50">View</button>
             </td>
